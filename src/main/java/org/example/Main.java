@@ -28,5 +28,15 @@ public class Main {
         sp.vypisRybarov();
         sp.odobratRybara(1111);
 
+        var kapor = new Ulovok();
+        kapor.setIdUlovok(001);
+        kapor.setDatumUlovku(LocalDate.of(2024,1,22));
+        kapor.setCisloReviru(40102);
+        kapor.setDruhRyby("kapor");
+        kapor.setDlzkaVcm(40);
+        kapor.setHmotnostVkg(20);
+
+        System.out.println(kapor);
+
     }
 }
