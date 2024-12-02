@@ -1,6 +1,5 @@
-package org.example;
+package org.projekt;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Data;
