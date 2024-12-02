@@ -1,4 +1,4 @@
-package org.example;
+package org.projekt;
 
 import java.time.LocalDate;
 import lombok.Data;
