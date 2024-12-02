@@ -16,8 +16,12 @@ public class SpravaRybara {
     }
 
     public void pridatRybara(Rybar rybar) {
-        zoznamRybarov.add(rybar);
-        System.out.println(zoznamRybarov);
+        if (rybar != null) {
+            zoznamRybarov.add(rybar);
+
+        }
+
+
     }
 
     public void odobratRybara(int rybarID) {
@@ -51,6 +55,11 @@ public class SpravaRybara {
                 break;
             }
         }
+    }
+
+    public int pocetRybarov() {
+
+        return zoznamRybarov.size();
     }
 
 }
