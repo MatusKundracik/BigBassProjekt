@@ -62,8 +62,6 @@ public class RegisterController {
 
     @FXML
     void initialize() {
-        this.rybari.add(new Rybar(555, "Peter", "Novák", LocalDate.of(2000, 5, 10), "Bratislava", "SK", "AB123456", 1234, 2010, LocalDate.now(), null));
-        this.rybari.add(new Rybar(556, "Joyef", "Novák", LocalDate.of(2000, 5, 10), "Bratislava", "SK", "AB123456", 1234, 2010, LocalDate.now(), null));
 
         this.rybarListView.getItems().addAll(this.rybari);
     }
