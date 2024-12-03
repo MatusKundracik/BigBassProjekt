@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.projekt.RegisterController">
+   <children>
+      <HBox prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Meno:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Prievisko:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Adresa:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="214.0" prefHeight="27.0" prefWidth="214.0" text="Číslo občianského preukazu:">
+               <HBox.margin>
+                  <Insets left="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Štátna príslušnosť:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <TextField fx:id="menoTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="priezviskoTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="adresaTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="obcianskyPreukazTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="statnaPrislusnotTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label maxHeight="40.0" maxWidth="140.0" prefHeight="40.0" prefWidth="140.0" text="Dátum narodenia:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="166.0" prefHeight="27.0" prefWidth="160.0" text="Dátum pridania do evidencie:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <DatePicker fx:id="datumNarodeniaDatePicker" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="30.0" />
+               </HBox.margin>
+            </DatePicker>
+            <DatePicker fx:id="datumPridaniaDoEvidencieDatePicker" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" top="30.0" />
+               </HBox.margin>
+            </DatePicker>
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <padding>
+            <Insets left="15.0" right="15.0" />
+         </padding>
+      </HBox>
+      <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Button fx:id="pridatRybaraButton" mnemonicParsing="false" onAction="#addRybarAction" text="Registrovať" textAlignment="CENTER">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="30.0" left="30.0" right="30.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </children>
+</VBox>
