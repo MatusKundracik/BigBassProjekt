@@ -15,7 +15,7 @@ public class registerOkno extends Application {
         stage.setTitle("Register");
         stage.setScene(scene);
         stage.show();
-////
+//////
     }
 
     public static void main(String[] args) {
