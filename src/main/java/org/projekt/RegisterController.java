@@ -18,6 +18,12 @@ public class RegisterController {
     private DatePicker datumNarodeniaDatePicker;
 
     @FXML
+    private TextField emailTextField;
+
+    @FXML
+    private TextField hesloTextField;
+
+    @FXML
     private TextField menoTextField;
 
     @FXML
