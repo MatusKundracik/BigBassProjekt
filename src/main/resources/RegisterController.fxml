@@ -10,105 +10,133 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.projekt.RegisterController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.projekt.RegisterController">
    <children>
-      <HBox prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <HBox>
          <children>
-            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Meno:">
+            <Label text="Email:">
                <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
+                  <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Label>
-            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Prievisko:">
+            <Label text="Heslo:">
                <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Adresa:">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <Label maxHeight="40.0" maxWidth="214.0" prefHeight="27.0" prefWidth="214.0" text="Číslo občianského preukazu:">
-               <HBox.margin>
-                  <Insets left="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Štátna príslušnosť:">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-      </HBox>
-      <HBox VBox.vgrow="ALWAYS">
-         <children>
-            <TextField fx:id="menoTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </HBox.margin>
-            </TextField>
-            <TextField fx:id="priezviskoTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </HBox.margin>
-            </TextField>
-            <TextField fx:id="adresaTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </HBox.margin>
-            </TextField>
-            <TextField fx:id="obcianskyPreukazTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </HBox.margin>
-            </TextField>
-            <TextField fx:id="statnaPrislusnotTextField" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </HBox.margin>
-            </TextField>
-         </children>
-      </HBox>
-      <HBox VBox.vgrow="ALWAYS">
-         <children>
-            <Label maxHeight="40.0" maxWidth="140.0" prefHeight="40.0" prefWidth="140.0" text="Dátum narodenia:">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
+                  <Insets left="175.0" top="10.0" />
                </HBox.margin>
             </Label>
          </children>
       </HBox>
       <HBox>
          <children>
-            <DatePicker fx:id="datumNarodeniaDatePicker" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
+            <TextField fx:id="emailTextField">
                <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="30.0" />
+                  <Insets bottom="10.0" left="10.0" right="50.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="hesloTextField">
+               <HBox.margin>
+                  <Insets bottom="10.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox prefWidth="200.0">
+         <children>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Meno:">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Prievisko:">
+               <HBox.margin>
+                  <Insets left="40.0" right="20.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Adresa:">
+               <HBox.margin>
+                  <Insets left="10.0" right="20.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <TextField fx:id="menoTextField">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="30.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="priezviskoTextField">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="15.0" right="35.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="adresaTextField">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="5.0" right="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <Label maxHeight="40.0" maxWidth="214.0" prefHeight="27.0" prefWidth="214.0" text="Číslo občianského preukazu:">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="170.0" prefHeight="40.0" prefWidth="170.0" text="Štátna príslušnosť:">
+               <HBox.margin>
+                  <Insets left="5.0" right="20.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="40.0" maxWidth="140.0" prefHeight="40.0" prefWidth="140.0" text="Dátum narodenia:">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <TextField fx:id="obcianskyPreukazTextField" prefHeight="30.0" prefWidth="177.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="statnaPrislusnotTextField">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="15.0" right="40.0" />
+               </HBox.margin>
+            </TextField>
+            <DatePicker fx:id="datumNarodeniaDatePicker">
+               <HBox.margin>
+                  <Insets bottom="10.0" />
                </HBox.margin>
             </DatePicker>
          </children>
          <VBox.margin>
-            <Insets left="15.0" right="15.0" />
+            <Insets />
          </VBox.margin>
       </HBox>
       <VBox alignment="BOTTOM_RIGHT">
          <children>
-            <ListView fx:id="rybarListView" />
+            <ListView fx:id="rybarListView" VBox.vgrow="ALWAYS" />
             <Button fx:id="pridatRybaraButton" mnemonicParsing="false" onAction="#addRybarAction" text="Registrovať" textAlignment="CENTER">
                <font>
                   <Font size="22.0" />
