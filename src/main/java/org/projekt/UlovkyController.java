@@ -45,7 +45,7 @@ public class UlovkyController {
     private Button pridajUlovokButton;
 
     @FXML
-    private ListView<?> ulovokListView;
+    private ListView<Ulovok> ulovokListView;
 
     @FXML
     void addUlovokAction(ActionEvent event) {
@@ -57,14 +57,14 @@ public class UlovkyController {
         int hmotnostVkg = Integer.parseInt(hmotnostVkgTextField.getText());
         int kontrola = Integer.parseInt(kontrolaTextField.getText());
 
-//        Ulovok ulovok = new Ulovok(idUlovok,datumUlovok,cisloReviru,druhRyby,dlzkaVcm,hmotnostVkg,kontrola);
-//        this.ulovky.add(ulovok);
-//        ulovokListView.getItems().add(ulovok);
+        Ulovok ulovok = new Ulovok(idUlovok,datumUlovok,cisloReviru,druhRyby,dlzkaVcm,hmotnostVkg,kontrola);
+        this.ulovky.add(ulovok);
+        ulovokListView.getItems().add(ulovok);
     }
 
     @FXML
     void initialize() {
-        //this.ulovokListView.getItems().addAll(this.ulovky);
+        this.ulovokListView.getItems().addAll(this.ulovky);
     }
 
 }
