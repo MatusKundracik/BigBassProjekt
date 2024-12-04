@@ -10,12 +10,17 @@ public class registerOkno extends Application {
 
     public void start(Stage stage) throws Exception {
         Parent rootPane = FXMLLoader.load(getClass().getResource("/RegisterController.fxml"));
+       // Parent ulovokPane = FXMLLoader.load(getClass().getResource("/RegisterController.fxml"));
 
         Scene scene = new Scene(rootPane);
         stage.setTitle("Register");
         stage.setScene(scene);
         stage.show();
-//////
+
+       // Scene scene1 = new Scene(rootPane);
+       // stage.setTitle("Ulovky");
+       // stage.setScene(scene1);
+       // stage.show();
     }
 
     public static void main(String[] args) {

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -84,14 +85,9 @@
             </TextField>
          </children>
       </HBox>
-      <HBox prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <HBox VBox.vgrow="ALWAYS">
          <children>
             <Label maxHeight="40.0" maxWidth="140.0" prefHeight="40.0" prefWidth="140.0" text="Dátum narodenia:">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <Label maxHeight="40.0" maxWidth="166.0" prefHeight="27.0" prefWidth="160.0" text="Dátum pridania do evidencie:">
                <HBox.margin>
                   <Insets left="20.0" right="20.0" top="15.0" />
                </HBox.margin>
@@ -105,20 +101,14 @@
                   <Insets left="15.0" right="15.0" top="30.0" />
                </HBox.margin>
             </DatePicker>
-            <DatePicker fx:id="datumPridaniaDoEvidencieDatePicker" maxHeight="40.0" maxWidth="150.0" prefHeight="40.0" prefWidth="150.0">
-               <HBox.margin>
-                  <Insets left="15.0" right="15.0" top="30.0" />
-               </HBox.margin>
-            </DatePicker>
          </children>
-      </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
-         <padding>
+         <VBox.margin>
             <Insets left="15.0" right="15.0" />
-         </padding>
+         </VBox.margin>
       </HBox>
-      <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0">
+      <VBox alignment="BOTTOM_RIGHT">
          <children>
+            <ListView fx:id="rybarListView" />
             <Button fx:id="pridatRybaraButton" mnemonicParsing="false" onAction="#addRybarAction" text="Registrovať" textAlignment="CENTER">
                <font>
                   <Font size="22.0" />
