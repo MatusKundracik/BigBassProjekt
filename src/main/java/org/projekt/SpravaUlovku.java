@@ -1,5 +1,6 @@
 package org.projekt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -8,6 +9,10 @@ import lombok.Data;
 public class SpravaUlovku {
 
     private List<Ulovok> zoznamUlovkov;
+
+    public void SpravaUlovku() {
+        this.zoznamUlovkov = new ArrayList<>();
+    }
 
     public void pridajUlovok(Ulovok ulovok) {
         zoznamUlovkov.add(ulovok);
@@ -25,9 +30,5 @@ public class SpravaUlovku {
         }
         return null;
     }
-
-
-
-
 
 }
