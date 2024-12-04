@@ -92,11 +92,6 @@
                   <Insets left="20.0" right="20.0" top="15.0" />
                </HBox.margin>
             </Label>
-            <Label fx:id="idLabel" maxHeight="40.0" maxWidth="140.0" prefHeight="40.0" prefWidth="140.0" text="ID:">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="15.0" />
-               </HBox.margin>
-            </Label>
          </children>
       </HBox>
       <HBox>
@@ -106,14 +101,6 @@
                   <Insets left="15.0" right="15.0" top="30.0" />
                </HBox.margin>
             </DatePicker>
-            <TextField fx:id="IDTextField">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets top="30.0" />
-               </HBox.margin>
-            </TextField>
          </children>
          <VBox.margin>
             <Insets left="15.0" right="15.0" />

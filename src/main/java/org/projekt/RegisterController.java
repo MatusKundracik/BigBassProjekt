@@ -6,22 +6,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import org.projekt.Rybar;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegisterController {
-    private List<Rybar> rybari = new ArrayList<>();
+    private RybarDAO rybarDAO = RybarDAOFactory.INSTANCE.getRybarDAO();
+
     @FXML
     private TextField adresaTextField;
 
     @FXML
     private DatePicker datumNarodeniaDatePicker;
-
-    @FXML
-    private DatePicker datumPridaniaDoEvidencieDatePicker;
 
     @FXML
     private TextField menoTextField;
@@ -46,23 +40,31 @@ public class RegisterController {
 
     @FXML
     void addRybarAction(ActionEvent event) {
-    int idRybara = Integer.parseInt(IDTextField.getText());
-    String meno = menoTextField.getText();
-    String priezvisko = priezviskoTextField.getText();
-    String adresa = adresaTextField.getText();
-    String obcianskyPreukaz = obcianskyPreukazTextField.getText();
-    String statnaPrislusnost = statnaPrislusnotTextField.getText();
-    LocalDate datumNarodenia = datumNarodeniaDatePicker.getValue();
+        try {
 
-    Rybar rybar = new Rybar(idRybara,meno,priezvisko,datumNarodenia,adresa,statnaPrislusnost,obcianskyPreukaz,LocalDate.now(),null);
-    this.rybari.add(rybar);
-    rybarListView.getItems().add(rybar);
+            String meno = menoTextField.getText();
+            String priezvisko = priezviskoTextField.getText();
+            String adresa = adresaTextField.getText();
+            String obcianskyPreukaz = obcianskyPreukazTextField.getText();
+            String statnaPrislusnost = statnaPrislusnotTextField.getText();
+            LocalDate datumNarodenia = datumNarodeniaDatePicker.getValue();
 
+            Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
+                    statnaPrislusnost, obcianskyPreukaz, LocalDate.now(), null);
+
+            rybarDAO.save(rybar);
+
+            rybarListView.getItems().clear();
+            rybarListView.getItems().addAll(rybarDAO.getAll());
+        } catch (NumberFormatException e) {
+            System.out.println("ID musí byť číslo!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Chyba: " + e.getMessage());
+        }
     }
 
     @FXML
     void initialize() {
-
-        this.rybarListView.getItems().addAll(this.rybari);
+        rybarListView.getItems().addAll(rybarDAO.getAll());
     }
 }

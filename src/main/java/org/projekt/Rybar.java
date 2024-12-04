@@ -24,10 +24,9 @@ public class Rybar {
     private LocalDate pridanyDoEvidencie;
     private LocalDate odhlasenyZEvidencie;
 
-    public Rybar(int rybarId, String meno, String priezvisko, LocalDate datumNarodenia,
+    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia,
                  String adresa, String statnaPrislusnost, String cisloOP,
                  LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie) {
-        this.rybarId = rybarId;
         this.meno = meno;
         this.priezvisko = priezvisko;
         this.datumNarodenia = datumNarodenia;
