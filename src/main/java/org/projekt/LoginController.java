@@ -44,4 +44,25 @@ public class LoginController {
         }
     }
 
+    @FXML
+    void prihlasSaButton(ActionEvent event) {
+        try {
+            // Načítaj FXML pre register okno
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BigBassController.fxml"));
+            Parent root = loader.load();
+
+            // Vytvor novú scénu
+            Scene scene = new Scene(root);
+
+            // Získaj aktuálne okno (Stage)
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Nastav novú scénu
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
