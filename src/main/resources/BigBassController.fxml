@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.projekt.BigBassController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <right>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #46923c;" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="profilButton" mnemonicParsing="false" onAction="#zobrazProfilButton" prefHeight="25.0" prefWidth="104.0" stylesheets="@../java/css/Button.css" text="Profil" />
+                  <Button fx:id="ulovkyButton" mnemonicParsing="false" onAction="#zobrazUlovkyButton" prefHeight="25.0" prefWidth="105.0" stylesheets="@../java/css/Button.css" text="Ulovky" />
+               </children>
+            </VBox>
+         </right>
+         <top>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #3b8132;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Big Bass">
+                     <HBox.margin>
+                        <Insets left="40.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
