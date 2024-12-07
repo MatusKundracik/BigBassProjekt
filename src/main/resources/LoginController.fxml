@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.PasswordField?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.projekt.LoginController">
    <children>
       <VBox alignment="CENTER">
@@ -19,7 +20,7 @@
             <Label text="Email:" />
             <TextField fx:id="EmailTextField" />
             <Label text="Password:" />
-            <TextField fx:id="PasswordTextField" />
+            <PasswordField fx:id="PasswordTextField" />
             <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#prihlasSaButton" text="Login">
                <VBox.margin>
                   <Insets bottom="10.0" top="10.0" />
