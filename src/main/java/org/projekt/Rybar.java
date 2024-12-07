@@ -19,12 +19,11 @@ public class Rybar {
     private String adresa;
     private String statnaPrislusnost;
     private String cisloOP;
-    private int evidentneCislo;
-    private int clenomOd;
     private LocalDate pridanyDoEvidencie;
     private LocalDate odhlasenyZEvidencie;
+    private String email;
 
-    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia,
+    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia, String email,
                  String adresa, String statnaPrislusnost, String cisloOP,
                  LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie) {
         this.meno = meno;
