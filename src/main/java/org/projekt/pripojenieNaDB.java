@@ -9,7 +9,7 @@ public class pripojenieNaDB {
         Connection con = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:C:/Users/matus/IdeaProjects/BigBassProjekt/bigbass.db");
+            con = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
             System.out.println("Connected to the database successfully");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
