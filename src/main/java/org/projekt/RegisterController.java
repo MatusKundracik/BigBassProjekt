@@ -73,7 +73,7 @@ public class RegisterController {
             rybarDAO.save(rybar);
 
             // Vložíme používateľa priamo cez JDBC
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:C:/Users/matus/IdeaProjects/BigBassProjekt/bigbass.db")) {
+            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 insertUser(connection, meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost,
                         datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, hashedHeslo);
                 System.out.println("Používateľ bol úspešne pridaný do databázy.");
