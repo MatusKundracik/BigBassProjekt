@@ -11,6 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
+import org.projekt.Session;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -75,7 +76,10 @@ public class LoginController {
             }
         } else if (overitPouzivatela(email, heslo)) {
             // Ak sa používateľ nájde v databáze, načíta sa hlavná obrazovka
+            Session.aktualnyRybarId = getUserIdByEmail(email);
+            System.out.println("Prihlásený používateľ ID: " + Session.aktualnyRybarId + ", email: " + email); // Log ID a email
             try {
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/BigBassController.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
@@ -116,4 +120,26 @@ public class LoginController {
         }
         return false; // Ak sa používateľ nenašiel alebo došlo k chybe
     }
+
+    private int getUserIdByEmail(String email) {
+        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email); // Nastavenie emailu
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id_rybara");
+                    System.out.println("Našiel som ID: " + id + " pre email: " + email);
+                    return id; // Vráť nájdené ID
+                } else {
+                    System.out.println("Email: " + email + " nebol nájdený v databáze.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+        }
+        return -1; // Ak ID neexistuje alebo došlo k chybe
+    }
+
+
 }

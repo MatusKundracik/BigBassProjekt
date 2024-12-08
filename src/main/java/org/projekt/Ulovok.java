@@ -16,11 +16,11 @@ public class Ulovok {
     private int cisloReviru;
     private String druhRyby;
     //private int pocetKusov;
-    private int dlzkaVcm;
-    private int hmotnostVkg;
+    private double dlzkaVcm;
+    private double hmotnostVkg;
     private int kontrola;
 
-    public Ulovok(LocalDate datumUlovku, int cisloReviru, String druhRyby, int dlzkaVcm, int hmotnostVkg, int kontrola) {
+    public Ulovok(LocalDate datumUlovku, int cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg, int kontrola) {
         this.idUlovok = idUlovok;
         this.datumUlovku = datumUlovku;
         this.cisloReviru = cisloReviru;
