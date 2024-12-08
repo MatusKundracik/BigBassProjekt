@@ -19,6 +19,7 @@ public class registerOkno extends Application {
        Parent loginPane = FXMLLoader.load(getClass().getResource("/LoginController.fxml"));
        //Parent bigBass = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/BigBassController.fxml")));
 
+        //
 
 //        Scene scene1 = new Scene(ulovokPane);
 //        stage.setTitle("Ulovky");

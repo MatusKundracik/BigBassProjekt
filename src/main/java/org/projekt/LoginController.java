@@ -88,7 +88,7 @@ public class LoginController {
             alert.showAndWait();
         }
     }
-
+//
     // Metóda na overenie používateľa v databáze
     private boolean overitPouzivatela(String email, String heslo) {
         // SQL dotaz na získanie hesla pre daný email
