@@ -20,7 +20,7 @@ public class Ulovok {
     private int hmotnostVkg;
     private int kontrola;
 
-    public Ulovok(int idUlovok, LocalDate datumUlovku, int cisloReviru, String druhRyby, int dlzkaVcm, int hmotnostVkg, int kontrola) {
+    public Ulovok(LocalDate datumUlovku, int cisloReviru, String druhRyby, int dlzkaVcm, int hmotnostVkg, int kontrola) {
         this.idUlovok = idUlovok;
         this.datumUlovku = datumUlovku;
         this.cisloReviru = cisloReviru;
