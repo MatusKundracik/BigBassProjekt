@@ -7,9 +7,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.mindrot.jbcrypt.BCrypt;
+import org.projekt.Factory;
 import org.projekt.Rybar;
 import org.projekt.RybarDAO;
-import org.projekt.RybarDAOFactory;
+import org.projekt.Factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class RegisterController {
-    private RybarDAO rybarDAO = RybarDAOFactory.INSTANCE.getRybarDAO();
+    private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
     private TextField adresaTextField;
@@ -114,8 +115,4 @@ public class RegisterController {
         }
     }
 
-    @FXML
-    void initialize() {
-        rybarListView.getItems().addAll(rybarDAO.getAll());
-    }
 }
