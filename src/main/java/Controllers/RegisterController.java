@@ -1,4 +1,4 @@
-package org.projekt;
+package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +7,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.mindrot.jbcrypt.BCrypt;
+import org.projekt.Rybar;
+import org.projekt.RybarDAO;
+import org.projekt.RybarDAOFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
