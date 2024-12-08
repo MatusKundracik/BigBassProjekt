@@ -42,7 +42,7 @@ public class registerOkno extends Application {
 //            stage.setY(evt.getScreenY() - y);
 //        });
 //        stage.setScene(sc);
-//        stage.show();
+////        stage.show();
     }
 
     public static void main(String[] args) {
