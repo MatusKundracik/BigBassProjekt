@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
@@ -25,7 +26,7 @@ public class LoginController {
     private Button LoginButton; // Tlačidlo na prihlásenie
 
     @FXML
-    private TextField PasswordTextField; // Textové pole na zadanie hesla
+    private PasswordField PasswordTextField; // Textové pole na zadanie hesla
 
     @FXML
     private Button RegisterButton; // Tlačidlo na prechod na registračnú obrazovku
