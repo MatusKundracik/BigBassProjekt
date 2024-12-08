@@ -1,4 +1,4 @@
-package org.projekt;
+package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,24 +60,30 @@ public class LoginController {
         String email = EmailTextField.getText();
         String heslo = PasswordTextField.getText();
 
-        // Overí, či je používateľ v databáze
-        if (overitPouzivatela(email, heslo)) {
+        // Skontroluje, či je email a heslo "admin"
+        if ("admin".equals(email) && "admin".equals(heslo)) {
+            // Ak je email a heslo "admin", načíta sa AdminController
             try {
-                // Načíta FXML súbor pre hlavnú obrazovku
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BigBassController.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminController.fxml"));
                 Parent root = loader.load();
-
-                // Vytvorí novú scénu
                 Scene scene = new Scene(root);
-
-                // Získaj aktuálne okno (Stage)
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
-                // Nastav novú scénu
                 stage.setScene(scene);
                 stage.show();
             } catch (Exception e) {
-                e.printStackTrace(); // Vypíše chybu, ak sa FXML nepodarí načítať
+                e.printStackTrace();
+            }
+        } else if (overitPouzivatela(email, heslo)) {
+            // Ak sa používateľ nájde v databáze, načíta sa hlavná obrazovka
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/BigBassController.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             // Ak sú prihlasovacie údaje nesprávne, zobrazí sa chybové hlásenie
