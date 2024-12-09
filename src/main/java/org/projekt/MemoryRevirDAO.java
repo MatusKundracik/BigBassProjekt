@@ -19,7 +19,7 @@ public class MemoryRevirDAO implements RevirDAO {
         }
 
         // Overenie povinných atribútov
-        if (revir.getNazov() == null || revir.getLokalita() == null || revir.getCisloReviru() <= 0) {
+        if (revir.getNazov() == null || revir.getLokalita() == null) {
             throw new IllegalArgumentException("Názov, lokalita a číslo revíru sú povinné");
         }
 

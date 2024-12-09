@@ -60,8 +60,8 @@ public class UlovkyController {
             LocalDate datumUlovok = datumUlovkuDatePicker.getValue();
             int cisloReviru = Integer.parseInt(cisloReviruTextField.getText());
             String druhRyby = druhRybyTextField.getText();
-            double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());  // Dĺžka v cm ako Double
-            double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());  // Hmotnosť v kg ako Double
+            double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
+            double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
             int kontrola = Integer.parseInt(kontrolaTextField.getText());
 
             // Vytvorenie objektu Ulovok
