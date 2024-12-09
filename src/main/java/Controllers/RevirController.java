@@ -8,9 +8,6 @@ import javafx.scene.control.TextField;
 public class RevirController {
 
     @FXML
-    private TextField cisloReviruTextField;
-
-    @FXML
     private TextField lokalitaTextField;
 
     @FXML
