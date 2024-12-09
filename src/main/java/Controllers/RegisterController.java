@@ -2,20 +2,14 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.mindrot.jbcrypt.BCrypt;
 import org.projekt.Factory;
 import org.projekt.Rybar;
 import org.projekt.RybarDAO;
 import org.projekt.Factory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class RegisterController {
@@ -68,6 +62,12 @@ public class RegisterController {
             LocalDate pridanyDoEvidencie = LocalDate.now(); // Dátum pridania
             LocalDate odhlasenyZEvidencie = null; // Predpokladáme, že nového používateľa neodhlasujeme
 
+            // Skontroluj, či email už existuje
+            if (jeEmailPouzity(email)) {
+                zobrazAlert("Chyba registrácie", "Email už je použitý!", "Zadajte iný email.");
+                return;
+            }
+
             // Šifrovanie hesla pomocou Bcrypt
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
 
@@ -113,6 +113,30 @@ public class RegisterController {
 
             statement.executeUpdate();
         }
+    }
+
+    private boolean jeEmailPouzity(String email) {
+        String sql = "SELECT COUNT(*) AS pocet FROM rybar WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("pocet") > 0) {
+                    return true; // Email už existuje
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Email neexistuje
+    }
+
+    private void zobrazAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }
