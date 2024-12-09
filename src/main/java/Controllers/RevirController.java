@@ -95,19 +95,5 @@ public class RevirController {
         }
     }
 
-    @FXML
-    void kaproveAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void lipnoveAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void pstruhoveAction(ActionEvent event) {
-
-    }
 
 }
