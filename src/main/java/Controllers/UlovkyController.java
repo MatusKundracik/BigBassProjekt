@@ -2,11 +2,7 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.projekt.*;
 
 import java.sql.*;
@@ -49,6 +45,9 @@ public class UlovkyController {
 
     @FXML
     private ListView<Ulovok> ulovokListView;
+
+    @FXML
+    private ComboBox<String> nazovReviruComboBox;
 
     @FXML
     void addUlovokAction(ActionEvent event) {
@@ -104,6 +103,30 @@ public class UlovkyController {
         }
     }
 
+    @FXML
+    private void naplnNazvyReviruDoChoiceBox() {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
+            String selectQuery = "SELECT nazov FROM revir";
+            try (PreparedStatement statement = connection.prepareStatement(selectQuery);
+                 ResultSet resultSet = statement.executeQuery()) {
+
+                // Clear the existing items in the ChoiceBox
+                nazovReviruComboBox.getItems().clear();
+
+                // Add each "nazov" from the database to the ChoiceBox
+                while (resultSet.next()) {
+                    String nazovReviru = resultSet.getString("nazov");
+                    nazovReviruComboBox.getItems().add(nazovReviru);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Chyba při načítání názvů revírů.", e);
+        }
+    }
+
+    ;
+
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
         ulovky.clear(); // Vyčistenie lokálneho zoznamu
         ulovokListView.getItems().clear(); // Vyčistenie zobrazenia
@@ -141,6 +164,7 @@ public class UlovkyController {
     void initialize() {
         this.ulovokListView.getItems().addAll(this.ulovky);
         nacitajUlovkyPreAktualnehoPouzivatela();
+        naplnNazvyReviruDoChoiceBox();
     }
 
 }

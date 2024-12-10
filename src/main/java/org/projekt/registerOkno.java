@@ -10,9 +10,7 @@ import javafx.stage.StageStyle;
 import java.util.Objects;
 
 public class registerOkno extends Application {
-
-    double x,y = 0;
-
+    
     public void start(Stage stage) throws Exception {
 
        Parent loginPane = FXMLLoader.load(getClass().getResource("/LoginController.fxml"));
