@@ -20,7 +20,7 @@ public class registerOkno extends Application {
        //Parent bigBass = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/BigBassController.fxml")));
 
 
-//        Scene scene1 = new Scene(ulovokPane);
+//  //      Scene scene1 = new Scene(ulovokPane);
 //        stage.setTitle("Ulovky");
 //        stage.setScene(scene1);
 //        stage.show();

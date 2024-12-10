@@ -20,4 +20,16 @@ public class Revir {
         this.lipnove = lipnove;
         this.pstruhove = pstruhove;
     }
+
+    public boolean isKaprove() {
+        return kaprove;
+    }
+
+    public boolean isLipnove() {
+        return lipnove;
+    }
+
+    public boolean isPstruhove() {
+        return pstruhove;
+    }
 }
