@@ -73,4 +73,20 @@ public class MemoryRybarDAO implements RybarDAO {
             throw new IllegalArgumentException("Rybar s ID " + id + " neexistuje");
         }
     }
+
+    @Override
+    public List<Rybar> najdiPodlaID(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID musí byť väčšie ako 0");
+        }
+
+        List<Rybar> vysledky = new ArrayList<>();
+        for (Rybar rybar : rybari) {
+            if (rybar.getRybarId() == id) {
+                vysledky.add(rybar); // Nájdeme rybára a vrátime ho
+            }
+        }
+        return vysledky;
+    }
+
 }

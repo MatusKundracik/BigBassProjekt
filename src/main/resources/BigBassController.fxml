@@ -17,6 +17,11 @@
                <children>
                   <Button fx:id="profilButton" mnemonicParsing="false" onAction="#zobrazProfilButton" prefHeight="25.0" prefWidth="104.0" stylesheets="@../java/css/Button.css" text="Profil" />
                   <Button fx:id="ulovkyButton" mnemonicParsing="false" onAction="#zobrazUlovkyButton" prefHeight="25.0" prefWidth="105.0" stylesheets="@../java/css/Button.css" text="Ulovky" />
+                  <Button fx:id="odhlasitSaButton" mnemonicParsing="false" onAction="#odhlasMaButton" prefHeight="25.0" prefWidth="103.0" text="Odhlásiť sa">
+                     <VBox.margin>
+                        <Insets top="225.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </right>

@@ -26,6 +26,9 @@ public class BigBassController {
     private StackPane contentStackPane;
 
     @FXML
+    private Button odhlasitSaButton;
+
+    @FXML
     private Label prihlasenyPouzivatelLabel;
 
     @FXML
@@ -33,7 +36,6 @@ public class BigBassController {
 
     @FXML
     private Button ulovkyButton;
-
 
     @FXML
     public void initialize() {
@@ -73,14 +75,41 @@ public class BigBassController {
     }
 
     @FXML
+    void odhlasMaButton(ActionEvent event) {
+        try {
+            // 1. Vyčistenie session (odhlásenie používateľa)
+            Session.aktualnyRybarId = 0;
+
+            System.out.println("Používateľ bol úspešne odhlásený.");
+
+            // 2. Načítanie login okna
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginController.fxml"));
+            Parent root = loader.load();
+
+            // 3. Vytvorenie novej scény pre prihlasovacie okno
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.setTitle("Prihlásenie");
+            loginStage.show();
+
+            // 4. Zavretie aktuálneho okna
+            Stage currentStage = (Stage) odhlasitSaButton.getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            e.printStackTrace(); // Výpis chyby, ak sa niečo nepodarí
+        }
+    }
+
+    @FXML
     void zobrazProfilButton(ActionEvent event) {
-        //nahradObsah("/Profil.fxml");
+        nahradObsah("/ProfilController.fxml");
     }
 
     @FXML
     void zobrazUlovkyButton(ActionEvent event) {
         nahradObsah("/UlovkyController.fxml");
     }
+
 
     private void nahradObsah(String fxmlSubor) {
         try {
@@ -94,6 +123,5 @@ public class BigBassController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
+   <children>
+      <HBox>
+         <children>
+            <Label fx:id="menoPriezviskoLabel" text="Meno a priezvisko:">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="datumNarodeniaLabel" text="Dátum narodenia:">
+               <HBox.margin>
+                  <Insets left="80.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="adresaLabel" text="Adresa:">
+               <HBox.margin>
+                  <Insets left="80.0" top="10.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <Label fx:id="emailLabel" text="Email:">
+               <HBox.margin>
+                  <Insets left="10.0" top="30.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="pridanyDoEvidencieLabel" text="Pridaný do evidencie:">
+               <HBox.margin>
+                  <Insets left="100.0" top="30.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="odobranzyZEvidencieLabel" text="Odobraný z evidencie:">
+               <HBox.margin>
+                  <Insets left="100.0" top="30.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>
