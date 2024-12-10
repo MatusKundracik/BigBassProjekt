@@ -9,10 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.projekt.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,9 +104,43 @@ public class UlovkyController {
         }
     }
 
+    private void nacitajUlovkyPreAktualnehoPouzivatela() {
+        ulovky.clear(); // Vyčistenie lokálneho zoznamu
+        ulovokListView.getItems().clear(); // Vyčistenie zobrazenia
+
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
+            String selectQuery = "SELECT * FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+                statement.setInt(1, Session.aktualnyRybarId); // ID aktuálne prihláseného používateľa
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        // Načítanie údajov z databázy
+                        LocalDate datum = LocalDate.parse(resultSet.getString("datum"));
+                        int cisloReviru = resultSet.getInt("cislo_reviru");
+                        String druhRyby = resultSet.getString("druh_ryby");
+                        double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
+                        double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
+                        int kontrola = resultSet.getInt("kontrola");
+
+                        // Vytvorenie objektu Ulovok
+                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
+
+                        // Pridanie do zoznamu a ListView
+                        ulovky.add(ulovok);
+                        ulovokListView.getItems().add(ulovok);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void initialize() {
         this.ulovokListView.getItems().addAll(this.ulovky);
+        nacitajUlovkyPreAktualnehoPouzivatela();
     }
 
 }
