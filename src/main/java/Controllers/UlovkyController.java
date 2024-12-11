@@ -54,14 +54,14 @@ public class UlovkyController {
         try {
             // Získanie údajov z formulára
             LocalDate datumUlovok = datumUlovkuDatePicker.getValue();
-            int cisloReviru = Integer.parseInt(cisloReviruTextField.getText());
+            String cisloReviru = nazovReviruComboBox.getValue();
             String druhRyby = druhRybyTextField.getText();
             double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
             double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
-            int kontrola = Integer.parseInt(kontrolaTextField.getText());
+
 
             // Vytvorenie objektu Ulovok
-            Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
+            Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
 
             // Pridanie úlovku do zoznamu a ListView
             this.ulovky.add(ulovok);
@@ -81,21 +81,20 @@ public class UlovkyController {
 
     private void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException {
         // SQL dotaz pre vloženie úlovku
-        String insertQuery = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg, kontrola, " +
+        String insertQuery = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg," +
                 "povolenie_id_povolenie, povolenie_rybar_id_rybara, revir_id_revira) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             // Nastavenie parametrov pre PreparedStatement
             statement.setString(1, ulovok.getDatumUlovku().toString());
-            statement.setInt(2, ulovok.getCisloReviru());
+            statement.setString(2, ulovok.getCisloReviru());
             statement.setString(3, ulovok.getDruhRyby());
             statement.setDouble(4, ulovok.getDlzkaVcm());
             statement.setDouble(5, ulovok.getHmotnostVkg());
-            statement.setInt(6, ulovok.getKontrola());
-            statement.setInt(7, 1);
-            statement.setInt(8, Session.aktualnyRybarId);
-            statement.setInt(9, 1);
+            statement.setInt(6, 1);
+            statement.setInt(7, Session.aktualnyRybarId);
+            statement.setInt(8, 1);
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -140,14 +139,14 @@ public class UlovkyController {
                     while (resultSet.next()) {
                         // Načítanie údajov z databázy
                         LocalDate datum = LocalDate.parse(resultSet.getString("datum"));
-                        int cisloReviru = resultSet.getInt("cislo_reviru");
+                        String cisloReviru = resultSet.getString("cislo_reviru");
                         String druhRyby = resultSet.getString("druh_ryby");
                         double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
                         double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
                         int kontrola = resultSet.getInt("kontrola");
 
                         // Vytvorenie objektu Ulovok
-                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
+                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
 
                         // Pridanie do zoznamu a ListView
                         ulovky.add(ulovok);

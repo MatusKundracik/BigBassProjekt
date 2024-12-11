@@ -19,7 +19,7 @@ public class MemoryUlovokDAO implements UlovokDAO {
         }
 
         // Overenie povinných atribútov
-        if (ulovok.getDatumUlovku() == null || ulovok.getDruhRyby() == null || ulovok.getCisloReviru() <= 0) {
+        if (ulovok.getDatumUlovku() == null || ulovok.getDruhRyby() == null || ulovok.getCisloReviru() == null) {
             throw new IllegalArgumentException("Dátum úlovku, druh ryby a číslo revíru sú povinné");
         }
 
