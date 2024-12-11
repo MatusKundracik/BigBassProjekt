@@ -47,6 +47,7 @@ public class LoginController {
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 
             // Nastav novú scénu
+            stage.setTitle("Registrácia");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -84,6 +85,7 @@ public class LoginController {
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Big Bass");
                 stage.setScene(scene);
                 stage.show();
             } catch (Exception e) {

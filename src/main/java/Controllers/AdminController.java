@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.projekt.Session;
 
@@ -15,52 +16,13 @@ public class AdminController {
     private Button odhlasitSaButton;
 
     @FXML
+    private StackPane contentStackPane;
+
+    @FXML
     private Button povolenieButton;
 
     @FXML
     private Button upravitReviryButton;
-
-    @FXML
-    void upravPovolenieButton(ActionEvent event) {
-        try {
-            // Načítaj FXML pre register okno
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/PovolenieController.fxml"));
-            Parent root = loader.load();
-
-            // Vytvor novú scénu
-            Scene scene = new Scene(root);
-
-            // Získaj aktuálne okno (Stage)
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
-            // Nastav novú scénu
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void upravRevirButton(ActionEvent event) {
-        try {
-            // Načítaj FXML pre register okno
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RevirController.fxml"));
-            Parent root = loader.load();
-
-            // Vytvor novú scénu
-            Scene scene = new Scene(root);
-
-            // Získaj aktuálne okno (Stage)
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
-            // Nastav novú scénu
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     void odhlasMaButton(ActionEvent event) {
@@ -85,6 +47,30 @@ public class AdminController {
             currentStage.close();
         } catch (Exception e) {
             e.printStackTrace(); // Výpis chyby, ak sa niečo nepodarí
+        }
+    }
+
+    @FXML
+    void upravPovolenieButton(ActionEvent event) {
+        nahradObsah("/PovolenieController.fxml");
+    }
+
+    @FXML
+    void upravRevirButton(ActionEvent event) {
+        nahradObsah("/RevirController.fxml");
+    }
+
+    private void nahradObsah(String fxmlSubor) {
+        try {
+            // Načítaj nový obsah z FXML súboru
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlSubor));
+            Parent obsah = loader.load();
+
+            // Vymaž starý obsah a nahraď ho novým v StackPane
+            contentStackPane.getChildren().clear();
+            contentStackPane.getChildren().add(obsah);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

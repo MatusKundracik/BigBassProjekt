@@ -19,11 +19,6 @@
                   <Insets left="10.0" top="30.0" />
                </HBox.margin>
             </Label>
-            <Label text="Platnosť do:">
-               <HBox.margin>
-                  <Insets left="130.0" top="30.0" />
-               </HBox.margin>
-            </Label>
             <Label text="ID Rybara:">
                <HBox.margin>
                   <Insets left="125.0" top="30.0" />
@@ -40,7 +35,7 @@
             </DatePicker>
             <TextField fx:id="idRybaraTextFIeld" prefWidth="90.0">
                <HBox.margin>
-                  <Insets bottom="10.0" left="290.0" />
+                  <Insets bottom="10.0" left="100.0" />
                </HBox.margin>
             </TextField>
          </children>

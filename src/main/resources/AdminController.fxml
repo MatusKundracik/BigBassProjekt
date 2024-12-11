@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
@@ -17,6 +18,11 @@
                   <Label text="Big Bass">
                      <HBox.margin>
                         <Insets left="40.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label text="Prihlásený použivateľ : Admin">
+                     <HBox.margin>
+                        <Insets left="280.0" />
                      </HBox.margin>
                   </Label>
                </children>
@@ -36,7 +42,10 @@
             </VBox>
          </right>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane fx:id="contentStackPane" prefHeight="305.0" prefWidth="500.0" />
+               </children></VBox>
          </center>
       </BorderPane>
    </children>
