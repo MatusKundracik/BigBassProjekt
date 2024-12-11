@@ -59,16 +59,14 @@ public class RegisterController {
             String email = emailTextField.getText();
             String heslo = hesloTextField.getText();
             LocalDate datumNarodenia = datumNarodeniaDatePicker.getValue();
-            LocalDate pridanyDoEvidencie = LocalDate.now(); // Dátum pridania
-            LocalDate odhlasenyZEvidencie = null; // Predpokladáme, že nového používateľa neodhlasujeme
+            LocalDate pridanyDoEvidencie = LocalDate.now();
+            LocalDate odhlasenyZEvidencie = null;
 
-            // Skontroluj, či email už existuje
             if (jeEmailPouzity(email)) {
                 zobrazAlert("Chyba registrácie", "Email už je použitý!", "Zadajte iný email.");
                 return;
             }
 
-            // Šifrovanie hesla pomocou Bcrypt
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
 
             Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
@@ -76,7 +74,6 @@ public class RegisterController {
 
             rybarDAO.save(rybar);
 
-            // Vložíme používateľa priamo cez JDBC
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 insertUser(connection, meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost,
                         datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, hashedHeslo);
@@ -122,13 +119,13 @@ public class RegisterController {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next() && rs.getInt("pocet") > 0) {
-                    return true; // Email už existuje
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Email neexistuje
+        return false;
     }
 
     private void zobrazAlert(String title, String header, String content) {

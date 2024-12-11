@@ -74,7 +74,7 @@ public class UlovkyController {
 
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertUlovok(connection, ulovok); // Zavolanie metódy na uloženie do databázy
+                insertUlovok(connection, ulovok);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
@@ -91,7 +91,7 @@ public class UlovkyController {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            // Nastavenie parametrov pre PreparedStatement
+
             statement.setString(1, ulovok.getDatumUlovku().toString());
             statement.setString(2, ulovok.getCisloReviru());
             statement.setString(3, ulovok.getDruhRyby());

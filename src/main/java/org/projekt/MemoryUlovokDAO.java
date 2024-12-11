@@ -9,7 +9,7 @@ public class MemoryUlovokDAO implements UlovokDAO {
 
     @Override
     public List<Ulovok> getAll() {
-        return new ArrayList<>(this.ulovky); // Vytvorenie novej ArrayList pre imunitu voči úpravám
+        return new ArrayList<>(this.ulovky);
     }
 
     @Override
@@ -18,17 +18,17 @@ public class MemoryUlovokDAO implements UlovokDAO {
             throw new IllegalArgumentException("Ulovok nesmie byť null");
         }
 
-        // Overenie povinných atribútov
+
         if (ulovok.getDatumUlovku() == null || ulovok.getDruhRyby() == null || ulovok.getCisloReviru() == null) {
             throw new IllegalArgumentException("Dátum úlovku, druh ryby a číslo revíru sú povinné");
         }
 
         if (ulovok.getIdUlovok() == 0) {
-            // Ak úlovok nemá ID, pridáme nový
+
             ulovok.setIdUlovok(++this.posledneID);
             this.ulovky.add(ulovok);
         } else {
-            // Ak úlovok má ID, aktualizujeme existujúci
+
             boolean found = false;
             for (int i = 0; i < ulovky.size(); i++) {
                 if (ulovky.get(i).getIdUlovok() == ulovok.getIdUlovok()) {
