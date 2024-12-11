@@ -66,6 +66,7 @@ public class LoginController {
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Admin");
                 stage.setScene(scene);
                 stage.show();
             } catch (Exception e) {
