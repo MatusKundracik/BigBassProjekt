@@ -18,17 +18,17 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
             throw new IllegalArgumentException("Povolenie nesmie byť null");
         }
 
-        // Overenie povinných atribútov
+
         if (povolenie.getPlatnostOd() == null || povolenie.getPlatnostDo() == null || povolenie.getRybarIdRybara() <= 0) {
             throw new IllegalArgumentException("Platnosť od, platnosť do a ID rybára sú povinné");
         }
 
         if (povolenie.getIdPovolenie() == 0) {
-            // Ak povolenie nemá ID, pridáme nový záznam
+
             povolenie.setIdPovolenie(++this.posledneID);
             this.povolenia.add(povolenie);
         } else {
-            // Ak povolenie má ID, pokúsime sa aktualizovať existujúci záznam
+
             boolean found = false;
             for (int i = 0; i < povolenia.size(); i++) {
                 if (povolenia.get(i).getIdPovolenie() == povolenie.getIdPovolenie()) {

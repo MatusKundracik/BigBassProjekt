@@ -52,10 +52,9 @@ public class PovolenieController {
             pstruhove = pstruhoveCheckBox.isSelected();
             int rybarID = Integer.parseInt(idRybaraTextFIeld.getText());
 
-            // Vytvorenie objektu Ulovok
+
             Povolenie povolenie = new Povolenie(platnostOd, platnostDo, kaprove, lipnove, pstruhove, rybarID);
 
-            // Pridanie úlovku do zoznamu a ListView
             this.povolenia.add(povolenie);
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
@@ -70,12 +69,12 @@ public class PovolenieController {
     }
 
     private void insertPovolenie(Connection connection, Povolenie povolenie) throws SQLException {
-        // SQL dotaz pre vloženie povolenia
+
         String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            // Nastavenie parametrov pre PreparedStatement
+
             statement.setString(1, povolenie.getPlatnostOd().toString());
             statement.setString(2, povolenie.getPlatnostDo().toString());
             statement.setInt(3, povolenie.isPstruhove() ? 1 : 0);
@@ -83,7 +82,6 @@ public class PovolenieController {
             statement.setInt(5, povolenie.isKaprove() ? 1 : 0);
             statement.setInt(6, (int) povolenie.getRybarIdRybara());
 
-            // Vykonanie dotazu
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Chyba pri vkladaní povolenia do databázy", e);

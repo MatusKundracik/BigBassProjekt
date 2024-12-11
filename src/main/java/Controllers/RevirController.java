@@ -50,19 +50,16 @@ public class RevirController {
             String lokalita = lokalitaTextField.getText();
             String popis = popisTextField.getText();
 
-            // Nastavíme hodnoty podľa zaškrtnutých checkboxov
             kaprove = kaproveCheckBox.isSelected();
             lipnove = lipnoveCheckBox.isSelected();
             pstruhove = pstruhoveCheckBox.isSelected();
 
             Revir revir = new Revir(nazov, lokalita, popis, kaprove, lipnove, pstruhove);
 
-            // Pridanie úlovku do zoznamu a ListView
             this.revire.add(revir);
 
-            // Uloženie úlovku do databázy
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertRevir(connection, revir); // Zavolanie metódy na uloženie do databázy
+                insertRevir(connection, revir);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
@@ -74,21 +71,21 @@ public class RevirController {
 
     @FXML
     void kaproveAction(ActionEvent event) {
-        kaprove = kaproveCheckBox.isSelected(); // Nastavenie hodnoty na TRUE alebo FALSE
+        kaprove = kaproveCheckBox.isSelected();
     }
 
     @FXML
     void lipnoveAction(ActionEvent event) {
-        lipnove = lipnoveCheckBox.isSelected(); // Nastavenie hodnoty na TRUE alebo FALSE
+        lipnove = lipnoveCheckBox.isSelected();
     }
 
     @FXML
     void pstruhoveAction(ActionEvent event) {
-        pstruhove = pstruhoveCheckBox.isSelected(); // Nastavenie hodnoty na TRUE alebo FALSE
+        pstruhove = pstruhoveCheckBox.isSelected();
     }
 
     private void insertRevir(Connection connection, Revir revir) throws SQLException {
-        // SQL dotaz pre vloženie úlovku
+
         String insertQuery = "INSERT INTO revir (nazov, lokalita, popis, kaprove, lipnove, pstruhove) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -96,7 +93,7 @@ public class RevirController {
             statement.setString(1, revir.getNazov());
             statement.setString(2, revir.getLokalita());
             statement.setString(3, revir.getPopis());
-            // Zápis 1 (TRUE) alebo 0 (FALSE) pre TINYINT
+
             statement.setInt(4, revir.isKaprove() ? 1 : 0);
             statement.setInt(5, revir.isLipnove() ? 1 : 0);
             statement.setInt(6, revir.isPstruhove() ? 1 : 0);

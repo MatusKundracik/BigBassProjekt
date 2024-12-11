@@ -18,21 +18,21 @@ public class MemoryRevirDAO implements RevirDAO {
             throw new IllegalArgumentException("Revír nesmie byť null");
         }
 
-        // Overenie povinných atribútov
+
         if (revir.getNazov() == null || revir.getLokalita() == null) {
             throw new IllegalArgumentException("Názov, lokalita a číslo revíru sú povinné");
         }
 
         if (revir.getIdRevir() == 0) {
-            // Ak revír nemá ID, pridáme nový záznam
+
             revir.setIdRevir(++this.posledneID);
             this.reviry.add(revir);
         } else {
-            // Ak revír má ID, pokúsime sa aktualizovať existujúci záznam
+
             boolean found = false;
             for (int i = 0; i < reviry.size(); i++) {
                 if (reviry.get(i).getIdRevir() == revir.getIdRevir()) {
-                    reviry.set(i, revir); // Aktualizujeme existujúci záznam
+                    reviry.set(i, revir);
                     found = true;
                     break;
                 }
