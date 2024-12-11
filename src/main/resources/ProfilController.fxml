@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
    <children>
       <HBox>
          <children>
@@ -31,12 +30,12 @@
          <children>
             <Label fx:id="emailLabel" text="Email:">
                <HBox.margin>
-                  <Insets left="10.0" top="30.0" />
+                  <Insets left="10.0" right="100.0" top="30.0" />
                </HBox.margin>
             </Label>
             <Label fx:id="pridanyDoEvidencieLabel" text="Pridaný do evidencie:">
                <HBox.margin>
-                  <Insets left="100.0" top="30.0" />
+                  <Insets top="30.0" />
                </HBox.margin>
             </Label>
             <Label fx:id="odobranzyZEvidencieLabel" text="Odobraný z evidencie:">
@@ -46,5 +45,24 @@
             </Label>
          </children>
       </HBox>
+      <VBox prefHeight="335.0" prefWidth="300.0">
+         <children>
+            <Label fx:id="celkovyPocetRybLabel" prefHeight="17.0" prefWidth="164.0" text="Celkový počet chytených rýb:">
+               <VBox.margin>
+                  <Insets left="10.0" top="30.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="najvacsiaRybaLabel" prefHeight="17.0" prefWidth="131.0" text="Najväčšia chytená ryba:">
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="najtazsiaRybaLabel" text="Najťažšia chytená ryba:">
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
    </children>
 </VBox>
