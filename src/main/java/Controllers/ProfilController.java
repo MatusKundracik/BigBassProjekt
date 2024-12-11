@@ -23,6 +23,15 @@ public class ProfilController {
     private Label adresaLabel;
 
     @FXML
+    private Label celkovyPocetRybLabel;
+
+    @FXML
+    private Label najtazsiaRybaLabel;
+
+    @FXML
+    private Label najvacsiaRybaLabel;
+
+    @FXML
     private Label datumNarodeniaLabel;
 
     @FXML
@@ -58,6 +67,16 @@ public class ProfilController {
                 emailLabel.setText("Email: " + email);
                 pridanyDoEvidencieLabel.setText("Pridaný do evidencie: " + pridanyDoEvidencie);
                 odobranzyZEvidencieLabel.setText("Odobraný z evidencie: " + odobranieDatum);
+            }
+            if (aktualnyRybarId > 0) {
+                // Nastavenie štatistík
+                celkovyPocetRybLabel.setText("Celkový počet chytených rýb: " + vypocitajCelkovyPocetRyb(aktualnyRybarId));
+                najvacsiaRybaLabel.setText("Najväčšia chytený ryba: " + vypocitajNajvacsiUlovok(aktualnyRybarId) + " cm");
+                najtazsiaRybaLabel.setText("Najťažšia chytený ryba:  " + vypocitajNajtazsiUlovok(aktualnyRybarId) + " kg");
+            } else {
+                celkovyPocetRybLabel.setText("Nie sú dostupné údaje.");
+                najvacsiaRybaLabel.setText("Nie sú dostupné údaje.");
+                najtazsiaRybaLabel.setText("Nie sú dostupné údaje.");
             }
         }
         //nahradObsah("/Profil.fxml");
@@ -147,6 +166,57 @@ public class ProfilController {
             e.printStackTrace(); // Vypíše chybu pri práci s databázou
         }
         return null; // Ak sa meno nepodarilo načítať
+    }
+
+    // Metóda na výpočet celkového počtu chytených rýb
+    private int vypocitajCelkovyPocetRyb(int rybarId) {
+        String sql = "SELECT SUM(druh_ryby) AS celkovy_pocet FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, rybarId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("celkovy_pocet");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Metóda na výpočet najväčšej chytenej ryby
+    private int vypocitajNajvacsiUlovok(int rybarId) {
+        String sql = "SELECT MAX(dlzka_v_cm) AS najvacsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, rybarId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("najvacsia_ryba");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Metóda na výpočet najťažšej chytenej ryby
+    private double vypocitajNajtazsiUlovok(int rybarId) {
+        String sql = "SELECT MAX(hmotnost_v_kg) AS najtazsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, rybarId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("najtazsia_ryba");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0.0;
     }
 
 }
