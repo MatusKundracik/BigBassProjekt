@@ -8,7 +8,9 @@ import org.projekt.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UlovkyController {
 
@@ -16,6 +18,9 @@ public class UlovkyController {
 
     private List<Ulovok> ulovky = new ArrayList<>();
 
+    private Map<String, Integer> revirMap = new HashMap<>();
+    private int idRevir;
+    private int idPovolenie;
     @FXML
     private Label IDulovokLabel;
 
@@ -52,24 +57,24 @@ public class UlovkyController {
     @FXML
     void addUlovokAction(ActionEvent event) {
         try {
-            // Získanie údajov z formulára
+
             LocalDate datumUlovok = datumUlovkuDatePicker.getValue();
             String cisloReviru = nazovReviruComboBox.getValue();
+            idRevir = revirMap.get(cisloReviru);
             String druhRyby = druhRybyTextField.getText();
             double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
             double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
 
 
-            // Vytvorenie objektu Ulovok
             Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
 
-            // Pridanie úlovku do zoznamu a ListView
+
             this.ulovky.add(ulovok);
             ulovokListView.getItems().add(ulovok);
 
-            // Uloženie úlovku do databázy
+
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertUlovok(connection, ulovok); // Zavolanie metódy na uloženie do databázy
+                insertUlovok(connection, ulovok);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
@@ -86,15 +91,15 @@ public class UlovkyController {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            // Nastavenie parametrov pre PreparedStatement
+
             statement.setString(1, ulovok.getDatumUlovku().toString());
             statement.setString(2, ulovok.getCisloReviru());
             statement.setString(3, ulovok.getDruhRyby());
             statement.setDouble(4, ulovok.getDlzkaVcm());
             statement.setDouble(5, ulovok.getHmotnostVkg());
-            statement.setInt(6, 1);
+            statement.setInt(6, idPovolenie);
             statement.setInt(7, Session.aktualnyRybarId);
-            statement.setInt(8, 1);
+            statement.setInt(8, idRevir);
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -105,25 +110,17 @@ public class UlovkyController {
     @FXML
     private void naplnNazvyReviruDoChoiceBox() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery =  "SELECT r.nazov FROM revir r " +
-                    "JOIN povolenie p ON (" +
-                    "    (p.kaprové = 1 AND r.kaprove = 1) OR " +
-                    "    (p.pstruhove = 1 AND r.pstruhove = 1) OR " +
-                    "    (p.lipňove = 1 AND r.lipnove = 1)" +
-                    ") " +
-                    "WHERE p.rybar_id_rybara = ?";
-            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
-                statement.setInt(1, Session.aktualnyRybarId);
+            String selectQuery = "SELECT id_revira, nazov FROM revir";
+            try (PreparedStatement statement = connection.prepareStatement(selectQuery);
+                 ResultSet resultSet = statement.executeQuery()) {
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    // Clear the existing items in the ChoiceBox
-                    nazovReviruComboBox.getItems().clear();
+                nazovReviruComboBox.getItems().clear();
 
-                    // Add each "nazov" from the database to the ChoiceBox
-                    while (resultSet.next()) {
-                        String nazovReviru = resultSet.getString("nazov");
-                        nazovReviruComboBox.getItems().add(nazovReviru);
-                    }
+                while (resultSet.next()) {
+                    String nazovReviru = resultSet.getString("nazov");
+                    int idRevir = resultSet.getInt("id_revira");
+                    revirMap.put(nazovReviru, idRevir);
+                    nazovReviruComboBox.getItems().add(nazovReviru);
                 }
             }
         } catch (SQLException e) {
@@ -132,31 +129,30 @@ public class UlovkyController {
         }
     }
 
+
     ;
 
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
-        ulovky.clear(); // Vyčistenie lokálneho zoznamu
-        ulovokListView.getItems().clear(); // Vyčistenie zobrazenia
+        ulovky.clear();
+        ulovokListView.getItems().clear();
 
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
             String selectQuery = "SELECT * FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
             try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
-                statement.setInt(1, Session.aktualnyRybarId); // ID aktuálne prihláseného používateľa
+                statement.setInt(1, Session.aktualnyRybarId);
 
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        // Načítanie údajov z databázy
+
                         LocalDate datum = LocalDate.parse(resultSet.getString("datum"));
                         String cisloReviru = resultSet.getString("cislo_reviru");
                         String druhRyby = resultSet.getString("druh_ryby");
                         double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
                         double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
-                        int kontrola = resultSet.getInt("kontrola");
 
-                        // Vytvorenie objektu Ulovok
                         Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
 
-                        // Pridanie do zoznamu a ListView
+
                         ulovky.add(ulovok);
                         ulovokListView.getItems().add(ulovok);
                     }
@@ -167,11 +163,37 @@ public class UlovkyController {
         }
     }
 
+    private void idPovoleniaPodlaRybaraID() {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
+            String selectQuery = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
+            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+                statement.setInt(1, Session.aktualnyRybarId);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    // Predpokladáme, že rybár má iba jedno povolenie
+                    if (resultSet.next()) {
+                        this.idPovolenie = resultSet.getInt("id_povolenie");
+                        System.out.println("ID povolenia pre aktuálneho rybára: " + idPovolenie);
+                    } else {
+                        System.out.println("Rybár nemá žiadne povolenie.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Chyba pri načítaní ID povolenia pre rybára.", e);
+        }
+    }
+
+
+
+
     @FXML
     void initialize() {
         this.ulovokListView.getItems().addAll(this.ulovky);
         nacitajUlovkyPreAktualnehoPouzivatela();
         naplnNazvyReviruDoChoiceBox();
+        idPovoleniaPodlaRybaraID();
     }
 
 }

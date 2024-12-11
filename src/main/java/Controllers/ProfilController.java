@@ -55,11 +55,11 @@ public class ProfilController {
 
     @FXML
     public void initialize() {
-        // Načítanie údajov o aktuálne prihlásenom používateľovi zo Session
+
         int aktualnyRybarId = Session.aktualnyRybarId;
 
         if (aktualnyRybarId > 0) {
-            // Načítaj meno používateľa podľa ID
+
             String menoPouzivatela = getRybarMenoPriezviskoById(aktualnyRybarId);
             String adresaPouzivatela = getRybarAdresaById(aktualnyRybarId);
             String datumNarodenia = getRybarDatumNarById(aktualnyRybarId);
@@ -89,7 +89,7 @@ public class ProfilController {
                 najtazsiaRybaLabel.setText("Nie sú dostupné údaje.");
             }
         }
-        //nahradObsah("/Profil.fxml");
+
     }
 
     private String getRybarMenoPriezviskoById(int idRybara) {
@@ -101,13 +101,13 @@ public class ProfilController {
                 if (rs.next()) {
                     String meno = rs.getString("meno");
                     String priezvisko = rs.getString("priezvisko");
-                    return meno + " " + priezvisko; // Skombinuj meno a priezvisko
+                    return meno + " " + priezvisko;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+            e.printStackTrace();
         }
-        return null; // Ak sa meno nepodarilo načítať
+        return null;
     }
 
     private String getRybarAdresaById(int idRybara) {
@@ -122,9 +122,9 @@ public class ProfilController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+            e.printStackTrace();
         }
-        return null; // Ak sa meno nepodarilo načítať
+        return null;
     }
 
     private String getRybarDatumNarById(int idRybara) {
@@ -139,9 +139,9 @@ public class ProfilController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+            e.printStackTrace();
         }
-        return null; // Ak sa meno nepodarilo načítať
+        return null;
     }
 
     private String getRybarEmailById(int idRybara) {
@@ -156,9 +156,9 @@ public class ProfilController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+            e.printStackTrace();
         }
-        return null; // Ak sa meno nepodarilo načítať
+        return null;
     }
 
     private String getRybarpridanyDoEvidencieById(int idRybara) {
@@ -173,9 +173,9 @@ public class ProfilController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Vypíše chybu pri práci s databázou
+            e.printStackTrace();
         }
-        return null; // Ak sa meno nepodarilo načítať
+        return null;
     }
 
     // Metóda na výpočet celkového počtu chytených rýb
@@ -195,7 +195,7 @@ public class ProfilController {
         return 0;
     }
 
-    // Metóda na výpočet najväčšej chytenej ryby
+
     private int vypocitajNajvacsiUlovok(int rybarId) {
         String sql = "SELECT MAX(dlzka_v_cm) AS najvacsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
@@ -212,7 +212,7 @@ public class ProfilController {
         return 0;
     }
 
-    // Metóda na výpočet najťažšej chytenej ryby
+
     private double vypocitajNajtazsiUlovok(int rybarId) {
         String sql = "SELECT MAX(hmotnost_v_kg) AS najtazsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
