@@ -17,8 +17,6 @@ import java.util.Optional;
 
 public class ProfilController {
 
-    private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
-
     @FXML
     private Label adresaLabel;
 
@@ -47,6 +45,15 @@ public class ProfilController {
     private Label pridanyDoEvidencieLabel;
 
     @FXML
+    private Label povolenieKLabel;
+
+    @FXML
+    private Label povolenieLLabel;
+
+    @FXML
+    private Label povoleniePLabel;
+
+    @FXML
     public void initialize() {
         // Načítanie údajov o aktuálne prihlásenom používateľovi zo Session
         int aktualnyRybarId = Session.aktualnyRybarId;
@@ -60,6 +67,9 @@ public class ProfilController {
             String pridanyDoEvidencie = getRybarpridanyDoEvidencieById(aktualnyRybarId);
             LocalDate pridanyDatum = LocalDate.parse(pridanyDoEvidencie);
             LocalDate odobranieDatum = pridanyDatum.plusYears(1);
+            zobrazKaprovePovolenie(aktualnyRybarId);
+            zobrazLipnovePovolenie(aktualnyRybarId);
+            zobrazPstruhovePovolenie(aktualnyRybarId);
             if (menoPouzivatela != null) {
                 menoPriezviskoLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
                 adresaLabel.setText("Adresa: " + adresaPouzivatela);
@@ -170,7 +180,7 @@ public class ProfilController {
 
     // Metóda na výpočet celkového počtu chytených rýb
     private int vypocitajCelkovyPocetRyb(int rybarId) {
-        String sql = "SELECT SUM(druh_ryby) AS celkovy_pocet FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+        String sql = "SELECT count(druh_ryby) AS celkovy_pocet FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, rybarId);
@@ -217,6 +227,54 @@ public class ProfilController {
             e.printStackTrace();
         }
         return 0.0;
+    }
+
+    public void zobrazKaprovePovolenie(int idRybara) {
+        String query = "SELECT kaprové FROM povolenie WHERE rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idRybara);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                int kaprove = resultSet.getInt("kaprové");
+                povolenieKLabel.setText(kaprove == 1 ? "Kaprové povolenie: Áno" : "Kaprové povolenie: Nie");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            povolenieKLabel.setText("Chyba pri načítaní povolenia");
+        }
+    }
+
+    public void zobrazPstruhovePovolenie(int idRybara) {
+        String query = "SELECT pstruhove FROM povolenie WHERE rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idRybara);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                int pstruhove = resultSet.getInt("pstruhove");
+                povoleniePLabel.setText(pstruhove == 1 ? "Pstruhové povolenie: Áno" : "Pstruhové povolenie: Nie");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            povoleniePLabel.setText("Chyba pri načítaní povolenia");
+        }
+    }
+
+    public void zobrazLipnovePovolenie(int idRybara) {
+        String query = "SELECT lipňove FROM povolenie WHERE rybar_id_rybara = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idRybara);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                int lipnove = resultSet.getInt("lipňove");
+                povolenieLLabel.setText(lipnove == 1 ? "Lipňové povolenie: Áno" : "Lipňové povolenie: Nie");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            povolenieLLabel.setText("Chyba pri načítaní povolenia");
+        }
     }
 
 }
