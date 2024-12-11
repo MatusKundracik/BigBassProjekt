@@ -105,17 +105,25 @@ public class UlovkyController {
     @FXML
     private void naplnNazvyReviruDoChoiceBox() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery = "SELECT nazov FROM revir";
-            try (PreparedStatement statement = connection.prepareStatement(selectQuery);
-                 ResultSet resultSet = statement.executeQuery()) {
+            String selectQuery =  "SELECT r.nazov FROM revir r " +
+                    "JOIN povolenie p ON (" +
+                    "    (p.kaprové = 1 AND r.kaprove = 1) OR " +
+                    "    (p.pstruhove = 1 AND r.pstruhove = 1) OR " +
+                    "    (p.lipňove = 1 AND r.lipnove = 1)" +
+                    ") " +
+                    "WHERE p.rybar_id_rybara = ?";
+            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+                statement.setInt(1, Session.aktualnyRybarId);
 
-                // Clear the existing items in the ChoiceBox
-                nazovReviruComboBox.getItems().clear();
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    // Clear the existing items in the ChoiceBox
+                    nazovReviruComboBox.getItems().clear();
 
-                // Add each "nazov" from the database to the ChoiceBox
-                while (resultSet.next()) {
-                    String nazovReviru = resultSet.getString("nazov");
-                    nazovReviruComboBox.getItems().add(nazovReviru);
+                    // Add each "nazov" from the database to the ChoiceBox
+                    while (resultSet.next()) {
+                        String nazovReviru = resultSet.getString("nazov");
+                        nazovReviruComboBox.getItems().add(nazovReviru);
+                    }
                 }
             }
         } catch (SQLException e) {
