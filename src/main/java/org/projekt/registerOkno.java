@@ -14,7 +14,7 @@ public class registerOkno extends Application {
     public void start(Stage stage) throws Exception {
 
        Parent loginPane = FXMLLoader.load(getClass().getResource("/LoginController.fxml"));
-//
+
         Scene scene2 = new Scene(loginPane);
         stage.setTitle("Prihlásenie");
         stage.setScene(scene2);
