@@ -110,7 +110,7 @@ public class UlovkyController {
     @FXML
     private void naplnNazvyReviruDoChoiceBox() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery =  "SELECT r.nazov FROM revir r " +
+            String selectQuery =  "SELECT r.nazov, r.id_revira FROM revir r " +
                     "JOIN povolenie p ON (" +
                     "    (p.kaprové = 1 AND r.kaprove = 1) OR " +
                     "    (p.pstruhove = 1 AND r.pstruhove = 1) OR " +
@@ -127,6 +127,8 @@ public class UlovkyController {
                     // Add each "nazov" from the database to the ChoiceBox
                     while (resultSet.next()) {
                         String nazovReviru = resultSet.getString("nazov");
+                        int idRevir = resultSet.getInt("id_revira");
+                        revirMap.put(nazovReviru, idRevir);
                         nazovReviruComboBox.getItems().add(nazovReviru);
                     }
                 }
