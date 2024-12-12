@@ -135,7 +135,7 @@ public class UlovkyController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Chyba při načítání názvů revírů.", e);
+            throw new RuntimeException("Chyba pri nacitani reviru.", e);
         }
     }
 
