@@ -109,7 +109,7 @@ public class ProfilController {
             return;
         }
 
-        ulovkyBarChart.getData().clear(); // Vyčistenie predchádzajúcich údajov
+        ulovkyBarChart.getData().clear();
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Počet úlovkov");
