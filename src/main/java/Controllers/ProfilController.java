@@ -1,18 +1,19 @@
 package Controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.projekt.Factory;
 import org.projekt.Rybar;
 import org.projekt.RybarDAO;
 import org.projekt.Session;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class ProfilController {
@@ -54,8 +55,11 @@ public class ProfilController {
     private Label povoleniePLabel;
 
     @FXML
-    public void initialize() {
+    private BarChart<String, Number> ulovkyBarChart;
 
+    @FXML
+    public void initialize() {
+        zobrazStatistikyUlovkov();
         int aktualnyRybarId = Session.aktualnyRybarId;
 
         if (aktualnyRybarId > 0) {
@@ -91,6 +95,77 @@ public class ProfilController {
         }
 
     }
+
+
+
+    private void naplnBarChart(Map<String, Integer> ulovkyZaMesiac) {
+        if (ulovkyBarChart == null) {
+            System.err.println("Chyba: BarChart nebol inicializovaný.");
+            return;
+        }
+
+        if (ulovkyZaMesiac == null || ulovkyZaMesiac.isEmpty()) {
+            System.err.println("Chyba: Údaje pre BarChart nie sú dostupné.");
+            return;
+        }
+
+        ulovkyBarChart.getData().clear(); // Vyčistenie predchádzajúcich údajov
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Počet úlovkov");
+
+        for (Map.Entry<String, Integer> entry : ulovkyZaMesiac.entrySet()) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            series.getData().add(data);
+        }
+
+        ulovkyBarChart.getData().add(series);
+    }
+
+
+    private Map<String, Integer> nacitajPoctyUlovkovZaMesiac() {
+        Map<String, Integer> ulovkyZaMesiac = new HashMap<>();
+
+        String query = "SELECT strftime('%Y-%m', datum) AS mesiac, COUNT(*) AS pocet_ulovkov " +
+                "FROM ulovok " +
+                "WHERE povolenie_rybar_id_rybara = ? " +
+                "GROUP BY strftime('%Y-%m', datum) " +
+                "ORDER BY mesiac ASC";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, Session.aktualnyRybarId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    String mesiac = resultSet.getString("mesiac");
+                    int pocet = resultSet.getInt("pocet_ulovkov");
+                    ulovkyZaMesiac.put(mesiac, pocet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Chyba pri načítaní počtu úlovkov za jednotlivé mesiace.", e);
+        }
+
+        return ulovkyZaMesiac;
+    }
+
+
+
+    @FXML
+    private void zobrazStatistikyUlovkov() {
+        Map<String, Integer> ulovkyZaMesiac = nacitajPoctyUlovkovZaMesiac();
+        if (ulovkyZaMesiac == null || ulovkyZaMesiac.isEmpty()) {
+            System.err.println("Chyba: Žiadne údaje o úlovkoch.");
+            return;
+        }
+        naplnBarChart(ulovkyZaMesiac);
+    }
+
+
+
 
     private String getRybarMenoPriezviskoById(int idRybara) {
         String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
