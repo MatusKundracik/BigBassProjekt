@@ -17,12 +17,14 @@ public class Ulovok {
     private String druhRyby;
     private double dlzkaVcm;
     private double hmotnostVkg;
+    private int kontrola;
 
-    public Ulovok(LocalDate datumUlovku, String cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg) {
+    public Ulovok(LocalDate datumUlovku, String cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg, int kontrola) {
         this.datumUlovku = datumUlovku;
         this.cisloReviru = cisloReviru;
         this.druhRyby = druhRyby;
         this.dlzkaVcm = dlzkaVcm;
         this.hmotnostVkg = hmotnostVkg;
+        this.kontrola = kontrola;
     }
 }
