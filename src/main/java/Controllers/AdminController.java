@@ -10,6 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.projekt.Session;
 
+import java.util.Objects;
+
 public class AdminController {
 
     @FXML
@@ -27,6 +29,8 @@ public class AdminController {
     @FXML
     private Button upravitReviryButton;
 
+
+
     @FXML
     void odhlasMaButton(ActionEvent event) {
         try {
@@ -41,6 +45,7 @@ public class AdminController {
 
             Stage loginStage = new Stage();
             loginStage.setScene(new Scene(root));
+            loginStage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
             loginStage.setTitle("Prihlásenie");
             loginStage.show();
 

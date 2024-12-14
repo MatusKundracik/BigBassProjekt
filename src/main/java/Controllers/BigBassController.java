@@ -7,15 +7,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.projekt.Session;
+import javafx.scene.image.ImageView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Objects;
 
 public class BigBassController {
 
@@ -24,6 +27,9 @@ public class BigBassController {
 
     @FXML
     private StackPane contentStackPane;
+
+    @FXML
+    private ImageView imageLabel;
 
     @FXML
     private Button odhlasitSaButton;
@@ -40,6 +46,8 @@ public class BigBassController {
     @FXML
     public void initialize() {
         int aktualnyRybarId = Session.aktualnyRybarId;
+        Image image = new Image("/images/bass.png");
+        imageLabel.setImage(image);
 
         if (aktualnyRybarId > 0) {
             // Načítaj meno používateľa podľa ID
@@ -88,6 +96,7 @@ public class BigBassController {
 
             Stage loginStage = new Stage();
             loginStage.setScene(new Scene(root));
+            loginStage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
             loginStage.setTitle("Prihlásenie");
             loginStage.show();
 

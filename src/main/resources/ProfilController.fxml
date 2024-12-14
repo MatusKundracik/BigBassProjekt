@@ -7,7 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
    <children>
       <VBox prefHeight="335.0" prefWidth="300.0">
          <children>
@@ -37,7 +37,7 @@
             </Label>
          </children>
       </VBox>
-      <BarChart fx:id="ulovkyBarChart">
+      <BarChart fx:id="ulovkyBarChart" stylesheets="@css/styling.css">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>

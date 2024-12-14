@@ -2,15 +2,21 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 import org.projekt.Factory;
 import org.projekt.Rybar;
 import org.projekt.RybarDAO;
 import org.projekt.Factory;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RegisterController {
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
@@ -84,11 +90,27 @@ public class RegisterController {
 
             rybarListView.getItems().clear();
             rybarListView.getItems().addAll(rybarDAO.getAll());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginController.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            stage.setTitle("Prihlásenie");
+            stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
+            stage.setScene(scene);
+            stage.show();
+
         } catch (NumberFormatException e) {
             System.out.println("ID musí byť číslo!");
         } catch (IllegalArgumentException e) {
             System.out.println("Chyba: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     private void insertUser(Connection connection, String meno, String priezvisko, String adresa,

@@ -17,6 +17,7 @@ public class registerOkno extends Application {
 
         Scene scene2 = new Scene(loginPane);
         stage.setTitle("Prihlásenie");
+        stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
         stage.setScene(scene2);
         stage.show();
 
