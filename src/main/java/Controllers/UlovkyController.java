@@ -215,7 +215,7 @@ public class UlovkyController {
                         String druhRyby = resultSet.getString("druh_ryby");
                         double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
                         double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
-                        int kontrola = 0;
+                        int kontrola = resultSet.getInt("kontrola");
                         Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
 
 
