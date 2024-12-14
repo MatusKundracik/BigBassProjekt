@@ -19,6 +19,9 @@ public class AdminController {
     private StackPane contentStackPane;
 
     @FXML
+    private Button kontrolaButton;
+
+    @FXML
     private Button povolenieButton;
 
     @FXML
@@ -47,6 +50,12 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @FXML
+    void skontrolujUlovokButton(ActionEvent event) {
+        nahradObsah(("/KontrolaController.fxml"));
     }
 
     @FXML

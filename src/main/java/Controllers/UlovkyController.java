@@ -64,9 +64,10 @@ public class UlovkyController {
             String druhRyby = druhRybyTextField.getText();
             double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
             double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
+            int kontrola = 0;
 
 
-            Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
+            Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg,kontrola);
 
 
             this.ulovky.add(ulovok);
@@ -87,8 +88,8 @@ public class UlovkyController {
     private void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException {
         // SQL dotaz pre vloženie úlovku
         String insertQuery = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg," +
-                "povolenie_id_povolenie, povolenie_rybar_id_rybara, revir_id_revira) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "povolenie_id_povolenie, povolenie_rybar_id_rybara, revir_id_revira, kontrola) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
 
@@ -97,6 +98,7 @@ public class UlovkyController {
             statement.setString(3, ulovok.getDruhRyby());
             statement.setDouble(4, ulovok.getDlzkaVcm());
             statement.setDouble(5, ulovok.getHmotnostVkg());
+            statement.setInt(6, ulovok.getKontrola());
             statement.setInt(6, idPovolenie);
             statement.setInt(7, Session.aktualnyRybarId);
             statement.setInt(8, idRevir);
@@ -159,8 +161,8 @@ public class UlovkyController {
                         String druhRyby = resultSet.getString("druh_ryby");
                         double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
                         double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
-
-                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg);
+                        int kontrola = 0;
+                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
 
 
                         ulovky.add(ulovok);
