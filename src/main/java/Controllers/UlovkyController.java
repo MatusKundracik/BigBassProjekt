@@ -55,13 +55,67 @@ public class UlovkyController {
     private ComboBox<String> nazovReviruComboBox;
 
     @FXML
+    private ComboBox<String> druhRybyComboBox;
+
+    public void nacitajRybyNaSlovensku() {
+
+
+        druhRybyComboBox.getItems().addAll(
+                "Amur biely",
+                "Blatňák tmavý",
+                "Candát obecný",
+                "Candát východný",
+                "Cejn perleťový",
+                "Cejn siný",
+                "Cejn veľký",
+                "Cejnek mal",
+                "Drsek menší",
+                "Jeseter malý",
+                "Drsek väčší",
+                "Hlavačka mramorovaná",
+                "Hlavačkovec Glenov",
+                "Hlavatka obecná podunajská",
+                "Hlaváč čiernoústý",
+                "Hlaváč holokrký",
+                "Hlaváč Kesslerov",
+                "Hlaváč riečny",
+                "Hořavka dúhová",
+                "Hrouzek beloplutvý",
+                "Hrouzek dlhovúsy",
+                "Hrouzek Kesslerov",
+                "Hrouzek obecný",
+                "Jelec jesenný",
+                "Jelec prúdnatý",
+                "Jelec tĺšť",
+                "Jeseter hviezdnatý",
+                "Jeseter ruský",
+                "Ježdík dunajský",
+                "Ježdík obyčajný",
+                "Ježdík žltý)",
+                "Kapr obyčajný",
+                "Karas obyčajný",
+                "Karas striebristý",
+                "Koljuška tŕnočiarna",
+                "Lipňan podhorný",
+                "Mník jednovúsy",
+                "Mrenka mramorovaná",
+                "Ostriež riečny",
+                "Plotica obyčajná",
+                "Sumec veľký",
+                "Šťuka obyčajná",
+                "Tolstolobec pestrofarebný",
+                "Úhor riečny",
+                "Vranka obyčajná"
+        );
+    }
+    @FXML
     void addUlovokAction(ActionEvent event) {
         try {
 
             LocalDate datumUlovok = datumUlovkuDatePicker.getValue();
             String cisloReviru = nazovReviruComboBox.getValue();
             idRevir = revirMap.get(cisloReviru);
-            String druhRyby = druhRybyTextField.getText();
+            String druhRyby = druhRybyComboBox.getValue();
             double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
             double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
             int kontrola = 0;
@@ -206,6 +260,7 @@ public class UlovkyController {
         nacitajUlovkyPreAktualnehoPouzivatela();
         naplnNazvyReviruDoChoiceBox();
         idPovoleniaPodlaRybaraID();
+        nacitajRybyNaSlovensku();
     }
 
 }
