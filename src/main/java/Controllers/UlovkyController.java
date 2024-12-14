@@ -118,7 +118,7 @@ public class UlovkyController {
             String druhRyby = druhRybyComboBox.getValue();
             double dlzkaVcm = Double.parseDouble(dlzkaVcmTextField.getText());
             double hmotnostVkg = Double.parseDouble(hmotnostVkgTextField.getText());
-            int kontrola = Integer.parseInt(kontrolaTextField.getText());
+            int kontrola = 0;
 
 
             Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg,kontrola);
