@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Objects;
 
 public class LoginController {
 
@@ -65,7 +66,11 @@ public class LoginController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminController.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styling.css")).toExternalForm());
+
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
                 stage.setTitle("Admin");
                 stage.setScene(scene);
                 stage.show();
@@ -81,8 +86,13 @@ public class LoginController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/BigBassController.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
+
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styling.css")).toExternalForm());
+
                 Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
                 stage.setTitle("Big Bass");
+
+
                 stage.setScene(scene);
                 stage.show();
             } catch (Exception e) {
