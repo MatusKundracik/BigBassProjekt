@@ -27,4 +27,13 @@ public class Ulovok {
         this.hmotnostVkg = hmotnostVkg;
         this.kontrola = kontrola;
     }
+
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Dátum: %s, Revír: %s, Druh ryby: %s, Dĺžka: %.2f cm, Hmotnosť: %.2f kg",
+                datumUlovku, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg
+        );
+    }
 }
