@@ -45,7 +45,7 @@ public class AdminController {
 
             Stage loginStage = new Stage();
             loginStage.setScene(new Scene(root));
-            loginStage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
+            loginStage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/alfonso.png"))));
             loginStage.setTitle("Prihlásenie");
             loginStage.show();
 

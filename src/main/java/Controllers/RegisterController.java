@@ -99,7 +99,7 @@ public class RegisterController {
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 
             stage.setTitle("Prihlásenie");
-            stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
+            stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/alfonso.png"))));
             stage.setScene(scene);
             stage.show();
 
