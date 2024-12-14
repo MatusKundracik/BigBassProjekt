@@ -3,44 +3,55 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.PasswordField?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: #238b45;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginController">
    <children>
-      <VBox alignment="CENTER">
+      <VBox layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
+            <VBox alignment="CENTER" prefHeight="242.0" prefWidth="600.0" style="-fx-background-color: #238b45;">
                <children>
-                  <Label text="Login Big Bass" />
+                  <HBox alignment="CENTER" prefHeight="124.0" prefWidth="614.0" style="-fx-background-color: #238b45;">
+                     <children>
+                        <ImageView fitHeight="141.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/bass.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Label text="Emailová adresa:" />
+                  <TextField fx:id="EmailTextField" />
+                  <Label text="Heslo:" />
+                  <PasswordField fx:id="PasswordTextField" />
+                  <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#prihlasSaButton" text="Prihlásiť sa">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="96.0" prefWidth="600.0" style="-fx-background-color: #238b45;">
+               <children>
+                  <Label prefHeight="36.0" prefWidth="105.0" stylesheets="@css/styling.css" text=" Nemáte ešte účet?">
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Button fx:id="RegisterButton" mnemonicParsing="false" onAction="#zaregistrujSaButton" stylesheets="@css/styling.css" text="Zaregistrovať sa">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
-            <Label text="Email:" />
-            <TextField fx:id="EmailTextField" />
-            <Label text="Password:" />
-            <PasswordField fx:id="PasswordTextField" />
-            <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#prihlasSaButton" text="Login">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </VBox.margin>
-            </Button>
          </children>
       </VBox>
-      <HBox alignment="CENTER">
-         <children>
-            <Label text="Nemáte ešte účet?">
-               <HBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </HBox.margin>
-            </Label>
-            <Button fx:id="RegisterButton" mnemonicParsing="false" onAction="#zaregistrujSaButton" text="Register">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="20.0" top="10.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
    </children>
-</VBox>
+</AnchorPane>
