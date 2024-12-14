@@ -1,21 +1,25 @@
-package org.projekt;
+package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
+import org.projekt.Factory;
+import org.projekt.Rybar;
+import org.projekt.RybarDAO;
+import org.projekt.Factory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RegisterController {
-    private RybarDAO rybarDAO = RybarDAOFactory.INSTANCE.getRybarDAO();
+    private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
     private TextField adresaTextField;
@@ -61,10 +65,14 @@ public class RegisterController {
             String email = emailTextField.getText();
             String heslo = hesloTextField.getText();
             LocalDate datumNarodenia = datumNarodeniaDatePicker.getValue();
-            LocalDate pridanyDoEvidencie = LocalDate.now(); // Dátum pridania
-            LocalDate odhlasenyZEvidencie = null; // Predpokladáme, že nového používateľa neodhlasujeme
+            LocalDate pridanyDoEvidencie = LocalDate.now();
+            LocalDate odhlasenyZEvidencie = null;
 
-            // Šifrovanie hesla pomocou Bcrypt
+            if (jeEmailPouzity(email)) {
+                zobrazAlert("Chyba registrácie", "Email už je použitý!", "Zadajte iný email.");
+                return;
+            }
+
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
 
             Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
@@ -72,8 +80,7 @@ public class RegisterController {
 
             rybarDAO.save(rybar);
 
-            // Vložíme používateľa priamo cez JDBC
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:C:/Users/matus/IdeaProjects/BigBassProjekt/bigbass.db")) {
+            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 insertUser(connection, meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost,
                         datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, hashedHeslo);
                 System.out.println("Používateľ bol úspešne pridaný do databázy.");
@@ -83,11 +90,27 @@ public class RegisterController {
 
             rybarListView.getItems().clear();
             rybarListView.getItems().addAll(rybarDAO.getAll());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginController.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            stage.setTitle("Prihlásenie");
+            stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/florida4bass.jpg"))));
+            stage.setScene(scene);
+            stage.show();
+
         } catch (NumberFormatException e) {
             System.out.println("ID musí byť číslo!");
         } catch (IllegalArgumentException e) {
             System.out.println("Chyba: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     private void insertUser(Connection connection, String meno, String priezvisko, String adresa,
@@ -111,8 +134,28 @@ public class RegisterController {
         }
     }
 
-    @FXML
-    void initialize() {
-        rybarListView.getItems().addAll(rybarDAO.getAll());
+    private boolean jeEmailPouzity(String email) {
+        String sql = "SELECT COUNT(*) AS pocet FROM rybar WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("pocet") > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
+
+    private void zobrazAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 }

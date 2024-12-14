@@ -9,7 +9,7 @@ public class MemoryRybarDAO implements RybarDAO {
 
     @Override
     public List<Rybar> getAll() {
-        return new ArrayList<>(this.rybari); // Vytvorenie novej ArrayList pre imunitu voči úpravám
+        return new ArrayList<>(this.rybari);
     }
 
     @Override
@@ -18,21 +18,21 @@ public class MemoryRybarDAO implements RybarDAO {
             throw new IllegalArgumentException("Rybar nesmie byť null");
         }
 
-        // Overíme, či sú povinné atribúty neplatné
+
         if (rybar.getMeno() == null || rybar.getPriezvisko() == null || rybar.getDatumNarodenia() == null) {
             throw new IllegalArgumentException("Meno, priezvisko a dátum narodenia sú povinné");
         }
 
         if (rybar.getRybarId() == 0) {
-            // Ak rybár nemá ID, znamená to, že je nový a musíme ho vytvoriť
+
             rybar.setRybarId(++this.posledneID);
             this.rybari.add(rybar);
         } else {
-            // Ak rybár má ID, pokúsime sa ho aktualizovať
+
             boolean found = false;
             for (int i = 0; i < rybari.size(); i++) {
                 if (rybari.get(i).getRybarId() == rybar.getRybarId()) {
-                    rybari.set(i, rybar); // Aktualizujeme existujúci objekt
+                    rybari.set(i, rybar);
                     found = true;
                     break;
                 }
@@ -73,4 +73,20 @@ public class MemoryRybarDAO implements RybarDAO {
             throw new IllegalArgumentException("Rybar s ID " + id + " neexistuje");
         }
     }
+
+    @Override
+    public List<Rybar> najdiPodlaID(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID musí byť väčšie ako 0");
+        }
+
+        List<Rybar> vysledky = new ArrayList<>();
+        for (Rybar rybar : rybari) {
+            if (rybar.getRybarId() == id) {
+                vysledky.add(rybar);
+            }
+        }
+        return vysledky;
+    }
+
 }

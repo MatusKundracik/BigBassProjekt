@@ -10,4 +10,6 @@ public interface RybarDAO {
     List<Rybar> najdiPodlaMena(String meno);
 
     void vymazPodlaID(int id);
+
+    List<Rybar> najdiPodlaID(int id);
 }

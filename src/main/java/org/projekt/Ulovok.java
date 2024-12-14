@@ -13,20 +13,27 @@ import lombok.NoArgsConstructor;
 public class Ulovok {
     private int idUlovok;
     private LocalDate datumUlovku;
-    private int cisloReviru;
+    private String cisloReviru;
     private String druhRyby;
-    //private int pocetKusov;
-    private int dlzkaVcm;
-    private int hmotnostVkg;
+    private double dlzkaVcm;
+    private double hmotnostVkg;
     private int kontrola;
 
-    public Ulovok(int idUlovok, LocalDate datumUlovku, int cisloReviru, String druhRyby, int dlzkaVcm, int hmotnostVkg, int kontrola) {
-        this.idUlovok = idUlovok;
+    public Ulovok(LocalDate datumUlovku, String cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg, int kontrola) {
         this.datumUlovku = datumUlovku;
         this.cisloReviru = cisloReviru;
         this.druhRyby = druhRyby;
         this.dlzkaVcm = dlzkaVcm;
         this.hmotnostVkg = hmotnostVkg;
         this.kontrola = kontrola;
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Dátum: %s, Revír: %s, Druh ryby: %s, Dĺžka: %.2f cm, Hmotnosť: %.2f kg",
+                datumUlovku, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg
+        );
     }
 }

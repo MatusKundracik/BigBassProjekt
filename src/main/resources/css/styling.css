@@ -1,0 +1,20 @@
+.vbox{
+    -fx-background-color:   #74C476;
+}
+.tlacitko
+{
+    -fx-background-color: #74C476;
+}
+.default-color0.chart-bar {
+    -fx-bar-fill: #ff5733;
+}
+
+
+.default-color1.chart-bar {
+    -fx-bar-fill: #33c3ff;
+}
+
+
+.default-color2.chart-bar {
+    -fx-bar-fill: #75ff33;
+}
