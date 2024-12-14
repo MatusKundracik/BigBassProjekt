@@ -43,11 +43,11 @@
                   <Insets left="30.0" />
                </HBox.margin>
             </ComboBox>
-            <TextField fx:id="druhRybyTextField">
+            <ComboBox fx:id="druhRybyComboBox" prefWidth="150.0">
                <HBox.margin>
-                  <Insets bottom="10.0" left="30.0" />
+                  <Insets left="30.0" />
                </HBox.margin>
-            </TextField>
+            </ComboBox>
          </children>
       </HBox>
       <HBox>

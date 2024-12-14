@@ -126,11 +126,12 @@ public class ProfilController {
     private Map<String, Integer> nacitajPoctyUlovkovZaMesiac() {
         Map<String, Integer> ulovkyZaMesiac = new HashMap<>();
 
-        String query = "SELECT strftime('%Y-%m', datum) AS mesiac, COUNT(*) AS pocet_ulovkov " +
-                "FROM ulovok " +
-                "WHERE povolenie_rybar_id_rybara = ? " +
-                "GROUP BY strftime('%Y-%m', datum) " +
-                "ORDER BY mesiac ASC";
+            String query = "SELECT strftime('%Y-%m', datum) AS mesiac, COUNT(*) AS pocet_ulovkov " +
+                    "FROM ulovok " +
+                    "WHERE povolenie_rybar_id_rybara = ? " +
+                    "GROUP BY strftime('%Y-%m', datum) " +
+                    "ORDER BY pocet_ulovkov DESC " +
+                    "LIMIT 3";
 
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
              PreparedStatement statement = connection.prepareStatement(query)) {
