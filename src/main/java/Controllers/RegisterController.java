@@ -88,9 +88,6 @@ public class RegisterController {
                 System.err.println("Chyba pri vkladaní používateľa do databázy: " + e.getMessage());
             }
 
-            rybarListView.getItems().clear();
-            rybarListView.getItems().addAll(rybarDAO.getAll());
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginController.fxml"));
             Parent root = loader.load();
 
