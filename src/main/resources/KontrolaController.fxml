@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.KontrolaController">
    <children>
       <HBox prefHeight="107.0" prefWidth="600.0">
@@ -27,7 +26,7 @@
       </HBox>
       <HBox prefHeight="278.0" prefWidth="600.0">
          <children>
-            <ListView prefHeight="256.0" prefWidth="600.0" />
+            <ListView fx:id="kontrolaListView" prefHeight="256.0" prefWidth="600.0" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="114.0" prefWidth="600.0">

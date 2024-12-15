@@ -2,10 +2,7 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.projekt.*;
 
 import java.sql.Connection;
@@ -31,6 +28,9 @@ public class PovolenieController {
     private TextField idRybaraTextFIeld;
 
     @FXML
+    private ListView<String> povolenieListVIew; // Zmena na ListView<String>
+
+    @FXML
     private CheckBox kaproveCheckBox;
 
     @FXML
@@ -46,12 +46,23 @@ public class PovolenieController {
     void addPovolenieButton(ActionEvent event) {
         try {
             LocalDate platnostOd = platnostOdDatePicker.getValue();
+            if (platnostOd == null) {
+                povolenieListVIew.getItems().add("Chyba: Zvoľte platnosť od dátum.");
+                return;
+            }
+
             LocalDate platnostDo = platnostOd.plusYears(1);
             kaprove = kaproveCheckBox.isSelected();
             lipnove = LipnoveCheckBox.isSelected();
             pstruhove = pstruhoveCheckBox.isSelected();
-            int rybarID = Integer.parseInt(idRybaraTextFIeld.getText());
 
+            String rybarIdText = idRybaraTextFIeld.getText();
+            if (rybarIdText == null || rybarIdText.isEmpty()) {
+                povolenieListVIew.getItems().add("Chyba: Zadajte ID rybára.");
+                return;
+            }
+
+            int rybarID = Integer.parseInt(rybarIdText);
 
             Povolenie povolenie = new Povolenie(platnostOd, platnostDo, kaprove, lipnove, pstruhove, rybarID);
 
@@ -59,22 +70,36 @@ public class PovolenieController {
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 insertPovolenie(connection, povolenie);
+
+                // Vytvorenie správy na základe zvolených typov povolení
+                StringBuilder message = new StringBuilder("Rybárovi " + rybarID + " bolo pridané ");
+                List<String> typyPovolenia = new ArrayList<>();
+                if (kaprove) typyPovolenia.add("kaprové");
+                if (lipnove) typyPovolenia.add("lipňové");
+                if (pstruhove) typyPovolenia.add("pstruhové");
+
+                if (typyPovolenia.isEmpty()) {
+                    message.append("žiadne povolenie.");
+                } else {
+                    message.append(String.join(", ", typyPovolenia)).append(" povolenie.");
+                }
+
+                povolenieListVIew.getItems().add(message.toString());
             } catch (SQLException e) {
-                throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
+                e.printStackTrace();
+                povolenieListVIew.getItems().add("Chyba pri ukladaní povolenia: " + e.getMessage());
             }
 
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Chyba pri spracovaní údajov: " + e.getMessage(), e);
+            povolenieListVIew.getItems().add("Chyba: ID rybára musí byť číslo.");
         }
     }
 
     private void insertPovolenie(Connection connection, Povolenie povolenie) throws SQLException {
-
         String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-
             statement.setString(1, povolenie.getPlatnostOd().toString());
             statement.setString(2, povolenie.getPlatnostDo().toString());
             statement.setInt(3, povolenie.isPstruhove() ? 1 : 0);
@@ -87,6 +112,4 @@ public class PovolenieController {
             throw new RuntimeException("Chyba pri vkladaní povolenia do databázy", e);
         }
     }
-
-
 }
