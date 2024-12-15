@@ -134,8 +134,8 @@ public class UlovkyController {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
 
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Chyba pri spracovaní údajov: " + e.getMessage(), e);
+        } catch (RuntimeException e) {
+            System.out.println("Chyba pri spracovaní údajov: ");
         }
     }
 
