@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.projekt.*;
 
@@ -29,6 +30,9 @@ public class RevirController {
     private CheckBox lipnoveCheckBox;
 
     @FXML
+    private ListView<String> revirListView; // Zmena na ListView<String>
+
+    @FXML
     private TextField lokalitaTextField;
 
     @FXML
@@ -50,6 +54,11 @@ public class RevirController {
             String lokalita = lokalitaTextField.getText();
             String popis = popisTextField.getText();
 
+            if (nazov == null || nazov.isEmpty()) {
+                revirListView.getItems().add("Názov revíru musí byť zadaný!");
+                return;
+            }
+
             kaprove = kaproveCheckBox.isSelected();
             lipnove = lipnoveCheckBox.isSelected();
             pstruhove = pstruhoveCheckBox.isSelected();
@@ -60,12 +69,15 @@ public class RevirController {
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 insertRevir(connection, revir);
+                String message = "Revír \"" + nazov + "\" bol úspešne pridaný.";
+                revirListView.getItems().add(message); // Pridanie správy do ListView
             } catch (SQLException e) {
-                throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
+                e.printStackTrace();
+                revirListView.getItems().add("Chyba pri ukladaní revíru: " + e.getMessage());
             }
 
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Chyba pri spracovaní údajov: " + e.getMessage(), e);
+            revirListView.getItems().add("Chyba pri spracovaní údajov: " + e.getMessage());
         }
     }
 
@@ -85,7 +97,6 @@ public class RevirController {
     }
 
     private void insertRevir(Connection connection, Revir revir) throws SQLException {
-
         String insertQuery = "INSERT INTO revir (nazov, lokalita, popis, kaprove, lipnove, pstruhove) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -99,7 +110,7 @@ public class RevirController {
             statement.setInt(6, revir.isPstruhove() ? 1 : 0);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní úlovku do databázy", e);
+            throw new RuntimeException("Chyba pri vkladaní revíru do databázy", e);
         }
     }
 }

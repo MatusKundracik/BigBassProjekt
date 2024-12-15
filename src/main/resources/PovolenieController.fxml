@@ -61,7 +61,7 @@
       </HBox>
       <HBox prefHeight="239.0" prefWidth="600.0">
          <children>
-            <ListView prefHeight="276.0" prefWidth="600.0" />
+            <ListView fx:id="povolenieListVIew" prefHeight="276.0" prefWidth="600.0" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0">

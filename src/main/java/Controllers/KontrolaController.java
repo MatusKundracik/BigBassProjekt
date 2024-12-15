@@ -3,9 +3,8 @@ package Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import org.projekt.Povolenie;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +14,9 @@ public class KontrolaController {
 
     @FXML
     private TextField idUlovkyTextField;
+
+    @FXML
+    private ListView<String> kontrolaListView;
 
     @FXML
     private Button zapisKontroluButton;
@@ -31,19 +33,22 @@ public class KontrolaController {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
             // SQL na aktualizáciu stĺpca "kontrola"
             String updateQuery = "UPDATE ulovok SET kontrola = ifnull(kontrola, 1) WHERE id_ulovok = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
-            preparedStatement.setInt(1, Integer.parseInt(idUlovku));
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                preparedStatement.setInt(1, Integer.parseInt(idUlovku));
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Kontrola bola úspešne zapísaná pre ID úlovku: " + idUlovku);
-            } else {
-                System.out.println("ID úlovku neexistuje: " + idUlovku);
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    String message = "Úlovok " + idUlovku + " bol úspešne skontrolovaný.";
+                    kontrolaListView.getItems().add(message);
+                } else {
+                    kontrolaListView.getItems().add("ID úlovku neexistuje: " + idUlovku);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            kontrolaListView.getItems().add("Chyba pri aktualizácii úlovku: " + e.getMessage());
         } catch (NumberFormatException e) {
-            System.out.println("Neplatný formát ID úlovku!");
+            kontrolaListView.getItems().add("Neplatný formát ID úlovku!");
         }
     }
     }
