@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
    <children>
@@ -24,7 +25,7 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="395.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -38,7 +39,10 @@
                         <Image url="@images/bass.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="prihlasenyPouzivatelLabel" text="Prihlásený použivateľ: Admin" GridPane.columnIndex="3" />
+                  <Label fx:id="prihlasenyPouzivatelLabel" prefHeight="22.0" prefWidth="281.0" text="Prihlásený použivateľ: Admin" GridPane.columnIndex="3">
+                     <font>
+                        <Font name="Cambria Bold" size="18.0" />
+                     </font></Label>
                </children>
             </GridPane>
          </top>
@@ -55,10 +59,50 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="upravitReviryButton" mnemonicParsing="false" onAction="#upravRevirButton" prefHeight="95.0" prefWidth="233.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Pridať revír" />
-                  <Button fx:id="povolenieButton" mnemonicParsing="false" onAction="#upravPovolenieButton" prefHeight="91.0" prefWidth="193.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Zapíš povolenie" GridPane.rowIndex="1" />
-                  <Button fx:id="odhlasitSaButton" mnemonicParsing="false" onAction="#odhlasMaButton" prefHeight="78.0" prefWidth="214.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Odhlásiť sa" GridPane.rowIndex="4" />
-                  <Button fx:id="kontrolaButton" mnemonicParsing="false" onAction="#skontrolujUlovokButton" prefHeight="84.0" prefWidth="234.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Kontrola úlovku" GridPane.rowIndex="2" />
+                  <Button fx:id="upravitReviryButton" mnemonicParsing="false" onAction="#upravRevirButton" prefHeight="95.0" prefWidth="233.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Pridať revír">
+                     <graphic>
+                        <ImageView fitHeight="49.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/jazierko.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Cambria" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="povolenieButton" mnemonicParsing="false" onAction="#upravPovolenieButton" prefHeight="91.0" prefWidth="193.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Zapíš povolenie" GridPane.rowIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="58.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/icons8-permission-50.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Cambria" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="odhlasitSaButton" mnemonicParsing="false" onAction="#odhlasMaButton" prefHeight="78.0" prefWidth="214.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Odhlásiť sa" GridPane.rowIndex="4">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="kontrolaButton" mnemonicParsing="false" onAction="#skontrolujUlovokButton" prefHeight="84.0" prefWidth="234.0" styleClass="tlacitko" stylesheets="@css/styling.css" text="Kontrola úlovku" GridPane.rowIndex="2">
+                     <graphic>
+                        <ImageView fitHeight="42.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/icons8-magnifying-glass-50.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Cambria" size="14.0" />
+                     </font></Button>
                </children>
             </GridPane>
          </right>
