@@ -15,13 +15,20 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.projekt.Factory;
 import org.projekt.Session;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.Objects;
 
 public class LoginController {
+
+    Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
@@ -81,9 +88,9 @@ public class LoginController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (rybarDAO.overitPouzivatela(email, heslo)) {
+        } else if (rybarDAO.overitPouzivatela(connection, email, heslo)) {
 
-            Session.aktualnyRybarId = rybarDAO.getUserIdByEmail(email);
+            Session.aktualnyRybarId = rybarDAO.getUserIdByEmail(connection, email);
             System.out.println("Prihlásený používateľ ID: " + Session.aktualnyRybarId + ", email: " + email); // Log ID a email
             try {
 

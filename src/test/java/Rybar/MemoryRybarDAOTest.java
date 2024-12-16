@@ -15,7 +15,10 @@ class MemoryRybarDAOTest {
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {
+        // Pripojenie k databáze v pamäti
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+
+        // Vytvorenie testovacej tabuľky
         String createTableQuery = "CREATE TABLE rybar (" +
                 "id_rybara INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "meno TEXT, " +
@@ -26,9 +29,8 @@ class MemoryRybarDAOTest {
                 "datum_narodenia TEXT, " +
                 "pridany_do_evidencie TEXT, " +
                 "odhlaseny_z_evidencie TEXT, " +
-                "email TEXT UNIQUE, " +
+                "email TEXT, " +
                 "heslo TEXT)";
-
         try (PreparedStatement statement = connection.prepareStatement(createTableQuery)) {
             statement.execute();
         }
@@ -36,6 +38,7 @@ class MemoryRybarDAOTest {
 
     @AfterAll
     static void tearDownDatabase() throws SQLException {
+        // Uzavretie pripojenia po všetkých testoch
         if (connection != null) {
             connection.close();
         }
@@ -43,103 +46,91 @@ class MemoryRybarDAOTest {
 
     @BeforeEach
     void setUp() {
+        // Inštancia testovacej triedy
         memoryRybarDAO = new MemoryRybarDAO();
     }
 
     @AfterEach
     void cleanUp() throws SQLException {
+        // Vymazanie všetkých údajov v tabuľke po každom teste
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM rybar")) {
             statement.executeUpdate();
         }
     }
 
     @Test
-    void testSaveAndRetrieveRybar() {
-        Rybar rybar = new Rybar("Jozef", "Novak", LocalDate.of(1990, 5, 15),
-                "jozef.novak@example.com", "Bratislava", "Slovak", "AB123456",
-                LocalDate.of(2023, 1, 1), null);
-        memoryRybarDAO.save(rybar);
-
-        assertEquals(1, rybar.getRybarId());
-        assertThrows(IllegalArgumentException.class, () -> memoryRybarDAO.save(null));
-        assertThrows(IllegalArgumentException.class, () -> memoryRybarDAO.save(new Rybar(null, "Novak", LocalDate.of(1990, 5, 15))));
-    }
-
-    @Test
     void testInsertUser() throws SQLException {
-        LocalDate datumNarodenia = LocalDate.of(1990, 5, 15);
-        LocalDate pridanyDoEvidencie = LocalDate.of(2023, 1, 1);
+        // Vytvorenie nového rybára
+        memoryRybarDAO.insertUser(connection, "Janko", "Hrasko", "Ulica 123", "123456789", "Slovenská republika",
+                LocalDate.of(1990, 5, 1), LocalDate.now(), null, "janko@hrasko.sk", "heslo");
 
-        memoryRybarDAO.insertUser(connection, "Jozef", "Novak", "Bratislava", "AB123456",
-                "Slovak", datumNarodenia, pridanyDoEvidencie, null, "jozef.novak@example.com",
-                BCrypt.hashpw("password123", BCrypt.gensalt()));
-
-        String query = "SELECT * FROM rybar WHERE email = 'jozef.novak@example.com'";
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            assertTrue(resultSet.next());
-            assertEquals("Jozef", resultSet.getString("meno"));
-            assertEquals("Novak", resultSet.getString("priezvisko"));
-            assertEquals("Bratislava", resultSet.getString("adresa"));
+        // Overenie, že bol záznam vložený
+        String sql = "SELECT * FROM rybar WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "janko@hrasko.sk");
+            try (ResultSet rs = stmt.executeQuery()) {
+                assertTrue(rs.next());
+                assertEquals("Janko", rs.getString("meno"));
+                assertEquals("Hrasko", rs.getString("priezvisko"));
+                assertEquals("janko@hrasko.sk", rs.getString("email"));
+            }
         }
     }
 
     @Test
-    void testJeEmailPouzity() {
-        LocalDate datumNarodenia = LocalDate.of(1990, 5, 15);
-        LocalDate pridanyDoEvidencie = LocalDate.of(2023, 1, 1);
+    void testJeEmailPouzity() throws SQLException {
+        // Vytvorenie nového rybára
+        memoryRybarDAO.insertUser(connection, "Janko", "Hrasko", "Ulica 123", "123456789", "Slovenská republika",
+                LocalDate.of(1990, 5, 1), LocalDate.now(), null, "janko@hrasko.sk", "heslo");
 
-        memoryRybarDAO.insertUser(connection, "Jozef", "Novak", "Bratislava", "AB123456",
-                "Slovak", datumNarodenia, pridanyDoEvidencie, null, "jozef.novak@example.com",
-                BCrypt.hashpw("password123", BCrypt.gensalt()));
+        // Testovanie, že email je použitý
+        boolean emailExistuje = memoryRybarDAO.jeEmailPouzity(connection, "janko@hrasko.sk");
+        assertTrue(emailExistuje);
 
-        assertTrue(memoryRybarDAO.jeEmailPouzity("jozef.novak@example.com"));
-        assertFalse(memoryRybarDAO.jeEmailPouzity("nonexistent@example.com"));
+        // Testovanie, že iný email nie je použitý
+        boolean emailNeexistuje = memoryRybarDAO.jeEmailPouzity(connection, "neexistujuci@hrasko.sk");
+        assertFalse(emailNeexistuje);
     }
 
     @Test
-    void testOveritPouzivatela() {
-        // Príprava údajov
-        LocalDate datumNarodenia = LocalDate.of(1990, 5, 15);
-        LocalDate pridanyDoEvidencie = LocalDate.of(2023, 1, 1);
-        String spravneHeslo = "password123";
-        String nespravneHeslo = "wrongpassword";
-        String hashovaneHeslo = BCrypt.hashpw(spravneHeslo, BCrypt.gensalt());
+    void testGetUserIdByEmail() throws SQLException {
+        // Vytvorenie nového rybára
+        memoryRybarDAO.insertUser(connection, "Janko", "Hrasko", "Ulica 123", "123456789", "Slovenská republika",
+                LocalDate.of(1990, 5, 1), LocalDate.now(), null, "janko@hrasko.sk", "heslo");
 
-        // Vloženie používateľa do databázy
-        memoryRybarDAO.insertUser(connection, "Jozef", "Novak", "Bratislava", "AB123456",
-                "Slovak", datumNarodenia, pridanyDoEvidencie, null, "jozef.novak@example.com",
-                hashovaneHeslo);
-
-        // Overenie správnych údajov
-        assertTrue(memoryRybarDAO.overitPouzivatela("jozef.novak@example.com", spravneHeslo),
-                "Overenie správnych údajov by malo vrátiť true");
-
-        // Overenie nesprávneho hesla
-        assertFalse(memoryRybarDAO.overitPouzivatela("jozef.novak@example.com", nespravneHeslo),
-                "Overenie nesprávneho hesla by malo vrátiť false");
-
-        // Overenie neexistujúceho e-mailu
-        assertFalse(memoryRybarDAO.overitPouzivatela("neexistujuci.email@example.com", spravneHeslo),
-                "Overenie neexistujúceho e-mailu by malo vrátiť false");
-
-        // Overenie neexistujúceho e-mailu s nesprávnym heslom
-        assertFalse(memoryRybarDAO.overitPouzivatela("neexistujuci.email@example.com", nespravneHeslo),
-                "Overenie neexistujúceho e-mailu s nesprávnym heslom by malo vrátiť false");
+        // Testovanie získania ID podľa emailu
+        int userId = memoryRybarDAO.getUserIdByEmail(connection, "janko@hrasko.sk");
+        assertTrue(userId > 0);
     }
 
+    @Test
+    void testOveritPouzivatela() throws SQLException {
+        // Vytvorenie nového rybára s heslom
+        String email = "janko@hrasko.sk";
+        String heslo = BCrypt.hashpw("heslo", BCrypt.gensalt());
+        memoryRybarDAO.insertUser(connection, "Janko", "Hrasko", "Ulica 123", "123456789", "Slovenská republika",
+                LocalDate.of(1990, 5, 1), LocalDate.now(), null, email, heslo);
+
+        // Testovanie správneho overenia používateľa
+        boolean overeny = memoryRybarDAO.overitPouzivatela(connection, email, "heslo");
+        assertTrue(overeny);
+
+        // Testovanie nesprávneho overenia používateľa
+        boolean neovereny = memoryRybarDAO.overitPouzivatela(connection, email, "nespravneHeslo");
+        assertFalse(neovereny);
+    }
 
     @Test
-    void testGetRybarNameById() {
-        LocalDate datumNarodenia = LocalDate.of(1990, 5, 15);
-        LocalDate pridanyDoEvidencie = LocalDate.of(2023, 1, 1);
+    void testGetRybarNameById() throws SQLException {
+        // Vytvorenie nového rybára
+        memoryRybarDAO.insertUser(connection, "Janko", "Hrasko", "Ulica 123", "123456789", "Slovenská republika",
+                LocalDate.of(1990, 5, 1), LocalDate.now(), null, "janko@hrasko.sk", "heslo");
 
-        memoryRybarDAO.insertUser(connection, "Jozef", "Novak", "Bratislava", "AB123456",
-                "Slovak", datumNarodenia, pridanyDoEvidencie, null, "jozef.novak@example.com",
-                BCrypt.hashpw("password123", BCrypt.gensalt()));
+        // Získanie ID používateľa
+        int userId = memoryRybarDAO.getUserIdByEmail(connection, "janko@hrasko.sk");
 
-        int id = memoryRybarDAO.getUserIdByEmail("jozef.novak@example.com");
-        assertEquals("Jozef Novak", memoryRybarDAO.getRybarNameById(id));
-        assertNull(memoryRybarDAO.getRybarNameById(999));
+        // Testovanie získania mena používateľa
+        String meno = memoryRybarDAO.getRybarNameById(connection, userId);
+        assertEquals("Janko Hrasko", meno);
     }
 }

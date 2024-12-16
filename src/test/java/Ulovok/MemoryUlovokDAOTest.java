@@ -1,6 +1,7 @@
 package Ulovok;
 
 import org.junit.jupiter.api.*;
+import org.projekt.Session;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,13 +19,40 @@ class MemoryUlovokDAOTest {
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {
-        // Vytvorenie pamäťovej databázy
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
 
-        // Vytvorenie tabuľky ulovok
-        String createUlovokTable = " CREATE TABLE ulovok ( id_ulovok INTEGER PRIMARY KEY, datum DATE NOT NULL, cislo_reviru INTEGER NOT NULL, druh_ryby TEXT NOT NULL, dlzka_v_cm REAL NOT NULL, hmotnost_v_kg REAL NOT NULL, kontrola INTEGER NULL, povolenie_id_povolenie INTEGER NOT NULL, povolenie_rybar_id_rybara INTEGER NOT NULL, revir_id_revira INTEGER NOT NULL)";
-        try (PreparedStatement statement = connection.prepareStatement(createUlovokTable)) {
-            statement.execute();
+        String createPovolenieTableQuery = "CREATE TABLE povolenie (" +
+                "id_povolenie INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "platnost_od TEXT, " +
+                "platnost_do TEXT, " +
+                "pstruhove INTEGER, " +
+                "lipňove INTEGER, " +
+                "kaprové INTEGER, " +
+                "rybar_id_rybara INTEGER)";
+
+        String createRevirTableQuery = "CREATE TABLE revir (" +
+                "id_revira INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nazov TEXT)";
+
+        String createUlovokTableQuery = "CREATE TABLE ulovok (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "datum TEXT, " +
+                "cislo_reviru TEXT, " +
+                "druh_ryby TEXT, " +
+                "dlzka_v_cm REAL, " +
+                "hmotnost_v_kg REAL, " +
+                "povolenie_id_povolenie INTEGER, " +
+                "povolenie_rybar_id_rybara INTEGER, " +
+                "revir_id_revira INTEGER, " +
+                "kontrola TEXT)";
+
+        try (PreparedStatement createPovolenieTable = connection.prepareStatement(createPovolenieTableQuery);
+             PreparedStatement createRevirTable = connection.prepareStatement(createRevirTableQuery);
+             PreparedStatement createUlovokTable = connection.prepareStatement(createUlovokTableQuery)) {
+
+            createPovolenieTable.execute();
+            createRevirTable.execute();
+            createUlovokTable.execute();
         }
     }
 
@@ -42,48 +70,44 @@ class MemoryUlovokDAOTest {
 
     @AfterEach
     void cleanUp() throws SQLException {
-        // Vymazanie všetkých údajov z tabuľky ulovok
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM ulovok")) {
-            statement.executeUpdate();
+        try (PreparedStatement deleteUlovok = connection.prepareStatement("DELETE FROM ulovok");
+             PreparedStatement deletePovolenie = connection.prepareStatement("DELETE FROM povolenie");
+             PreparedStatement deleteRevir = connection.prepareStatement("DELETE FROM revir")) {
+
+            deleteUlovok.executeUpdate();
+            deletePovolenie.executeUpdate();
+            deleteRevir.executeUpdate();
         }
     }
 
     @Test
     void testInsertUlovok() throws SQLException {
-        // Kontrola, či je tabuľka 'revir' správne inicializovaná
-        String checkRevirSQL = "SELECT * FROM revir WHERE nazov = ?";
-        try (PreparedStatement statement = connection.prepareStatement(checkRevirSQL)) {
-            statement.setString(1, "123");
-            try (ResultSet resultSet = statement.executeQuery()) {
-                assertTrue(resultSet.next(), "Tabuľka 'revir' neobsahuje očakávaný záznam.");
-            }
+        // Insert test data for Povolenie and Revir
+        try (PreparedStatement insertPovolenie = connection.prepareStatement("INSERT INTO povolenie (id_povolenie, platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) VALUES (1, '2024-01-01', '2024-12-31', 1, 0, 1, 1)");
+             PreparedStatement insertRevir = connection.prepareStatement("INSERT INTO revir (id_revira, nazov) VALUES (1, '1234')")) {
+
+            insertPovolenie.executeUpdate();
+            insertRevir.executeUpdate();
         }
 
-        // Vytvorenie a vloženie testovacieho objektu
-        Ulovok ulovok = new Ulovok();
-        ulovok.setDatumUlovku(LocalDate.parse("2024-06-01"));
-        ulovok.setCisloReviru("123");
-        ulovok.setDruhRyby("Kapor");
-        ulovok.setDlzkaVcm(50.5);
-        ulovok.setHmotnostVkg(3.2);
-        ulovok.setKontrola(1);
+        Ulovok ulovok = new Ulovok(LocalDate.of(2024, 6, 15), "1234", "Pstruh", 45.0, 1.2, 1);
+        Session.aktualnyRybarId = 1;
 
-        memoryUlovokDAO.insertUlovok(connection, ulovok, "123");
+        memoryUlovokDAO.insertUlovok(connection, ulovok);
 
-        // Kontrola vložených údajov
-        String query = "SELECT * FROM ulovok WHERE cislo_reviru = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, "123");
-            try (ResultSet resultSet = statement.executeQuery()) {
-                assertTrue(resultSet.next(), "Záznam v tabuľke 'ulovok' nebol nájdený.");
-                assertEquals("2024-06-01", resultSet.getString("datum"));
-                assertEquals("123", resultSet.getString("cislo_reviru"));
-                assertEquals("Kapor", resultSet.getString("druh_ryby"));
-                assertEquals(50.5, resultSet.getDouble("dlzka_v_cm"), 0.01);
-                assertEquals(3.2, resultSet.getDouble("hmotnost_v_kg"), 0.01);
-                assertEquals(1, resultSet.getInt("kontrola"));
-            }
+        String query = "SELECT * FROM ulovok WHERE cislo_reviru = '1234'";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            assertTrue(resultSet.next());
+            assertEquals("2024-06-15", resultSet.getString("datum"));
+            assertEquals("1234", resultSet.getString("cislo_reviru"));
+            assertEquals("Pstruh", resultSet.getString("druh_ryby"));
+            assertEquals(45.0, resultSet.getDouble("dlzka_v_cm"));
+            assertEquals(1.2, resultSet.getDouble("hmotnost_v_kg"));
+            assertEquals(1, resultSet.getInt("povolenie_id_povolenie"));
+            assertEquals(1, resultSet.getInt("povolenie_rybar_id_rybara"));
+            assertEquals(1, resultSet.getInt("revir_id_revira"));
         }
     }
-
 }

@@ -53,13 +53,8 @@ class MemoryPovolenieDAOTest {
 
     @Test
     void testInsertPovolenie() throws SQLException {
-        Povolenie povolenie = new Povolenie();
-        povolenie.setPlatnostOd(LocalDate.parse("2024-01-01"));
-        povolenie.setPlatnostDo(LocalDate.parse("2024-12-31"));
-        povolenie.setPstruhove(true);
-        povolenie.setLipnove(false);
-        povolenie.setKaprove(true);
-        povolenie.setRybarIdRybara(1);
+        Povolenie povolenie = new Povolenie(LocalDate.of(2024,1,1),LocalDate.of(2024,12,31),true,false,true,1);
+
 
         memoryPovolenieDAO.insertPovolenie(connection, povolenie);
 
