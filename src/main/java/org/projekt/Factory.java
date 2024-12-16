@@ -1,39 +1,48 @@
-package org.projekt;
+    package org.projekt;
 
-public enum Factory {
-    INSTANCE;
+    import Povolenie.MemoryPovolenieDAO;
+    import Povolenie.PovolenieDAO;
+    import Revir.MemoryRevirDAO;
+    import Revir.RevirDAO;
+    import Rybar.MemoryRybarDAO;
+    import Rybar.RybarDAO;
+    import Ulovok.MemoryUlovokDAO;
+    import Ulovok.UlovokDAO;
 
-    private RybarDAO rybarDAO;
-    private UlovokDAO ulovokDAO;
-    private PovolenieDAO povolenieDAO;
-    private RevirDAO revirDAO;
+    public enum Factory {
+        INSTANCE;
 
-    public RybarDAO getRybarDAO() {
-        if (rybarDAO == null) {
-            rybarDAO = new MemoryRybarDAO();
+        private RybarDAO rybarDAO;
+        private UlovokDAO ulovokDAO;
+        private PovolenieDAO povolenieDAO;
+        private RevirDAO revirDAO;
+
+        public RybarDAO getRybarDAO() {
+            if (rybarDAO == null) {
+                rybarDAO = new MemoryRybarDAO();
+            }
+            return rybarDAO;
         }
-        return rybarDAO;
-    }
 
-    public UlovokDAO getUlovokDAO() {
-        if (ulovokDAO == null) {
-            ulovokDAO = new MemoryUlovokDAO();
+        public UlovokDAO getUlovokDAO() {
+            if (ulovokDAO == null) {
+                ulovokDAO = new MemoryUlovokDAO();
+            }
+            return ulovokDAO;
         }
-        return ulovokDAO;
-    }
 
-    public PovolenieDAO getPovolenieDAO() {
-        if (povolenieDAO == null) {
-            povolenieDAO = new MemoryPovolenieDAO();
+        public PovolenieDAO getPovolenieDAO() {
+            if (povolenieDAO == null) {
+                povolenieDAO = new MemoryPovolenieDAO();
+            }
+            return povolenieDAO;
         }
-        return povolenieDAO;
-    }
 
-    public RevirDAO getRevirDAO() {
-        if (revirDAO == null) {
-            revirDAO = new MemoryRevirDAO();
+        public RevirDAO getRevirDAO() {
+            if (revirDAO == null) {
+                revirDAO = new MemoryRevirDAO();
+            }
+            return revirDAO;
         }
-        return revirDAO;
     }
-}
 

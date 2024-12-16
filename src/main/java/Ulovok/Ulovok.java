@@ -1,9 +1,8 @@
-package org.projekt;
+package Ulovok;
 
 import java.time.LocalDate;
 
 // jdk.vm.ci.meta.Local;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +25,15 @@ public class Ulovok {
         this.dlzkaVcm = dlzkaVcm;
         this.hmotnostVkg = hmotnostVkg;
         this.kontrola = kontrola;
+    }
+
+    public Ulovok(String cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg, int kontrola) {
+        this.cisloReviru = cisloReviru;
+        this.druhRyby = druhRyby;
+        this.dlzkaVcm = dlzkaVcm;
+        this.hmotnostVkg = hmotnostVkg;
+        this.kontrola = kontrola;
+
     }
 
 

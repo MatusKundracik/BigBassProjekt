@@ -1,4 +1,4 @@
-package org.projekt;
+package Rybar;
 
 
 import java.time.LocalDate;
@@ -34,5 +34,9 @@ public class Rybar {
         this.cisloOP = cisloOP;
         this.pridanyDoEvidencie = pridanyDoEvidencie;
         this.odhlasenyZEvidencie = odhlasenyZEvidencie;
+    }
+
+    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia){
+
     }
 }

@@ -1,4 +1,4 @@
-package org.projekt;
+package Povolenie;
 
 import java.time.LocalDate;
 import lombok.Data;
@@ -20,6 +20,10 @@ public class Povolenie {
         this.lipnove = lipnove;
         this.pstruhove = pstruhove;
         this.rybarIdRybara = rybarID;
+    }
+
+    public Povolenie() {
+
     }
 }
 

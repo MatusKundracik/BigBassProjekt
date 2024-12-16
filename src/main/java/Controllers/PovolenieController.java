@@ -1,10 +1,11 @@
 package Controllers;
 
+import Povolenie.Povolenie;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.projekt.*;
-
+import Povolenie.PovolenieDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,7 +29,7 @@ public class PovolenieController {
     private TextField idRybaraTextFIeld;
 
     @FXML
-    private ListView<String> povolenieListVIew; // Zmena na ListView<String>
+    private ListView<String> povolenieListVIew;
 
     @FXML
     private CheckBox kaproveCheckBox;
@@ -69,20 +70,9 @@ public class PovolenieController {
             this.povolenia.add(povolenie);
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertPovolenie(connection, povolenie);
+                povolenieDAO.insertPovolenie(connection, povolenie);
 
-                // Vytvorenie správy na základe zvolených typov povolení
-                StringBuilder message = new StringBuilder("Rybárovi " + rybarID + " bolo pridané ");
-                List<String> typyPovolenia = new ArrayList<>();
-                if (kaprove) typyPovolenia.add("kaprové");
-                if (lipnove) typyPovolenia.add("lipňové");
-                if (pstruhove) typyPovolenia.add("pstruhové");
-
-                if (typyPovolenia.isEmpty()) {
-                    message.append("žiadne povolenie.");
-                } else {
-                    message.append(String.join(", ", typyPovolenia)).append(" povolenie.");
-                }
+                String message = povolenieDAO.generatePovolenieMessage(rybarID,kaprove,lipnove,pstruhove);
 
                 povolenieListVIew.getItems().add(message.toString());
             } catch (SQLException e) {
@@ -95,21 +85,5 @@ public class PovolenieController {
         }
     }
 
-    private void insertPovolenie(Connection connection, Povolenie povolenie) throws SQLException {
-        String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, povolenie.getPlatnostOd().toString());
-            statement.setString(2, povolenie.getPlatnostDo().toString());
-            statement.setInt(3, povolenie.isPstruhove() ? 1 : 0);
-            statement.setInt(4, povolenie.isLipnove() ? 1 : 0);
-            statement.setInt(5, povolenie.isKaprove() ? 1 : 0);
-            statement.setInt(6, (int) povolenie.getRybarIdRybara());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní povolenia do databázy", e);
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package org.projekt;
+package Revir;
 
 import lombok.Data;
 
@@ -19,6 +19,10 @@ public class Revir {
         this.kaprove = kaprove;
         this.lipnove = lipnove;
         this.pstruhove = pstruhove;
+    }
+
+    public Revir() {
+
     }
 
     public boolean isKaprove() {

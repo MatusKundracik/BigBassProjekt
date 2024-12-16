@@ -1,5 +1,6 @@
 package Controllers;
 
+import Rybar.RybarDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,16 +12,26 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.projekt.Factory;
 import org.projekt.Session;
 import javafx.scene.image.ImageView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.Objects;
 
 public class BigBassController {
+
+    Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
     private VBox buttonPanelVBox;
@@ -51,7 +62,7 @@ public class BigBassController {
 
         if (aktualnyRybarId > 0) {
             // Načítaj meno používateľa podľa ID
-            String menoPouzivatela = getRybarNameById(aktualnyRybarId);
+            String menoPouzivatela = rybarDAO.getRybarNameById(connection, aktualnyRybarId);
             if (menoPouzivatela != null) {
                 prihlasenyPouzivatelLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
             } else {
@@ -61,24 +72,6 @@ public class BigBassController {
             prihlasenyPouzivatelLabel.setText("Používateľ nie je prihlásený.");
         }
         //nahradObsah("/Profil.fxml");
-    }
-
-    private String getRybarNameById(int idRybara) {
-        String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String meno = rs.getString("meno");
-                    String priezvisko = rs.getString("priezvisko");
-                    return meno + " " + priezvisko;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @FXML

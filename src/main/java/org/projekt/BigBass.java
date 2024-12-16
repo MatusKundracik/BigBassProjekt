@@ -5,12 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
-public class registerOkno extends Application {
-    
+public class BigBass extends Application {
+
     public void start(Stage stage) throws Exception {
 
        Parent loginPane = FXMLLoader.load(getClass().getResource("/LoginController.fxml"));
