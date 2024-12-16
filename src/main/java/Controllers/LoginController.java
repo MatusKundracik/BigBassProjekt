@@ -1,5 +1,6 @@
 package Controllers;
 
+import Rybar.RybarDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
+import org.projekt.Factory;
 import org.projekt.Session;
 
 import java.sql.Connection;
@@ -20,6 +22,8 @@ import java.sql.ResultSet;
 import java.util.Objects;
 
 public class LoginController {
+
+    private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
     private TextField EmailTextField;
@@ -77,9 +81,9 @@ public class LoginController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (overitPouzivatela(email, heslo)) {
+        } else if (rybarDAO.overitPouzivatela(email, heslo)) {
 
-            Session.aktualnyRybarId = getUserIdByEmail(email);
+            Session.aktualnyRybarId = rybarDAO.getUserIdByEmail(email);
             System.out.println("Prihlásený používateľ ID: " + Session.aktualnyRybarId + ", email: " + email); // Log ID a email
             try {
 
@@ -106,48 +110,6 @@ public class LoginController {
             alert.setContentText("Skontrolujte svoje prihlasovacie údaje a skúste to znova.");
             alert.showAndWait();
         }
-    }
-
-
-    private boolean overitPouzivatela(String email, String heslo) {
-
-        String sql = "SELECT heslo FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db"); // Pripojenie k databáze
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-
-                    String ulozeneHeslo = rs.getString("heslo");
-
-                    return BCrypt.checkpw(heslo, ulozeneHeslo);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private int getUserIdByEmail(String email) {
-        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("id_rybara");
-                    System.out.println("Našiel som ID: " + id + " pre email: " + email);
-                    return id;
-                } else {
-                    System.out.println("Email: " + email + " nebol nájdený v databáze.");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
     }
 
 

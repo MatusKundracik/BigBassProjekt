@@ -1,5 +1,14 @@
 package org.projekt;
 
+import Povolenie.MemoryPovolenieDAO;
+import Povolenie.PovolenieDAO;
+import Revir.MemoryRevirDAO;
+import Revir.RevirDAO;
+import Rybar.MemoryRybarDAO;
+import Rybar.RybarDAO;
+import Ulovok.MemoryUlovokDAO;
+import Ulovok.UlovokDAO;
+
 public enum Factory {
     INSTANCE;
 

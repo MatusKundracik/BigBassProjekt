@@ -1,5 +1,7 @@
 package Controllers;
 
+import Revir.Revir;
+import Revir.RevirDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +32,7 @@ public class RevirController {
     private CheckBox lipnoveCheckBox;
 
     @FXML
-    private ListView<String> revirListView; // Zmena na ListView<String>
+    private ListView<String> revirListView;
 
     @FXML
     private TextField lokalitaTextField;
@@ -68,9 +70,9 @@ public class RevirController {
             this.revire.add(revir);
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertRevir(connection, revir);
+                revirDAO.insertRevir(connection, revir);
                 String message = "Revír \"" + nazov + "\" bol úspešne pridaný.";
-                revirListView.getItems().add(message); // Pridanie správy do ListView
+                revirListView.getItems().add(message);
             } catch (SQLException e) {
                 e.printStackTrace();
                 revirListView.getItems().add("Chyba pri ukladaní revíru: " + e.getMessage());
@@ -96,21 +98,5 @@ public class RevirController {
         pstruhove = pstruhoveCheckBox.isSelected();
     }
 
-    private void insertRevir(Connection connection, Revir revir) throws SQLException {
-        String insertQuery = "INSERT INTO revir (nazov, lokalita, popis, kaprove, lipnove, pstruhove) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, revir.getNazov());
-            statement.setString(2, revir.getLokalita());
-            statement.setString(3, revir.getPopis());
-
-            statement.setInt(4, revir.isKaprove() ? 1 : 0);
-            statement.setInt(5, revir.isLipnove() ? 1 : 0);
-            statement.setInt(6, revir.isPstruhove() ? 1 : 0);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní revíru do databázy", e);
-        }
-    }
 }

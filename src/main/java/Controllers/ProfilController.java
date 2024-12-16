@@ -4,17 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import org.projekt.Factory;
-import org.projekt.Rybar;
-import org.projekt.RybarDAO;
 import org.projekt.Session;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ProfilController {
 

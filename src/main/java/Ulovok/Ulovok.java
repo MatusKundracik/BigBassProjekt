@@ -1,9 +1,8 @@
-package org.projekt;
+package Ulovok;
 
 import java.time.LocalDate;
 
 // jdk.vm.ci.meta.Local;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

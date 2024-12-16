@@ -1,4 +1,4 @@
-package org.projekt;
+package Rybar;
 
 import java.util.ArrayList;
 import java.util.List;
