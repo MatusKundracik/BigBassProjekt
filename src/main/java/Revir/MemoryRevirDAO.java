@@ -2,6 +2,7 @@ package Revir;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,20 @@ public class MemoryRevirDAO implements RevirDAO {
         }
     }
 
+    public int getRevirIdByName(Connection connection, String nazovReviru) throws SQLException {
+        String sql = "SELECT id_revira FROM revir WHERE nazov = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, nazovReviru);
 
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id_revira");
+                } else {
+                    throw new RuntimeException("Revír nenájdený s názvom: " + nazovReviru + " nebolo nájdené.");
+                }
+            }
+        }
+    }
 
 
 }
