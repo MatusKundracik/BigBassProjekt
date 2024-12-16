@@ -1,4 +1,4 @@
-package org.projekt;
+package Revir;
 
 import lombok.Data;
 

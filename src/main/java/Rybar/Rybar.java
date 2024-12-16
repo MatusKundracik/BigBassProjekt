@@ -1,4 +1,4 @@
-package org.projekt;
+package Rybar;
 
 
 import java.time.LocalDate;

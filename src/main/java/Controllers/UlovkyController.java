@@ -1,5 +1,6 @@
 package Controllers;
 
+import Ulovok.Ulovok;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import Ulovok.UlovokDAO;
 
 public class UlovkyController {
 
@@ -129,7 +131,7 @@ public class UlovkyController {
 
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                insertUlovok(connection, ulovok);
+                ulovokDAO.insertUlovok(connection, ulovok);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
@@ -139,29 +141,7 @@ public class UlovkyController {
         }
     }
 
-    private void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException {
-        // SQL dotaz pre vloženie úlovku
-        String insertQuery = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg," +
-                "povolenie_id_povolenie, povolenie_rybar_id_rybara, revir_id_revira, kontrola) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-
-            statement.setString(1, ulovok.getDatumUlovku().toString());
-            statement.setString(2, ulovok.getCisloReviru());
-            statement.setString(3, ulovok.getDruhRyby());
-            statement.setDouble(4, ulovok.getDlzkaVcm());
-            statement.setDouble(5, ulovok.getHmotnostVkg());
-            statement.setInt(6, ulovok.getKontrola());
-            statement.setInt(6, idPovolenie);
-            statement.setInt(7, Session.aktualnyRybarId);
-            statement.setInt(8, idRevir);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní úlovku do databázy", e);
-        }
-    }
 
     @FXML
     private void naplnNazvyReviruDoChoiceBox() {
@@ -196,7 +176,7 @@ public class UlovkyController {
     }
 
 
-    ;
+
 
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
         ulovky.clear();
@@ -250,8 +230,6 @@ public class UlovkyController {
             throw new RuntimeException("Chyba pri načítaní ID povolenia pre rybára.", e);
         }
     }
-
-
 
 
     @FXML
