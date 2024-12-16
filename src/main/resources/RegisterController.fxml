@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #238b45;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.RegisterController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -21,11 +20,17 @@
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                   <Label text="Heslo:">
                      <HBox.margin>
-                        <Insets left="170.0" top="10.0" />
+                        <Insets left="158.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -49,16 +54,25 @@
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
-                  <Label text="Prievisko:">
+                  <Label text="Priezvisko:">
                      <HBox.margin>
                         <Insets left="160.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                   <Label text="Adresa:">
                      <HBox.margin>
-                        <Insets left="140.0" top="10.0" />
+                        <Insets left="122.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>
@@ -96,16 +110,25 @@
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                   <Label text="Štátna príslušnosť:">
                      <HBox.margin>
-                        <Insets left="45.0" top="10.0" />
+                        <Insets left="25.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                   <Label text="Dátum narodenia:">
                      <HBox.margin>
-                        <Insets left="90.0" right="20.0" top="10.0" />
+                        <Insets left="72.0" right="20.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>

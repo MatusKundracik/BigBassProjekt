@@ -6,34 +6,71 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfilController">
    <children>
       <VBox prefHeight="335.0" prefWidth="300.0">
          <children>
-            <Label fx:id="menoPriezviskoLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Meno a priezvisko:" />
-            <Label fx:id="datumNarodeniaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dátum narodenia:" />
-            <Label fx:id="adresaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Adresa:" />
-            <Label fx:id="emailLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Email:" />
-            <Label fx:id="odobranzyZEvidencieLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Odobraný z evidencie:" />
-            <Label fx:id="pridanyDoEvidencieLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Pridaný do evidencie:" />
-            <Label fx:id="povolenieKLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Kaprové povolenie:" />
-            <Label fx:id="povoleniePLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Pstruhové povolenie:" />
-            <Label fx:id="povolenieLLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Lipňové povolenie:" />
+            <Label fx:id="menoPriezviskoLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Meno a priezvisko:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="datumNarodeniaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dátum narodenia:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="adresaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Adresa:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="emailLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Email:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="pridanyDoEvidencieLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Pridaný do evidencie:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="odobranzyZEvidencieLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Odobraný z evidencie:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="povolenieKLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Kaprové povolenie:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="povoleniePLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Pstruhové povolenie:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="povolenieLLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Lipňové povolenie:">
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font></Label>
             <Label fx:id="celkovyPocetRybLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="164.0" text="Celkový počet chytených rýb:">
                <VBox.margin>
                   <Insets left="10.0" top="30.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font>
             </Label>
             <Label fx:id="najvacsiaRybaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Najväčšia chytená ryba:">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font>
             </Label>
             <Label fx:id="najtazsiaRybaLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Najťažšia chytená ryba:">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
+               <font>
+                  <Font name="Cambria Bold" size="13.0" />
+               </font>
             </Label>
          </children>
       </VBox>

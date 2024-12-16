@@ -12,7 +12,7 @@
    <children>
       <HBox prefHeight="107.0" prefWidth="600.0">
          <children>
-            <Label text="ID úlovku ktorý chceš skontrolvoať:">
+            <Label text="ID úlovku ktorý chceš skontrolovať:">
                <HBox.margin>
                   <Insets left="10.0" top="35.0" />
                </HBox.margin>
