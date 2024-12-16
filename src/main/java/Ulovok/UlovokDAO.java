@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UlovokDAO {
 
-    void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException;
+    void insertUlovok(Connection connection, Ulovok ulovok, String nazovReviru);
 
     }
 

@@ -1,5 +1,9 @@
 package Ulovok;
 
+import Povolenie.MemoryPovolenieDAO;
+import Povolenie.PovolenieDAO;
+import Revir.MemoryRevirDAO;
+import Revir.RevirDAO;
 import org.projekt.Session;
 
 import java.sql.Connection;
@@ -8,40 +12,41 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MemoryUlovokDAO implements UlovokDAO {
 
-    private int idRevir;
-    private int idPovolenie;
+    public void insertUlovok(Connection connection, Ulovok ulovok, String nazovReviru) {
+        try {
+            // Získanie ID aktuálneho rybára zo Session
+            int aktualnyRybarId = Session.aktualnyRybarId;
 
-    public void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException {
-        // SQL dotaz pre vloženie úlovku
-        String insertQuery = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg," +
-                "povolenie_id_povolenie, povolenie_rybar_id_rybara, revir_id_revira, kontrola) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // Získanie ID povolenia a ID revíru
+            PovolenieDAO povolenieDAO = new MemoryPovolenieDAO();
+            int povolenieId = povolenieDAO.getPovolenieIdByRybarId(connection, aktualnyRybarId);
 
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            RevirDAO revirDAO = new MemoryRevirDAO();
+            int revirId = revirDAO.getRevirIdByName(connection, nazovReviru);
 
-            statement.setString(1, ulovok.getDatumUlovku().toString());
-            statement.setString(2, ulovok.getCisloReviru());
-            statement.setString(3, ulovok.getDruhRyby());
-            statement.setDouble(4, ulovok.getDlzkaVcm());
-            statement.setDouble(5, ulovok.getHmotnostVkg());
-            statement.setInt(6, ulovok.getKontrola());
-            statement.setInt(6, idPovolenie);
-            statement.setInt(7, Session.aktualnyRybarId);
-            statement.setInt(8, idRevir);
+            // Príprava SQL dotazu
+            String sql = "INSERT INTO ulovok (datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg, kontrola, povolenie_rybar_id_rybara, revir_id_revira, povolenie_id_povolenie) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            statement.executeUpdate();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, ulovok.getDatumUlovku().toString());
+                preparedStatement.setString(2, ulovok.getCisloReviru());
+                preparedStatement.setString(3, ulovok.getDruhRyby());
+                preparedStatement.setDouble(4, ulovok.getDlzkaVcm());
+                preparedStatement.setDouble(5, ulovok.getHmotnostVkg());
+                preparedStatement.setInt(6, ulovok.getKontrola());
+                preparedStatement.setInt(7, aktualnyRybarId);
+                preparedStatement.setInt(8, revirId);
+                preparedStatement.setInt(9, povolenieId);
+
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Chyba pri vkladaní úlovku do databázy", e);
         }
     }
-
-
-
-
-
 
 
 

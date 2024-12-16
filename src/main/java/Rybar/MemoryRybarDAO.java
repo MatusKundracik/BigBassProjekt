@@ -48,7 +48,7 @@ public class MemoryRybarDAO implements RybarDAO {
                            String obcianskyPreukaz, String statnaPrislusnost, LocalDate datumNarodenia,
                            LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String email, String heslo) {
         String insertQuery = "INSERT INTO rybar (meno, priezvisko, adresa, cislo_obcianskeho_preukazu, statna_prislusnost, datum_narodenia, pridany_do_evidencie, odhlaseny_z_evidencie, email, heslo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+        String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, meno);
             statement.setString(2, priezvisko);
@@ -59,7 +59,7 @@ public class MemoryRybarDAO implements RybarDAO {
             statement.setString(7, pridanyDoEvidencie.toString());
             statement.setString(8, odhlasenyZEvidencie != null ? odhlasenyZEvidencie.toString() : null);
             statement.setString(9, email);
-            statement.setString(10, heslo);
+            statement.setString(10, hashedHeslo);
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -104,25 +104,27 @@ public class MemoryRybarDAO implements RybarDAO {
     }
 
     public boolean overitPouzivatela(String email, String heslo) {
-
         String sql = "SELECT heslo FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db"); // Pripojenie k databáze
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-
                     String ulozeneHeslo = rs.getString("heslo");
 
-                    return BCrypt.checkpw(heslo, ulozeneHeslo);
+                    if (BCrypt.checkpw(heslo, ulozeneHeslo)) {
+                        return true;
+                    }
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Chyba pri overovaní používateľa: " + e.getMessage());
         }
         return false;
     }
+
 
     public String getRybarNameById(int idRybara) {
         String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";

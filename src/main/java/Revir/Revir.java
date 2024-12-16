@@ -21,6 +21,10 @@ public class Revir {
         this.pstruhove = pstruhove;
     }
 
+    public Revir() {
+
+    }
+
     public boolean isKaprove() {
         return kaprove;
     }

@@ -8,6 +8,8 @@ import org.projekt.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,7 +133,7 @@ public class UlovkyController {
 
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                ulovokDAO.insertUlovok(connection, ulovok);
+                ulovokDAO.insertUlovok(connection, ulovok, cisloReviru);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }
@@ -175,29 +177,31 @@ public class UlovkyController {
         }
     }
 
-
-
-
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
         ulovky.clear();
         ulovokListView.getItems().clear();
 
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery = "SELECT * FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
+            String selectQuery = "SELECT datum, cislo_reviru, druh_ryby, dlzka_v_cm, hmotnost_v_kg, kontrola FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
             try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
                 statement.setInt(1, Session.aktualnyRybarId);
 
                 try (ResultSet resultSet = statement.executeQuery()) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // alebo prispôsobte podľa formátu v DB
                     while (resultSet.next()) {
-
-                        LocalDate datum = LocalDate.parse(resultSet.getString("datum"));
+                        LocalDate datumUlovok;
+                        try {
+                            datumUlovok = LocalDate.parse(resultSet.getString("datum"), formatter);
+                        } catch (DateTimeParseException | NullPointerException e) {
+                            datumUlovok = null;
+                        }
                         String cisloReviru = resultSet.getString("cislo_reviru");
                         String druhRyby = resultSet.getString("druh_ryby");
                         double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
                         double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
                         int kontrola = resultSet.getInt("kontrola");
-                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
 
+                        Ulovok ulovok = new Ulovok(datumUlovok, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
 
                         ulovky.add(ulovok);
                         ulovokListView.getItems().add(ulovok);
@@ -208,6 +212,7 @@ public class UlovkyController {
             e.printStackTrace();
         }
     }
+
 
     private void idPovoleniaPodlaRybaraID() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {

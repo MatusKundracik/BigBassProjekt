@@ -8,7 +8,7 @@ public interface RevirDAO {
 
     void insertRevir(Connection connection, Revir revir) throws SQLException;
 
-
+    public int getRevirIdByName(Connection connection, String nazovReviru) throws SQLException;
 
 
 }

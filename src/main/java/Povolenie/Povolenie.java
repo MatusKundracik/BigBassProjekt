@@ -21,5 +21,9 @@ public class Povolenie {
         this.pstruhove = pstruhove;
         this.rybarIdRybara = rybarID;
     }
+
+    public Povolenie() {
+
+    }
 }
 

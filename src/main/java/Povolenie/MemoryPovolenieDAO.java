@@ -2,6 +2,7 @@ package Povolenie;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,22 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
         return message.toString();
 
     }
+
+    public int getPovolenieIdByRybarId(Connection connection, int rybarId) throws SQLException {
+        String sql = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, rybarId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id_povolenie");
+                } else {
+                    throw new RuntimeException("Povolenie nenájdené pre rybára s ID: " + rybarId);
+                }
+            }
+        }
+    }
+
 
 
 

@@ -10,5 +10,5 @@ public interface PovolenieDAO {
 
     String generatePovolenieMessage(int rybarID, boolean kaprove, boolean lipnove, boolean pstruhove);
 
-
+    public int getPovolenieIdByRybarId(Connection connection, int rybarId) throws SQLException;
 }

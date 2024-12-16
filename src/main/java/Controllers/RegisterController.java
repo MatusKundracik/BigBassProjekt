@@ -73,7 +73,7 @@ public class RegisterController {
                 return;
             }
 
-            String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
+
 
             Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
                     statnaPrislusnost, email, obcianskyPreukaz, pridanyDoEvidencie, odhlasenyZEvidencie);
@@ -82,7 +82,7 @@ public class RegisterController {
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
                 rybarDAO.insertUser(connection, meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost,
-                        datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, hashedHeslo);
+                        datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, heslo);
                 System.out.println("Používateľ bol úspešne pridaný do databázy.");
             } catch (SQLException e) {
                 System.err.println("Chyba pri vkladaní používateľa do databázy: " + e.getMessage());
