@@ -80,8 +80,8 @@ public class ProfilController {
             if (aktualnyRybarId > 0) {
                 // Nastavenie štatistík
                 celkovyPocetRybLabel.setText("Celkový počet chytených rýb: " + vypocitajCelkovyPocetRyb(aktualnyRybarId));
-                najvacsiaRybaLabel.setText("Najväčšia chytený ryba: " + vypocitajNajvacsiUlovok(aktualnyRybarId) + " cm");
-                najtazsiaRybaLabel.setText("Najťažšia chytený ryba:  " + vypocitajNajtazsiUlovok(aktualnyRybarId) + " kg");
+                najvacsiaRybaLabel.setText("Najväčšia chytená ryba: " + vypocitajNajvacsiUlovok(aktualnyRybarId) + " cm");
+                najtazsiaRybaLabel.setText("Najťažšia chytená ryba:  " + vypocitajNajtazsiUlovok(aktualnyRybarId) + " kg");
             } else {
                 celkovyPocetRybLabel.setText("Nie sú dostupné údaje.");
                 najvacsiaRybaLabel.setText("Nie sú dostupné údaje.");

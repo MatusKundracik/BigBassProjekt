@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: #238b45;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LoginController">
    <children>
@@ -26,9 +27,15 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <Label text="Emailová adresa:" />
+                  <Label text="Emailová adresa:">
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font></Label>
                   <TextField fx:id="EmailTextField" />
-                  <Label text="Heslo:" />
+                  <Label text="Heslo:">
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font></Label>
                   <PasswordField fx:id="PasswordTextField" />
                   <Button fx:id="LoginButton" mnemonicParsing="false" onAction="#prihlasSaButton" text="Prihlásiť sa">
                      <VBox.margin>
@@ -39,10 +46,13 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="96.0" prefWidth="600.0" style="-fx-background-color: #238b45;">
                <children>
-                  <Label prefHeight="36.0" prefWidth="105.0" stylesheets="@css/styling.css" text=" Nemáte ešte účet?">
+                  <Label prefHeight="36.0" prefWidth="116.0" stylesheets="@css/styling.css" text=" Nemáte ešte účet?">
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="Cambria Bold" size="13.0" />
+                     </font>
                   </Label>
                   <Button fx:id="RegisterButton" mnemonicParsing="false" onAction="#zaregistrujSaButton" stylesheets="@css/styling.css" text="Zaregistrovať sa">
                      <HBox.margin>
