@@ -27,6 +27,15 @@ public class Ulovok {
         this.kontrola = kontrola;
     }
 
+    public Ulovok(String cisloReviru, String druhRyby, double dlzkaVcm, double hmotnostVkg, int kontrola) {
+        this.cisloReviru = cisloReviru;
+        this.druhRyby = druhRyby;
+        this.dlzkaVcm = dlzkaVcm;
+        this.hmotnostVkg = hmotnostVkg;
+        this.kontrola = kontrola;
+
+    }
+
 
     @Override
     public String toString() {

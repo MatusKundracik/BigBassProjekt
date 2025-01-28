@@ -47,7 +47,14 @@ class MemoryRevirDAOTest {
 
     @Test
     void testInsertRevir() throws SQLException {
-        Revir revir = new Revir("Revír Test", "Lokalita A","Popis pre revír.", true, false, true );
+        Revir revir = new Revir();
+        revir.setNazov("Revír Test");
+        revir.setLokalita("Lokalita A");
+        revir.setPopis("Popis pre revír.");
+        revir.setKaprove(true);
+        revir.setLipnove(false);
+        revir.setPstruhove(true);
+
         memoryRevirDAO.insertRevir(connection, revir);
 
         String query = "SELECT * FROM revir WHERE nazov = ?";
@@ -81,6 +88,6 @@ class MemoryRevirDAOTest {
             memoryRevirDAO.getRevirIdByName(connection, "Neexistujúci Revír");
         });
 
-        assertEquals("Revír nenájdený s názvom: Neexistujúci Revír" + " nebolo nájdené." , exception.getMessage());
+        assertEquals("Revír nenájdený s názvom: Neexistujúci Revír", exception.getMessage());
     }
 }

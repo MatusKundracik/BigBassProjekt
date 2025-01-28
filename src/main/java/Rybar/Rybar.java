@@ -35,4 +35,8 @@ public class Rybar {
         this.pridanyDoEvidencie = pridanyDoEvidencie;
         this.odhlasenyZEvidencie = odhlasenyZEvidencie;
     }
+
+    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia){
+
+    }
 }

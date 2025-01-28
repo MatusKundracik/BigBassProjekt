@@ -46,19 +46,23 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
     }
 
     public int getPovolenieIdByRybarId(Connection connection, int rybarId) throws SQLException {
-        String query = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
+        String sql = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, rybarId);
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, rybarId);
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("id_povolenie");
                 } else {
-                    throw new RuntimeException("Povolenie pre rybára s ID " + rybarId + " nebolo nájdené.");
+                    throw new RuntimeException("Povolenie nenájdené pre rybára s ID: " + rybarId);
                 }
             }
         }
     }
+
+
+
+
 
 
 

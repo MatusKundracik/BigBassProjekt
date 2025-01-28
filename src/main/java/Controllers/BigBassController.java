@@ -16,13 +16,20 @@ import org.projekt.Factory;
 import org.projekt.Session;
 import javafx.scene.image.ImageView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.Objects;
 
 public class BigBassController {
+
+    Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
@@ -55,7 +62,7 @@ public class BigBassController {
 
         if (aktualnyRybarId > 0) {
             // Načítaj meno používateľa podľa ID
-            String menoPouzivatela = rybarDAO.getRybarNameById(aktualnyRybarId);
+            String menoPouzivatela = rybarDAO.getRybarNameById(connection, aktualnyRybarId);
             if (menoPouzivatela != null) {
                 prihlasenyPouzivatelLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
             } else {

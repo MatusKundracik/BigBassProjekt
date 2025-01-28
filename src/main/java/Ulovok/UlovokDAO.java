@@ -8,6 +8,4 @@ public interface UlovokDAO {
 
     void insertUlovok(Connection connection, Ulovok ulovok) throws SQLException;
 
-    }
-
-
+}

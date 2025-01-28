@@ -8,15 +8,15 @@ public interface RybarDAO {
 
     void save(Rybar rybar);
 
-    boolean jeEmailPouzity(String email);
+    boolean jeEmailPouzity(Connection connection, String email);
 
     void insertUser(Connection connection, String meno, String priezvisko, String adresa,
                     String obcianskyPreukaz, String statnaPrislusnost, LocalDate datumNarodenia,
                     LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String email, String heslo);
 
-    int getUserIdByEmail(String email);
+    int getUserIdByEmail(Connection connection, String email);
 
-    boolean overitPouzivatela(String email, String heslo);
+    boolean overitPouzivatela(Connection connection, String email, String heslo);
 
-    String getRybarNameById(int idRybara);
+    String getRybarNameById(Connection connection, int idRybara);
 }

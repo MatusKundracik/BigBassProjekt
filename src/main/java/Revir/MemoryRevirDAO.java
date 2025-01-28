@@ -37,11 +37,15 @@ public class MemoryRevirDAO implements RevirDAO {
                 if (resultSet.next()) {
                     return resultSet.getInt("id_revira");
                 } else {
-                    throw new RuntimeException("Revír nenájdený s názvom: " + nazovReviru + " nebolo nájdené.");
+                    throw new RuntimeException("Revír nenájdený s názvom: " + nazovReviru);
                 }
             }
         }
     }
+
+
+
+
 
 
 }

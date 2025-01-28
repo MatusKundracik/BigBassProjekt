@@ -11,6 +11,7 @@ public class MemoryRybarDAO implements RybarDAO {
     private List<Rybar> rybari = new ArrayList<>();
     private int posledneID = 0;
 
+
     @Override
     public void save(Rybar rybar) {
         if (rybar == null) {
@@ -67,14 +68,41 @@ public class MemoryRybarDAO implements RybarDAO {
         }
     }
 
-    public boolean jeEmailPouzity(String email) {
+    public boolean jeEmailPouzity(Connection connection, String email) {
         String sql = "SELECT COUNT(*) AS pocet FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next() && rs.getInt("pocet") > 0) {
-                    return true;
+                return rs.next() && rs.getInt("pocet") > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getUserIdByEmail(Connection connection, String email) {
+        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_rybara");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public boolean overitPouzivatela(Connection connection, String email, String heslo) {
+        String sql = "SELECT heslo FROM rybar WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return BCrypt.checkpw(heslo, rs.getString("heslo"));
                 }
             }
         } catch (SQLException e) {
@@ -83,51 +111,9 @@ public class MemoryRybarDAO implements RybarDAO {
         return false;
     }
 
-    public int getUserIdByEmail(String email) {
-        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("id_rybara");
-                    System.out.println("Našiel som ID: " + id + " pre email: " + email);
-                    return id;
-                } else {
-                    System.out.println("Email: " + email + " nebol nájdený v databáze.");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public boolean overitPouzivatela(String email, String heslo) {
-
-        String sql = "SELECT heslo FROM rybar WHERE email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db"); // Pripojenie k databáze
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-
-                    String ulozeneHeslo = rs.getString("heslo");
-
-                    return BCrypt.checkpw(heslo, ulozeneHeslo);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public String getRybarNameById(int idRybara) {
+    public String getRybarNameById(Connection conn, int idRybara) {
         String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, idRybara);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -141,5 +127,6 @@ public class MemoryRybarDAO implements RybarDAO {
         }
         return null;
     }
+
 
 }

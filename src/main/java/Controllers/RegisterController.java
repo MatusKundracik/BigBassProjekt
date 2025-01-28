@@ -21,6 +21,16 @@ import java.util.Objects;
 public class RegisterController {
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
+    Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
     private TextField adresaTextField;
 
@@ -68,12 +78,12 @@ public class RegisterController {
             LocalDate pridanyDoEvidencie = LocalDate.now();
             LocalDate odhlasenyZEvidencie = null;
 
-            if (rybarDAO.jeEmailPouzity(email)) {
+            if (rybarDAO.jeEmailPouzity(connection, email)) {
                 zobrazAlert("Chyba registrácie", "Email už je použitý!", "Zadajte iný email.");
                 return;
             }
-
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
+
 
             Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
                     statnaPrislusnost, email, obcianskyPreukaz, pridanyDoEvidencie, odhlasenyZEvidencie);
