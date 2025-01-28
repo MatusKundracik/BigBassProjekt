@@ -8,8 +8,9 @@
     import Rybar.RybarDAO;
     import Ulovok.MemoryUlovokDAO;
     import Ulovok.UlovokDAO;
-
+    //https://paz1c.ics.upjs.sk/prednasky/
     public enum Factory {
+
         INSTANCE;
 
         private RybarDAO rybarDAO;
