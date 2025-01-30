@@ -33,10 +33,6 @@ class MemoryRevirDAOTest {
         }
     }
 
-    @BeforeEach
-    void setUp() {
-        memoryRevirDAO = new MemoryRevirDAO();
-    }
 
     @AfterEach
     void cleanUp() throws SQLException {

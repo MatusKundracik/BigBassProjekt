@@ -63,10 +63,6 @@ class MemoryUlovokDAOTest {
         }
     }
 
-    @BeforeEach
-    void setUp() {
-        memoryUlovokDAO = new MemoryUlovokDAO();
-    }
 
     @AfterEach
     void cleanUp() throws SQLException {

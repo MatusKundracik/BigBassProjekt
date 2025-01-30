@@ -1,5 +1,7 @@
 package Revir;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,11 @@ import java.util.List;
 
 public class MemoryRevirDAO implements RevirDAO {
 
+    private JdbcTemplate jdbcTemplate;
+
+    public MemoryRevirDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public void insertRevir(Connection connection, Revir revir) throws SQLException {
         String insertQuery = "INSERT INTO revir (nazov, lokalita, popis, kaprove, lipnove, pstruhove) " +

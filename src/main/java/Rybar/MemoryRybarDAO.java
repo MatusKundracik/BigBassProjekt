@@ -1,6 +1,7 @@
 package Rybar;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -8,6 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryRybarDAO implements RybarDAO {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public MemoryRybarDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
     private List<Rybar> rybari = new ArrayList<>();
     private int posledneID = 0;
 
