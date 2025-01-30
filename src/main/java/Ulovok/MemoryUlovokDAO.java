@@ -5,6 +5,7 @@ import Povolenie.PovolenieDAO;
 import Revir.RevirDAO;
 import org.projekt.Factory;
 import org.projekt.Session;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,13 @@ import java.util.List;
 
 
 public class MemoryUlovokDAO implements UlovokDAO {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public MemoryUlovokDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     private PovolenieDAO povolenieDAO = Factory.INSTANCE.getPovolenieDAO();
     private RevirDAO revirDAO = Factory.INSTANCE.getRevirDAO();
 
@@ -24,13 +32,12 @@ public class MemoryUlovokDAO implements UlovokDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)";
 
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-
             statement.setString(1, ulovok.getDatumUlovku().toString());
             statement.setString(2, ulovok.getCisloReviru());
             statement.setString(3, ulovok.getDruhRyby());
             statement.setDouble(4, ulovok.getDlzkaVcm());
             statement.setDouble(5, ulovok.getHmotnostVkg());
-            statement.setInt(6, povolenieDAO.getPovolenieIdByRybarId(connection, Session.aktualnyRybarId));
+            statement.setInt(6, povolenieDAO.getPovolenieIdByRybarId(Session.aktualnyRybarId));
             statement.setInt(7, Session.aktualnyRybarId);
             statement.setInt(8, revirDAO.getRevirIdByName(connection, ulovok.getCisloReviru()));
 

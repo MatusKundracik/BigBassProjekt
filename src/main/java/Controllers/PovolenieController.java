@@ -70,7 +70,7 @@ public class PovolenieController {
             this.povolenia.add(povolenie);
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                povolenieDAO.insertPovolenie(connection, povolenie);
+                povolenieDAO.insertPovolenie(povolenie);
 
                 String message = povolenieDAO.generatePovolenieMessage(rybarID,kaprove,lipnove,pstruhove);
 

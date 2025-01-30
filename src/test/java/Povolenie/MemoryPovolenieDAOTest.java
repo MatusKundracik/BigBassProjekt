@@ -39,11 +39,6 @@ class MemoryPovolenieDAOTest {
         }
     }
 
-    @BeforeEach
-    void setUp() {
-        memoryPovolenieDAO = new MemoryPovolenieDAO();
-    }
-
     @AfterEach
     void cleanUp() throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM povolenie")) {
@@ -56,7 +51,7 @@ class MemoryPovolenieDAOTest {
         Povolenie povolenie = new Povolenie(LocalDate.of(2024,1,1),LocalDate.of(2024,12,31),true,false,true,1);
 
 
-        memoryPovolenieDAO.insertPovolenie(connection, povolenie);
+        memoryPovolenieDAO.insertPovolenie(povolenie);
 
         String query = "SELECT * FROM povolenie WHERE rybar_id_rybara = 1";
         try (PreparedStatement statement = connection.prepareStatement(query);

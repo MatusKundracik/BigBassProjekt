@@ -1,35 +1,36 @@
 package Povolenie;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryPovolenieDAO implements PovolenieDAO {
 
-    public void insertPovolenie(Connection connection, Povolenie povolenie) throws SQLException {
+    private final JdbcTemplate jdbcTemplate;
+
+    public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+//
+    @Override
+    public void insertPovolenie(Povolenie povolenie) {
         String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, povolenie.getPlatnostOd().toString());
-            statement.setString(2, povolenie.getPlatnostDo().toString());
-            statement.setInt(3, povolenie.isPstruhove() ? 1 : 0);
-            statement.setInt(4, povolenie.isLipnove() ? 1 : 0);
-            statement.setInt(5, povolenie.isKaprove() ? 1 : 0);
-            statement.setInt(6, (int) povolenie.getRybarIdRybara());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní povolenia do databázy", e);
-        }
+        jdbcTemplate.update(insertQuery,
+                povolenie.getPlatnostOd().toString(),
+                povolenie.getPlatnostDo().toString(),
+                povolenie.isPstruhove() ? 1 : 0,
+                povolenie.isLipnove() ? 1 : 0,
+                povolenie.isKaprove() ? 1 : 0,
+                povolenie.getRybarIdRybara());
     }
 
+    @Override
     public String generatePovolenieMessage(int rybarID, boolean kaprove, boolean lipnove, boolean pstruhove) {
         StringBuilder message = new StringBuilder("Rybárovi " + rybarID + " bolo pridané ");
-        List<String> typyPovolenia = new ArrayList<>();
+        List<String> typyPovolenia = new java.util.ArrayList<>();
 
         if (kaprove) typyPovolenia.add("kaprové");
         if (lipnove) typyPovolenia.add("lipňové");
@@ -40,31 +41,12 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
         } else {
             message.append(String.join(", ", typyPovolenia)).append(" povolenie.");
         }
-
         return message.toString();
-
     }
 
-    public int getPovolenieIdByRybarId(Connection connection, int rybarId) throws SQLException {
+    @Override
+    public int getPovolenieIdByRybarId(int rybarId) {
         String sql = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, rybarId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt("id_povolenie");
-                } else {
-                    throw new RuntimeException("Povolenie nenájdené pre rybára s ID: " + rybarId);
-                }
-            }
-        }
+        return jdbcTemplate.queryForObject(sql, Integer.class, rybarId);
     }
-
-
-
-
-
-
-
-
 }

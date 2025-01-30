@@ -44,12 +44,6 @@ class MemoryRybarDAOTest {
         }
     }
 
-    @BeforeEach
-    void setUp() {
-        // Inštancia testovacej triedy
-        memoryRybarDAO = new MemoryRybarDAO();
-    }
-
     @AfterEach
     void cleanUp() throws SQLException {
         // Vymazanie všetkých údajov v tabuľke po každom teste
