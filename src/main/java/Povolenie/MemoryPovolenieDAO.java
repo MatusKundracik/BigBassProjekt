@@ -1,5 +1,6 @@
 package Povolenie;
 
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
@@ -8,12 +9,12 @@ import java.util.List;
 
 public class MemoryPovolenieDAO implements PovolenieDAO {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcOperations jdbcTemplate;
 
-    public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
+    public MemoryPovolenieDAO(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-//
+
     @Override
     public void insertPovolenie(Povolenie povolenie) {
         String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +

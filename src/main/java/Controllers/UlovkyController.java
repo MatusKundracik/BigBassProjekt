@@ -130,8 +130,8 @@ public class UlovkyController {
             ulovokListView.getItems().add(ulovok);
 
 
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                ulovokDAO.insertUlovok(connection, ulovok);
+            try  {
+                ulovokDAO.insertUlovok(ulovok);
             } catch (SQLException e) {
                 throw new RuntimeException("Chyba pri ukladaní úlovku do databázy", e);
             }

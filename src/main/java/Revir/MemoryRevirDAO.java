@@ -1,58 +1,37 @@
 package Revir;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 public class MemoryRevirDAO implements RevirDAO {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public MemoryRevirDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertRevir(Connection connection, Revir revir) throws SQLException {
+    @Override
+    public void insertRevir(Revir revir) {
         String insertQuery = "INSERT INTO revir (nazov, lokalita, popis, kaprove, lipnove, pstruhove) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, revir.getNazov());
-            statement.setString(2, revir.getLokalita());
-            statement.setString(3, revir.getPopis());
-
-            statement.setInt(4, revir.isKaprove() ? 1 : 0);
-            statement.setInt(5, revir.isLipnove() ? 1 : 0);
-            statement.setInt(6, revir.isPstruhove() ? 1 : 0);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Chyba pri vkladaní revíru do databázy", e);
-        }
+        jdbcTemplate.update(insertQuery,
+                revir.getNazov(),
+                revir.getLokalita(),
+                revir.getPopis(),
+                revir.isKaprove() ? 1 : 0,
+                revir.isLipnove() ? 1 : 0,
+                revir.isPstruhove() ? 1 : 0);
     }
 
-    public int getRevirIdByName(Connection connection, String nazovReviru) throws SQLException {
+    @Override
+    public int getRevirIdByName(String nazovReviru) {
         String sql = "SELECT id_revira FROM revir WHERE nazov = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, nazovReviru);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt("id_revira");
-                } else {
-                    throw new RuntimeException("Revír nenájdený s názvom: " + nazovReviru);
-                }
-            }
+        try {
+            return jdbcTemplate.queryForObject(sql, new SingleColumnRowMapper<>(Integer.class), nazovReviru);
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("Revír nenájdený s názvom: " + nazovReviru);
         }
     }
-
-
-
-
-
-
 }
