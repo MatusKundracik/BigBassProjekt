@@ -1,5 +1,6 @@
 package Controllers;
 
+import Povolenie.PovolenieDAO;
 import Ulovok.Ulovok;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,12 +18,13 @@ import Ulovok.UlovokDAO;
 public class UlovkyController {
 
     private UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
+    private PovolenieDAO povolenieDAO = Factory.INSTANCE.getPovolenieDAO();
 
     private List<Ulovok> ulovky = new ArrayList<>();
 
     private Map<String, Integer> revirMap = new HashMap<>();
     private int idRevir;
-    private int idPovolenie;
+
     @FXML
     private Label IDulovokLabel;
 
@@ -209,27 +211,7 @@ public class UlovkyController {
         }
     }
 
-    private void idPovoleniaPodlaRybaraID() {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
-            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
-                statement.setInt(1, Session.aktualnyRybarId);
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    // Predpokladáme, že rybár má iba jedno povolenie
-                    if (resultSet.next()) {
-                        this.idPovolenie = resultSet.getInt("id_povolenie");
-                        System.out.println("ID povolenia pre aktuálneho rybára: " + idPovolenie);
-                    } else {
-                        System.out.println("Rybár nemá žiadne povolenie.");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Chyba pri načítaní ID povolenia pre rybára.", e);
-        }
-    }
 
 
     @FXML
@@ -237,7 +219,7 @@ public class UlovkyController {
         this.ulovokListView.getItems().addAll(this.ulovky);
         nacitajUlovkyPreAktualnehoPouzivatela();
         naplnNazvyReviruDoChoiceBox();
-        idPovoleniaPodlaRybaraID();
+        povolenieDAO.idPovoleniaPodlaRybaraID();
         nacitajRybyNaSlovensku();
     }
 

@@ -11,4 +11,12 @@ public interface PovolenieDAO {
     String generatePovolenieMessage(int rybarID, boolean kaprove, boolean lipnove, boolean pstruhove);
 
     public int getPovolenieIdByRybarId(int rybarId) throws SQLException;
+
+    public boolean zobrazKaprovePovolenie(int idRybara);
+
+    public boolean zobrazPstruhovePovolenie(int idRybara);
+
+    public boolean zobrazLipnovePovolenie(int idRybara);
+
+    public void idPovoleniaPodlaRybaraID();
 }

@@ -1,15 +1,17 @@
 package Povolenie;
 
-import org.springframework.jdbc.core.JdbcOperations;
+
+import org.projekt.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.List;
 
 public class MemoryPovolenieDAO implements PovolenieDAO {
 
-    private final JdbcOperations jdbcTemplate;
+    private int idPovolenie;
+    private final JdbcTemplate jdbcTemplate;
+
 
     public MemoryPovolenieDAO(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -50,4 +52,34 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
         String sql = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, rybarId);
     }
+
+    public boolean zobrazKaprovePovolenie(int idRybara) {
+        String query = "SELECT kaprové FROM povolenie WHERE rybar_id_rybara = ? " +
+                "ORDER BY platnost_od DESC LIMIT 1";
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+    }
+
+    public boolean zobrazPstruhovePovolenie(int idRybara) {
+        String query = "SELECT pstruhove FROM povolenie WHERE rybar_id_rybara = ? " +
+                "ORDER BY platnost_od DESC LIMIT 1";
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+    }
+
+    public boolean zobrazLipnovePovolenie(int idRybara) {
+        String query = "SELECT lipňove FROM povolenie WHERE rybar_id_rybara = ? " +
+                "ORDER BY platnost_od DESC LIMIT 1";
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+    }
+
+    public void idPovoleniaPodlaRybaraID() {
+        String selectQuery = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ? " +
+                "ORDER BY platnost_od DESC LIMIT 1";
+
+        this.idPovolenie = jdbcTemplate.queryForObject(
+                selectQuery,
+                Integer.class,
+                Session.aktualnyRybarId
+        );
+    }
+
 }

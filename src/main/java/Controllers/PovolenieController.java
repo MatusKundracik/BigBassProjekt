@@ -69,11 +69,9 @@ public class PovolenieController {
 
             this.povolenia.add(povolenie);
 
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
+            try  {
                 povolenieDAO.insertPovolenie(povolenie);
-
                 String message = povolenieDAO.generatePovolenieMessage(rybarID,kaprove,lipnove,pstruhove);
-
                 povolenieListVIew.getItems().add(message.toString());
             } catch (SQLException e) {
                 e.printStackTrace();

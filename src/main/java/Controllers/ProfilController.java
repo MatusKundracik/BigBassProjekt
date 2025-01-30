@@ -1,9 +1,11 @@
 package Controllers;
 
+import Povolenie.PovolenieDAO;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import org.projekt.Factory;
 import org.projekt.Session;
 
 import java.sql.*;
@@ -12,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfilController {
-
+    private PovolenieDAO povolenieDAO= Factory.INSTANCE.getPovolenieDAO();
     @FXML
     private Label adresaLabel;
 
@@ -66,9 +68,14 @@ public class ProfilController {
             String pridanyDoEvidencie = getRybarpridanyDoEvidencieById(aktualnyRybarId);
             LocalDate pridanyDatum = LocalDate.parse(pridanyDoEvidencie);
             LocalDate odobranieDatum = pridanyDatum.plusYears(1);
-            zobrazKaprovePovolenie(aktualnyRybarId);
-            zobrazLipnovePovolenie(aktualnyRybarId);
-            zobrazPstruhovePovolenie(aktualnyRybarId);
+            boolean maKaprove = povolenieDAO.zobrazKaprovePovolenie(aktualnyRybarId);
+            boolean maLipnove = povolenieDAO.zobrazPstruhovePovolenie(aktualnyRybarId);
+            boolean maPstruhove = povolenieDAO.zobrazPstruhovePovolenie(aktualnyRybarId);
+
+            povolenieKLabel.setText("Kaprové: " + (maKaprove ? "Áno" : "Nie"));
+            povolenieLLabel.setText("Lipňové: " + (maLipnove ? "Áno" : "Nie"));
+            povoleniePLabel.setText("Pstruhové: " + (maPstruhove ? "Áno" : "Nie"));
+
             if (menoPouzivatela != null) {
                 menoPriezviskoLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
                 adresaLabel.setText("Adresa: " + adresaPouzivatela);
@@ -300,52 +307,6 @@ public class ProfilController {
         return 0.0;
     }
 
-    public void zobrazKaprovePovolenie(int idRybara) {
-        String query = "SELECT kaprové FROM povolenie WHERE rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, idRybara);
-            ResultSet resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
-                int kaprove = resultSet.getInt("kaprové");
-                povolenieKLabel.setText(kaprove == 1 ? "Kaprové povolenie: Áno" : "Kaprové povolenie: Nie");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            povolenieKLabel.setText("Chyba pri načítaní povolenia");
-        }
-    }
 
-    public void zobrazPstruhovePovolenie(int idRybara) {
-        String query = "SELECT pstruhove FROM povolenie WHERE rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, idRybara);
-            ResultSet resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
-                int pstruhove = resultSet.getInt("pstruhove");
-                povoleniePLabel.setText(pstruhove == 1 ? "Pstruhové povolenie: Áno" : "Pstruhové povolenie: Nie");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            povoleniePLabel.setText("Chyba pri načítaní povolenia");
-        }
-    }
-
-    public void zobrazLipnovePovolenie(int idRybara) {
-        String query = "SELECT lipňove FROM povolenie WHERE rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, idRybara);
-            ResultSet resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
-                int lipnove = resultSet.getInt("lipňove");
-                povolenieLLabel.setText(lipnove == 1 ? "Lipňové povolenie: Áno" : "Lipňové povolenie: Nie");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            povolenieLLabel.setText("Chyba pri načítaní povolenia");
-        }
-    }
 
 }
