@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface RevirDAO {
 
-    void insertRevir(Connection connection, Revir revir) throws SQLException;
+    void insertRevir(Revir revir) throws SQLException;
 
-    public int getRevirIdByName(Connection connection, String nazovReviru) throws SQLException;
+    public int getRevirIdByName(String nazovReviru) throws SQLException;
 
 
 }
