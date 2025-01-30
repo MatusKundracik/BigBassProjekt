@@ -13,7 +13,7 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
     public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
+//
     @Override
     public void insertPovolenie(Povolenie povolenie) {
         String insertQuery = "INSERT INTO povolenie (platnost_od, platnost_do, pstruhove, lipňove, kaprové, rybar_id_rybara) " +
