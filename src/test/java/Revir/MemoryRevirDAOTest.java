@@ -51,7 +51,7 @@ class MemoryRevirDAOTest {
         revir.setLipnove(false);
         revir.setPstruhove(true);
 
-        memoryRevirDAO.insertRevir(connection, revir);
+        memoryRevirDAO.insertRevir(revir);
 
         String query = "SELECT * FROM revir WHERE nazov = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -76,12 +76,12 @@ class MemoryRevirDAOTest {
             statement.executeUpdate();
         }
 
-        int id = memoryRevirDAO.getRevirIdByName(connection, "Revír 1");
+        int id = memoryRevirDAO.getRevirIdByName("Revír 1");
         assertTrue(id > 0); // Overenie, že id je platné
 
         // Pokus o získanie ID pre neexistujúci názov
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            memoryRevirDAO.getRevirIdByName(connection, "Neexistujúci Revír");
+            memoryRevirDAO.getRevirIdByName("Neexistujúci Revír");
         });
 
         assertEquals("Revír nenájdený s názvom: Neexistujúci Revír", exception.getMessage());

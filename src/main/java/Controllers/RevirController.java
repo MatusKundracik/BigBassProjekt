@@ -69,8 +69,8 @@ public class RevirController {
 
             this.revire.add(revir);
 
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                revirDAO.insertRevir(connection, revir);
+            try {
+                revirDAO.insertRevir(revir);
                 String message = "Revír \"" + nazov + "\" bol úspešne pridaný.";
                 revirListView.getItems().add(message);
             } catch (SQLException e) {

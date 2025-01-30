@@ -1,5 +1,6 @@
 package Povolenie;
 
+
 import org.projekt.Session;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -7,10 +8,12 @@ import java.sql.*;
 import java.util.List;
 
 public class MemoryPovolenieDAO implements PovolenieDAO {
+
     private int idPovolenie;
     private final JdbcTemplate jdbcTemplate;
 
-    public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
+
+    public MemoryPovolenieDAO(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
