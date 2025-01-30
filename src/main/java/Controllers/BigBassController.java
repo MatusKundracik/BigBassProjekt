@@ -62,7 +62,7 @@ public class BigBassController {
 
         if (aktualnyRybarId > 0) {
             // Načítaj meno používateľa podľa ID
-            String menoPouzivatela = rybarDAO.getRybarNameById(connection, aktualnyRybarId);
+            String menoPouzivatela = rybarDAO.getRybarNameById(aktualnyRybarId);
             if (menoPouzivatela != null) {
                 prihlasenyPouzivatelLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
             } else {

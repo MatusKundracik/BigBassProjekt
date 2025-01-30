@@ -2,140 +2,77 @@ package Rybar;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.sql.*;
+import org.springframework.dao.EmptyResultDataAccessException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MemoryRybarDAO implements RybarDAO {
-
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public MemoryRybarDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
-    private List<Rybar> rybari = new ArrayList<>();
-    private int posledneID = 0;
-
+    @Override
+    public void save(Rybar rybar) {  // Chýbajúca implementácia metódy save
+        insertUser(rybar);
+    }
 
     @Override
-    public void save(Rybar rybar) {
-        if (rybar == null) {
-            throw new IllegalArgumentException("Rybar nesmie byť null");
-        }
+    public void insertUser(Rybar rybar) {
+        String insertQuery = "INSERT INTO rybar (meno, priezvisko, adresa, cislo_obcianskeho_preukazu, statna_prislusnost, datum_narodenia, pridany_do_evidencie, odhlaseny_z_evidencie, email, heslo) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-
-        if (rybar.getMeno() == null || rybar.getPriezvisko() == null || rybar.getDatumNarodenia() == null) {
-            throw new IllegalArgumentException("Meno, priezvisko a dátum narodenia sú povinné");
-        }
-
-        if (rybar.getRybarId() == 0) {
-
-            rybar.setRybarId(++this.posledneID);
-            this.rybari.add(rybar);
-        } else {
-
-            boolean found = false;
-            for (int i = 0; i < rybari.size(); i++) {
-                if (rybari.get(i).getRybarId() == rybar.getRybarId()) {
-                    rybari.set(i, rybar);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                throw new IllegalArgumentException("Rybar s ID " + rybar.getRybarId() + " neexistuje");
-            }
-        }
-    }
-
-
-    public void insertUser(Connection connection, String meno, String priezvisko, String adresa,
-                           String obcianskyPreukaz, String statnaPrislusnost, LocalDate datumNarodenia,
-                           LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String email, String heslo) {
-        String insertQuery = "INSERT INTO rybar (meno, priezvisko, adresa, cislo_obcianskeho_preukazu, statna_prislusnost, datum_narodenia, pridany_do_evidencie, odhlaseny_z_evidencie, email, heslo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, meno);
-            statement.setString(2, priezvisko);
-            statement.setString(3, adresa);
-            statement.setString(4, obcianskyPreukaz);
-            statement.setString(5, statnaPrislusnost);
-            statement.setString(6, datumNarodenia.toString());
-            statement.setString(7, pridanyDoEvidencie.toString());
-            statement.setString(8, odhlasenyZEvidencie != null ? odhlasenyZEvidencie.toString() : null);
-            statement.setString(9, email);
-            statement.setString(10, heslo);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public boolean jeEmailPouzity(Connection connection, String email) {
-        String sql = "SELECT COUNT(*) AS pocet FROM rybar WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() && rs.getInt("pocet") > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public int getUserIdByEmail(Connection connection, String email) {
-        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id_rybara");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public boolean overitPouzivatela(Connection connection, String email, String heslo) {
-        String sql = "SELECT heslo FROM rybar WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return BCrypt.checkpw(heslo, rs.getString("heslo"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public String getRybarNameById(Connection conn, int idRybara) {
-        String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String meno = rs.getString("meno");
-                    String priezvisko = rs.getString("priezvisko");
-                    return meno + " " + priezvisko;
-                }
-            }
+        try {
+            jdbcTemplate.update(insertQuery,
+                    rybar.getMeno(),
+                    rybar.getPriezvisko(),
+                    rybar.getAdresa(),
+                    rybar.getCisloObcianskehoPreukazu(),  // Opravený getter
+                    rybar.getStatnaPrislusnost(),
+                    rybar.getDatumNarodenia().toString(),
+                    rybar.getPridanyDoEvidencie().toString(),
+                    rybar.getOdhlasenyZEvidencie() != null ? rybar.getOdhlasenyZEvidencie().toString() : null,
+                    rybar.getEmail(),
+                    BCrypt.hashpw(rybar.getHeslo(), BCrypt.gensalt()));  // Opravený getter
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Chyba pri vkladaní rybára do databázy.", e);
         }
-        return null;
     }
 
+    @Override
+    public boolean jeEmailPouzity(String email) {
+        String sql = "SELECT COUNT(*) FROM rybar WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
+    }
 
+    @Override
+    public int getUserIdByEmail(String email) {
+        String sql = "SELECT id_rybara FROM rybar WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, email);
+        } catch (EmptyResultDataAccessException e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean overitPouzivatela(String email, String heslo) {
+        String sql = "SELECT heslo FROM rybar WHERE email = ?";
+        try {
+            String hashedPassword = jdbcTemplate.queryForObject(sql, String.class, email);
+            return BCrypt.checkpw(heslo, hashedPassword);
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String getRybarNameById(int idRybara) {
+        String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getString("meno") + " " + rs.getString("priezvisko"), idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }
