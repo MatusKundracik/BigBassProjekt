@@ -11,58 +11,29 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.projekt.Factory;
 import Rybar.Rybar;
 import Rybar.RybarDAO;
-import org.projekt.Factory;
-
 import java.io.IOException;
-import java.sql.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class RegisterController {
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
-    Connection connection;
-
-    {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @FXML
     private TextField adresaTextField;
-
     @FXML
     private DatePicker datumNarodeniaDatePicker;
-
     @FXML
     private TextField emailTextField;
-
     @FXML
     private TextField hesloTextField;
-
     @FXML
     private TextField menoTextField;
-
     @FXML
     private TextField obcianskyPreukazTextField;
-
-    @FXML
-    private ListView<Rybar> rybarListView;
-
-    @FXML
-    private Button pridatRybaraButton;
-
     @FXML
     private TextField priezviskoTextField;
-
     @FXML
     private TextField statnaPrislusnotTextField;
-
-    @FXML
-    private TextField IDTextField;
 
     @FXML
     void addRybarAction(ActionEvent event) {
@@ -78,47 +49,29 @@ public class RegisterController {
             LocalDate pridanyDoEvidencie = LocalDate.now();
             LocalDate odhlasenyZEvidencie = null;
 
-            if (rybarDAO.jeEmailPouzity(connection, email)) {
+            if (rybarDAO.jeEmailPouzity(email)) {
                 zobrazAlert("Chyba registrácie", "Email už je použitý!", "Zadajte iný email.");
                 return;
             }
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
 
-
             Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
-                    statnaPrislusnost, email, obcianskyPreukaz, pridanyDoEvidencie, odhlasenyZEvidencie);
+                    statnaPrislusnost, email, obcianskyPreukaz, pridanyDoEvidencie, odhlasenyZEvidencie, heslo);
 
             rybarDAO.save(rybar);
 
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-                rybarDAO.insertUser(connection, meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost,
-                        datumNarodenia, pridanyDoEvidencie, odhlasenyZEvidencie, email, hashedHeslo);
-                System.out.println("Používateľ bol úspešne pridaný do databázy.");
-            } catch (SQLException e) {
-                System.err.println("Chyba pri vkladaní používateľa do databázy: " + e.getMessage());
-            }
-
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginController.fxml"));
             Parent root = loader.load();
-
             Scene scene = new Scene(root);
-
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
             stage.setTitle("Prihlásenie");
             stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/alfonso.png"))));
             stage.setScene(scene);
             stage.show();
 
-        } catch (NumberFormatException e) {
-            System.out.println("ID musí byť číslo!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Chyba: " + e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void zobrazAlert(String title, String header, String content) {
@@ -128,5 +81,4 @@ public class RegisterController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 }
