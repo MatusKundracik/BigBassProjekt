@@ -13,7 +13,7 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
     private final JdbcTemplate jdbcTemplate;
 
 
-    public MemoryPovolenieDAO(JdbcOperations jdbcTemplate) {
+    public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

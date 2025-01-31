@@ -1,6 +1,7 @@
 package Controllers;
 
 import Povolenie.PovolenieDAO;
+import Revir.RevirDAO;
 import Ulovok.Ulovok;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ public class UlovkyController {
 
     private UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
     private PovolenieDAO povolenieDAO = Factory.INSTANCE.getPovolenieDAO();
+    private RevirDAO revirDAO = Factory.INSTANCE.getRevirDAO();
 
     private List<Ulovok> ulovky = new ArrayList<>();
 
@@ -147,38 +149,18 @@ public class UlovkyController {
 
     @FXML
     private void naplnNazvyReviruDoChoiceBox() {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery =  "SELECT r.nazov, r.id_revira FROM revir r " +
-                    "JOIN povolenie p ON (" +
-                    "    (p.kaprové = 1 AND r.kaprove = 1) OR " +
-                    "    (p.pstruhove = 1 AND r.pstruhove = 1) OR " +
-                    "    (p.lipňove = 1 AND r.lipnove = 1)" +
-                    ") " +
-                    "WHERE p.rybar_id_rybara = ?";
-            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
-                statement.setInt(1, Session.aktualnyRybarId);
+        try {
+            // Získanie revírov z DAO
+            revirMap = revirDAO.getReviryForRybar(Session.aktualnyRybarId);
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    // Clear the existing items in the ChoiceBox
-                    nazovReviruComboBox.getItems().clear();
-
-                    // Add each "nazov" from the database to the ChoiceBox
-                    while (resultSet.next()) {
-                        String nazovReviru = resultSet.getString("nazov");
-                        int idRevir = resultSet.getInt("id_revira");
-                        revirMap.put(nazovReviru, idRevir);
-                        nazovReviruComboBox.getItems().add(nazovReviru);
-                    }
-                }
-            }
+            // Naplnenie ComboBoxu
+            nazovReviruComboBox.getItems().clear();
+            nazovReviruComboBox.getItems().addAll(revirMap.keySet());
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Chyba pri nacitani reviru.", e);
+            throw new RuntimeException("Chyba pri načítaní revírov", e);
         }
     }
-
-
-
 
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
         ulovky.clear();
