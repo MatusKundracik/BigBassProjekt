@@ -15,4 +15,12 @@ public interface RybarDAO {
     boolean overitPouzivatela(String email, String heslo);
 
     String getRybarNameById(int idRybara);
+
+    String getRybarAdresaById(int idRybara);
+    String getRybarDatumNarById(int idRybara);
+    String getRybarEmailById(int idRybara);
+    String getRybarPridanyDoEvidencieById(int idRybara);
+
+    String getRybarMenoPriezviskoById(int idRybara);
+
 }

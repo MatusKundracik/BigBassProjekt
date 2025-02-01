@@ -1,6 +1,7 @@
 package Controllers;
 
 import Povolenie.PovolenieDAO;
+import Rybar.RybarDAO;
 import Ulovok.UlovokDAO;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class ProfilController {
     private PovolenieDAO povolenieDAO= Factory.INSTANCE.getPovolenieDAO();
     private final UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
+    private final RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
+
     @FXML
     private Label adresaLabel;
 
@@ -64,11 +67,11 @@ public class ProfilController {
 
         if (aktualnyRybarId > 0) {
 
-            String menoPouzivatela = getRybarMenoPriezviskoById(aktualnyRybarId);
-            String adresaPouzivatela = getRybarAdresaById(aktualnyRybarId);
-            String datumNarodenia = getRybarDatumNarById(aktualnyRybarId);
-            String email = getRybarEmailById(aktualnyRybarId);
-            String pridanyDoEvidencie = getRybarpridanyDoEvidencieById(aktualnyRybarId);
+            String menoPouzivatela = rybarDAO.getRybarMenoPriezviskoById(aktualnyRybarId);
+            String adresaPouzivatela = rybarDAO.getRybarAdresaById(aktualnyRybarId);
+            String datumNarodenia = rybarDAO.getRybarDatumNarById(aktualnyRybarId);
+            String email = rybarDAO.getRybarEmailById(aktualnyRybarId);
+            String pridanyDoEvidencie = rybarDAO.getRybarPridanyDoEvidencieById(aktualnyRybarId);
             LocalDate pridanyDatum = LocalDate.parse(pridanyDoEvidencie);
             LocalDate odobranieDatum = pridanyDatum.plusYears(1);
             boolean maKaprove = povolenieDAO.zobrazKaprovePovolenie(aktualnyRybarId);
@@ -115,107 +118,5 @@ public class ProfilController {
 
         ulovkyBarChart.getData().add(series);
     }
-
-
-
-
-
-
-
-
-
-    private String getRybarMenoPriezviskoById(int idRybara) {
-        String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String meno = rs.getString("meno");
-                    String priezvisko = rs.getString("priezvisko");
-                    return meno + " " + priezvisko;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private String getRybarAdresaById(int idRybara) {
-        String sql = "SELECT adresa FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String adresa = rs.getString("adresa");
-                    return adresa;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private String getRybarDatumNarById(int idRybara) {
-        String sql = "SELECT datum_narodenia FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String datumNar = rs.getString("datum_narodenia");
-                    return datumNar;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private String getRybarEmailById(int idRybara) {
-        String sql = "SELECT email FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String email = rs.getString("email");
-                    return email;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private String getRybarpridanyDoEvidencieById(int idRybara) {
-        String sql = "SELECT pridany_do_evidencie FROM rybar WHERE id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idRybara);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String pridanyDoEvi = rs.getString("pridany_do_evidencie");
-                    return pridanyDoEvi;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-
-
-
-
-
-
 
 }
