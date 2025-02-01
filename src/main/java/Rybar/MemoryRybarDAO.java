@@ -75,4 +75,55 @@ public class MemoryRybarDAO implements RybarDAO {
             return null;
         }
     }
+
+    @Override
+    public String getRybarAdresaById(int idRybara) {
+        String sql = "SELECT adresa FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getRybarDatumNarById(int idRybara) {
+        String sql = "SELECT datum_narodenia FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getRybarEmailById(int idRybara) {
+        String sql = "SELECT email FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getRybarPridanyDoEvidencieById(int idRybara) {
+        String sql = "SELECT pridany_do_evidencie FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getRybarMenoPriezviskoById(int idRybara) {
+        String sql = "SELECT meno, priezvisko FROM rybar WHERE id_rybara = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
+                    rs.getString("meno") + " " + rs.getString("priezvisko"), idRybara);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }

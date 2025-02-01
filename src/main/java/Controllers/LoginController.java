@@ -20,16 +20,6 @@ import java.util.Objects;
 
 public class LoginController {
 
-    Connection connection;
-
-    {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
