@@ -1,6 +1,7 @@
 package Controllers;
 
 import Povolenie.PovolenieDAO;
+import Ulovok.UlovokDAO;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 public class ProfilController {
     private PovolenieDAO povolenieDAO= Factory.INSTANCE.getPovolenieDAO();
+    private final UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
     @FXML
     private Label adresaLabel;
 
@@ -56,8 +58,9 @@ public class ProfilController {
 
     @FXML
     public void initialize() {
-        zobrazStatistikyUlovkov();
         int aktualnyRybarId = Session.aktualnyRybarId;
+            int rybarId = aktualnyRybarId;
+
 
         if (aktualnyRybarId > 0) {
 
@@ -85,10 +88,12 @@ public class ProfilController {
                 odobranzyZEvidencieLabel.setText("Odobraný z evidencie: " + odobranieDatum);
             }
             if (aktualnyRybarId > 0) {
-                // Nastavenie štatistík
-                celkovyPocetRybLabel.setText("Celkový počet chytených rýb: " + vypocitajCelkovyPocetRyb(aktualnyRybarId));
-                najvacsiaRybaLabel.setText("Najväčšia chytená ryba: " + vypocitajNajvacsiUlovok(aktualnyRybarId) + " cm");
-                najtazsiaRybaLabel.setText("Najťažšia chytená ryba:  " + vypocitajNajtazsiUlovok(aktualnyRybarId) + " kg");
+                celkovyPocetRybLabel.setText("Celkový počet chytených rýb: " + ulovokDAO.vypocitajCelkovyPocetRyb(rybarId));
+                najvacsiaRybaLabel.setText("Najväčšia chytená ryba: " + ulovokDAO.vypocitajNajvacsiUlovok(rybarId) + " cm");
+                najtazsiaRybaLabel.setText("Najťažšia chytená ryba: " + ulovokDAO.vypocitajNajtazsiUlovok(rybarId) + " kg");
+
+                Map<String, Integer> ulovkyZaMesiac = ulovokDAO.nacitajPoctyUlovkovZaMesiac(rybarId);
+                naplnBarChart(ulovkyZaMesiac);
             } else {
                 celkovyPocetRybLabel.setText("Nie sú dostupné údaje.");
                 najvacsiaRybaLabel.setText("Nie sú dostupné údaje.");
@@ -98,74 +103,23 @@ public class ProfilController {
 
     }
 
-
-
     private void naplnBarChart(Map<String, Integer> ulovkyZaMesiac) {
-        if (ulovkyBarChart == null) {
-            System.err.println("Chyba: BarChart nebol inicializovaný.");
-            return;
-        }
-
-        if (ulovkyZaMesiac == null || ulovkyZaMesiac.isEmpty()) {
-            System.err.println("Chyba: Údaje pre BarChart nie sú dostupné.");
-            return;
-        }
-
         ulovkyBarChart.getData().clear();
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Počet úlovkov");
 
         for (Map.Entry<String, Integer> entry : ulovkyZaMesiac.entrySet()) {
-            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
-            series.getData().add(data);
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
 
         ulovkyBarChart.getData().add(series);
     }
 
 
-    private Map<String, Integer> nacitajPoctyUlovkovZaMesiac() {
-        Map<String, Integer> ulovkyZaMesiac = new HashMap<>();
-
-            String query = "SELECT strftime('%Y-%m', datum) AS mesiac, COUNT(*) AS pocet_ulovkov " +
-                    "FROM ulovok " +
-                    "WHERE povolenie_rybar_id_rybara = ? " +
-                    "GROUP BY strftime('%Y-%m', datum) " +
-                    "ORDER BY pocet_ulovkov DESC " +
-                    "LIMIT 3";
-
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, Session.aktualnyRybarId);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    String mesiac = resultSet.getString("mesiac");
-                    int pocet = resultSet.getInt("pocet_ulovkov");
-                    ulovkyZaMesiac.put(mesiac, pocet);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Chyba pri načítaní počtu úlovkov za jednotlivé mesiace.", e);
-        }
-
-        return ulovkyZaMesiac;
-    }
 
 
 
-    @FXML
-    private void zobrazStatistikyUlovkov() {
-        Map<String, Integer> ulovkyZaMesiac = nacitajPoctyUlovkovZaMesiac();
-        if (ulovkyZaMesiac == null || ulovkyZaMesiac.isEmpty()) {
-            System.err.println("Chyba: Žiadne údaje o úlovkoch.");
-            return;
-        }
-        naplnBarChart(ulovkyZaMesiac);
-    }
 
 
 
@@ -256,56 +210,11 @@ public class ProfilController {
         return null;
     }
 
-    // Metóda na výpočet celkového počtu chytených rýb
-    private int vypocitajCelkovyPocetRyb(int rybarId) {
-        String sql = "SELECT count(druh_ryby) AS celkovy_pocet FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, rybarId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("celkovy_pocet");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
 
-    private int vypocitajNajvacsiUlovok(int rybarId) {
-        String sql = "SELECT MAX(dlzka_v_cm) AS najvacsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, rybarId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("najvacsia_ryba");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
 
-    private double vypocitajNajtazsiUlovok(int rybarId) {
-        String sql = "SELECT MAX(hmotnost_v_kg) AS najtazsia_ryba FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, rybarId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("najtazsia_ryba");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0.0;
-    }
+
 
 
 
