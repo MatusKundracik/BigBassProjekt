@@ -163,34 +163,8 @@ public class UlovkyController {
     }
 
     private void nacitajUlovkyPreAktualnehoPouzivatela() {
-        ulovky.clear();
-        ulovokListView.getItems().clear();
-
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            String selectQuery = "SELECT * FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-            try (PreparedStatement statement = connection.prepareStatement(selectQuery)) {
-                statement.setInt(1, Session.aktualnyRybarId);
-
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-
-                        LocalDate datum = LocalDate.parse(resultSet.getString("datum"));
-                        String cisloReviru = resultSet.getString("cislo_reviru");
-                        String druhRyby = resultSet.getString("druh_ryby");
-                        double dlzkaVcm = resultSet.getDouble("dlzka_v_cm");
-                        double hmotnostVkg = resultSet.getDouble("hmotnost_v_kg");
-                        int kontrola = resultSet.getInt("kontrola");
-                        Ulovok ulovok = new Ulovok(datum, cisloReviru, druhRyby, dlzkaVcm, hmotnostVkg, kontrola);
-
-
-                        ulovky.add(ulovok);
-                        ulovokListView.getItems().add(ulovok);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ulovky = ulovokDAO.nacitajUlovkyPreRybara(Session.aktualnyRybarId);
+        ulovokListView.getItems().setAll(ulovky);
     }
 
 
