@@ -61,15 +61,19 @@ public class MemoryUlovokDAO implements UlovokDAO {
 
     @Override
     public int vypocitajNajvacsiUlovok(int rybarId) {
+        System.out.println(rybarId);
         String sql = "SELECT MAX(dlzka_v_cm) FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, rybarId);
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class, rybarId);
+        return result != null ? result : 0;  // Ak je null, vráť 0
     }
 
     @Override
-    public double vypocitajNajtazsiUlovok(int rybarId) {
+    public Double vypocitajNajtazsiUlovok(int rybarId) {
         String sql = "SELECT MAX(hmotnost_v_kg) FROM ulovok WHERE povolenie_rybar_id_rybara = ?";
-        return jdbcTemplate.queryForObject(sql, Double.class, rybarId);
+        Double najtazsiUlovok = jdbcTemplate.queryForObject(sql, Double.class, rybarId);
+        return najtazsiUlovok != null ? najtazsiUlovok : 0.0;
     }
+
 
     @Override
     public Map<String, Integer> nacitajPoctyUlovkovZaMesiac(int rybarId) {

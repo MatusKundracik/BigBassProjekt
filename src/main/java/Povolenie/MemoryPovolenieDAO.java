@@ -2,6 +2,7 @@ package Povolenie;
 
 
 import org.projekt.Session;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.*;
@@ -56,30 +57,38 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
     public boolean zobrazKaprovePovolenie(int idRybara) {
         String query = "SELECT kaprové FROM povolenie WHERE rybar_id_rybara = ? " +
                 "ORDER BY platnost_od DESC LIMIT 1";
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
     public boolean zobrazPstruhovePovolenie(int idRybara) {
         String query = "SELECT pstruhove FROM povolenie WHERE rybar_id_rybara = ? " +
                 "ORDER BY platnost_od DESC LIMIT 1";
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
     public boolean zobrazLipnovePovolenie(int idRybara) {
         String query = "SELECT lipňove FROM povolenie WHERE rybar_id_rybara = ? " +
                 "ORDER BY platnost_od DESC LIMIT 1";
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(query, Boolean.class, idRybara));
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
+
 
     public void idPovoleniaPodlaRybaraID() {
         String selectQuery = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ? " +
                 "ORDER BY platnost_od DESC LIMIT 1";
 
-        this.idPovolenie = jdbcTemplate.queryForObject(
-                selectQuery,
-                Integer.class,
-                Session.aktualnyRybarId
-        );
     }
 
 }

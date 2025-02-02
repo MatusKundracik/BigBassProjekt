@@ -13,7 +13,7 @@ public interface UlovokDAO {
 
     int vypocitajNajvacsiUlovok(int rybarId);
 
-    double vypocitajNajtazsiUlovok(int rybarId);
+    Double vypocitajNajtazsiUlovok(int rybarId);
 
     Map<String, Integer> nacitajPoctyUlovkovZaMesiac(int rybarId);
 

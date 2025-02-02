@@ -8,11 +8,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.projekt.Factory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class KontrolaController {
     private final UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
     @FXML

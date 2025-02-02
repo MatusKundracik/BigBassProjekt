@@ -9,10 +9,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.projekt.Factory;
 import org.projekt.Session;
-
-import java.sql.*;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ProfilController {
@@ -75,8 +72,8 @@ public class ProfilController {
             LocalDate pridanyDatum = LocalDate.parse(pridanyDoEvidencie);
             LocalDate odobranieDatum = pridanyDatum.plusYears(1);
             boolean maKaprove = povolenieDAO.zobrazKaprovePovolenie(aktualnyRybarId);
-            boolean maLipnove = povolenieDAO.zobrazPstruhovePovolenie(aktualnyRybarId);
-            boolean maPstruhove = povolenieDAO.zobrazPstruhovePovolenie(aktualnyRybarId);
+            boolean  maPstruhove = povolenieDAO.zobrazPstruhovePovolenie(aktualnyRybarId);
+            boolean  maLipnove= povolenieDAO.zobrazLipnovePovolenie(aktualnyRybarId);
 
             povolenieKLabel.setText("Kaprové: " + (maKaprove ? "Áno" : "Nie"));
             povolenieLLabel.setText("Lipňové: " + (maLipnove ? "Áno" : "Nie"));
