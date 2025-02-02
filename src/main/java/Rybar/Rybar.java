@@ -22,9 +22,8 @@ public class Rybar {
     private String email;
     private String heslo;  // Pridané heslo (ak je potrebné uložiť)
 
-    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia, String email,
-                 String adresa, String statnaPrislusnost, String cisloObcianskehoPreukazu,
-                 LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String heslo) { // Pridané heslo
+    public Rybar(String meno, String priezvisko, String adresa, String cisloObcianskehoPreukazu, String statnaPrislusnost, LocalDate datumNarodenia,
+                 LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String email, String heslo) { // Pridané heslo
         this.meno = meno;
         this.priezvisko = priezvisko;
         this.datumNarodenia = datumNarodenia;

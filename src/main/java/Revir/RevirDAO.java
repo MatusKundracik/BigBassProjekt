@@ -12,4 +12,6 @@ public interface RevirDAO {
     public int getRevirIdByName(String nazovReviru) throws SQLException;
 
     Map<String, Integer> getReviryForRybar(int rybarId) throws SQLException;
+
+    List<Revir> getAllReviry() throws SQLException;
 }

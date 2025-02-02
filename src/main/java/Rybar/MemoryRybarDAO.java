@@ -27,7 +27,7 @@ public class MemoryRybarDAO implements RybarDAO {
                     rybar.getMeno(),
                     rybar.getPriezvisko(),
                     rybar.getAdresa(),
-                    rybar.getCisloObcianskehoPreukazu(),  // Opravený getter
+                    rybar.getCisloObcianskehoPreukazu(),
                     rybar.getStatnaPrislusnost(),
                     rybar.getDatumNarodenia().toString(),
                     rybar.getPridanyDoEvidencie().toString(),
