@@ -55,8 +55,8 @@ public class RegisterController {
             }
             String hashedHeslo = BCrypt.hashpw(heslo, BCrypt.gensalt());
 
-            Rybar rybar = new Rybar(meno, priezvisko, datumNarodenia, adresa,
-                    statnaPrislusnost, email, obcianskyPreukaz, pridanyDoEvidencie, odhlasenyZEvidencie, heslo);
+            Rybar rybar = new Rybar(meno, priezvisko, adresa, obcianskyPreukaz, statnaPrislusnost, datumNarodenia,
+                       pridanyDoEvidencie, odhlasenyZEvidencie, email, heslo);
 
             rybarDAO.save(rybar);
 
