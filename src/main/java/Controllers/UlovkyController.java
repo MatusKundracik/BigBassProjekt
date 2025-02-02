@@ -175,7 +175,6 @@ public class UlovkyController {
         this.ulovokListView.getItems().addAll(this.ulovky);
         nacitajUlovkyPreAktualnehoPouzivatela();
         naplnNazvyReviruDoChoiceBox();
-        povolenieDAO.idPovoleniaPodlaRybaraID();
         nacitajRybyNaSlovensku();
     }
 
