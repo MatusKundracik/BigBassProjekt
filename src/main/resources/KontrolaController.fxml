@@ -2,9 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -12,16 +12,16 @@
    <children>
       <HBox prefHeight="107.0" prefWidth="600.0">
          <children>
-            <Label text="ID úlovku ktorý chceš skontrolovať:">
+            <Label text="Vyber e-mail používateľa:">
                <HBox.margin>
                   <Insets left="10.0" top="35.0" />
                </HBox.margin>
             </Label>
-            <TextField fx:id="idUlovkyTextField">
+            <ComboBox fx:id="emailComboBox">
                <HBox.margin>
                   <Insets left="10.0" top="30.0" />
                </HBox.margin>
-            </TextField>
+            </ComboBox>
          </children>
       </HBox>
       <HBox prefHeight="278.0" prefWidth="600.0">
@@ -31,7 +31,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="114.0" prefWidth="600.0">
          <children>
-            <Button fx:id="zapisKontroluButton" mnemonicParsing="false" onAction="#addKontroluButton" text="Zapíš kontrolu" />
+            <Button fx:id="zapisKontroluButton" mnemonicParsing="false" onAction="#skontrolujUlovok" text="Skontrolovať úlovok" />
          </children>
       </HBox>
    </children>

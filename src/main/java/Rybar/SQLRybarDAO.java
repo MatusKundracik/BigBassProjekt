@@ -3,17 +3,16 @@ package Rybar;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.dao.EmptyResultDataAccessException;
-import java.time.LocalDate;
 
-public class MemoryRybarDAO implements RybarDAO {
+public class SQLRybarDAO implements RybarDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    public MemoryRybarDAO(JdbcTemplate jdbcTemplate) {
+    public SQLRybarDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public void save(Rybar rybar) {  // Chýbajúca implementácia metódy save
+    public void save(Rybar rybar) {
         insertUser(rybar);
     }
 
@@ -33,7 +32,7 @@ public class MemoryRybarDAO implements RybarDAO {
                     rybar.getPridanyDoEvidencie().toString(),
                     rybar.getOdhlasenyZEvidencie() != null ? rybar.getOdhlasenyZEvidencie().toString() : null,
                     rybar.getEmail(),
-                    BCrypt.hashpw(rybar.getHeslo(), BCrypt.gensalt()));  // Opravený getter
+                    BCrypt.hashpw(rybar.getHeslo(), BCrypt.gensalt()));
         } catch (Exception e) {
             throw new RuntimeException("Chyba pri vkladaní rybára do databázy.", e);
         }

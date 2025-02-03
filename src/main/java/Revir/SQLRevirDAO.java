@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MemoryRevirDAO implements RevirDAO {
+public class SQLRevirDAO implements RevirDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public MemoryRevirDAO(JdbcTemplate jdbcTemplate) {
+    public SQLRevirDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

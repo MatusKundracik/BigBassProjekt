@@ -1,12 +1,12 @@
     package org.projekt;
 
-    import Povolenie.MemoryPovolenieDAO;
+    import Povolenie.SQLPovolenieDAO;
     import Povolenie.PovolenieDAO;
-    import Revir.MemoryRevirDAO;
+    import Revir.SQLRevirDAO;
     import Revir.RevirDAO;
-    import Rybar.MemoryRybarDAO;
+    import Rybar.SQLRybarDAO;
     import Rybar.RybarDAO;
-    import Ulovok.MemoryUlovokDAO;
+    import Ulovok.SQLUlovokDAO;
     import Ulovok.UlovokDAO;
     import org.springframework.jdbc.core.JdbcTemplate;
     import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -24,28 +24,28 @@
 
         public RybarDAO getRybarDAO() {
             if (rybarDAO == null) {
-                rybarDAO = new MemoryRybarDAO(getJdbcTemplate());
+                rybarDAO = new SQLRybarDAO(getJdbcTemplate());
             }
             return rybarDAO;
         }
 
         public UlovokDAO getUlovokDAO() {
             if (ulovokDAO == null) {
-                ulovokDAO = new MemoryUlovokDAO(getJdbcTemplate());
+                ulovokDAO = new SQLUlovokDAO(getJdbcTemplate());
             }
             return ulovokDAO;
         }
 
         public PovolenieDAO getPovolenieDAO() {
             if (povolenieDAO == null) {
-                povolenieDAO = new MemoryPovolenieDAO(getJdbcTemplate());
+                povolenieDAO = new SQLPovolenieDAO(getJdbcTemplate());
             }
             return povolenieDAO;
         }
 
         public RevirDAO getRevirDAO() {
             if (revirDAO == null) {
-                revirDAO = new MemoryRevirDAO(getJdbcTemplate());
+                revirDAO = new SQLRevirDAO(getJdbcTemplate());
             }
             return revirDAO;
         }

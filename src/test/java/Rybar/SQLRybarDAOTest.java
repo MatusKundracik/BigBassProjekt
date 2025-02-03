@@ -1,17 +1,13 @@
 package Rybar;
 
 import org.junit.jupiter.api.*;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
-import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class MemoryRybarDAOTest {
+class SQLRybarDAOTest {
 
     private static Connection connection;
-    private MemoryRybarDAO memoryRybarDAO;
+    private SQLRybarDAO SQLRybarDAO;
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {

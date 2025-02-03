@@ -19,4 +19,8 @@ public interface PovolenieDAO {
     public boolean zobrazLipnovePovolenie(int idRybara);
 
     public void idPovoleniaPodlaRybaraID();
+
+    List<String> getAllEmails();
+
+    int getIdByEmail(String email);
 }
