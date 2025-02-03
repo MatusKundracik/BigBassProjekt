@@ -1,20 +1,18 @@
 package Povolenie;
 
 
-import org.projekt.Session;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.*;
 import java.util.List;
 
-public class MemoryPovolenieDAO implements PovolenieDAO {
+public class SQLPovolenieDAO implements PovolenieDAO {
 
     private int idPovolenie;
     private final JdbcTemplate jdbcTemplate;
 
 
-    public MemoryPovolenieDAO(JdbcTemplate jdbcTemplate) {
+    public SQLPovolenieDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -89,6 +87,16 @@ public class MemoryPovolenieDAO implements PovolenieDAO {
         String selectQuery = "SELECT id_povolenie FROM povolenie WHERE rybar_id_rybara = ? " +
                 "ORDER BY platnost_od DESC LIMIT 1";
 
+    }
+
+    public List<String> getAllEmails() {
+        String query = "SELECT email FROM rybar";
+        return jdbcTemplate.query(query, (rs, rowNum) -> rs.getString("email"));
+    }
+
+    public int getIdByEmail(String email) {
+        String query = "SELECT id_rybara FROM rybar WHERE email = ?";
+        return jdbcTemplate.queryForObject(query, Integer.class, email);
     }
 
 }

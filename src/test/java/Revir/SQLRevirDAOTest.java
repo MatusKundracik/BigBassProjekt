@@ -10,10 +10,10 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemoryRevirDAOTest {
+class SQLRevirDAOTest {
 
     private static Connection connection;
-    private MemoryRevirDAO memoryRevirDAO;
+    private SQLRevirDAO SQLRevirDAO;
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {
@@ -51,7 +51,7 @@ class MemoryRevirDAOTest {
         revir.setLipnove(false);
         revir.setPstruhove(true);
 
-        memoryRevirDAO.insertRevir(revir);
+        SQLRevirDAO.insertRevir(revir);
 
         String query = "SELECT * FROM revir WHERE nazov = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -76,12 +76,12 @@ class MemoryRevirDAOTest {
             statement.executeUpdate();
         }
 
-        int id = memoryRevirDAO.getRevirIdByName("Revír 1");
+        int id = SQLRevirDAO.getRevirIdByName("Revír 1");
         assertTrue(id > 0); // Overenie, že id je platné
 
         // Pokus o získanie ID pre neexistujúci názov
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            memoryRevirDAO.getRevirIdByName("Neexistujúci Revír");
+            SQLRevirDAO.getRevirIdByName("Neexistujúci Revír");
         });
 
         assertEquals("Revír nenájdený s názvom: Neexistujúci Revír", exception.getMessage());

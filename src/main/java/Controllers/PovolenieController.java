@@ -6,18 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.projekt.*;
 import Povolenie.PovolenieDAO;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PovolenieController {
     private PovolenieDAO povolenieDAO = Factory.INSTANCE.getPovolenieDAO();
-    private List<Povolenie> povolenia = new ArrayList<>();
-
     private boolean kaprove = false;
     private boolean lipnove = false;
     private boolean pstruhove = false;
@@ -26,7 +20,7 @@ public class PovolenieController {
     private CheckBox LipnoveCheckBox;
 
     @FXML
-    private TextField idRybaraTextFIeld;
+    private ComboBox<String> idRybaraComboBox;
 
     @FXML
     private ListView<String> povolenieListVIew;
@@ -44,6 +38,21 @@ public class PovolenieController {
     private Button zapisPovolenieButton;
 
     @FXML
+    public void initialize() {
+        loadEmails();
+    }
+
+    private void loadEmails() {
+        try {
+            List<String> emails = povolenieDAO.getAllEmails();
+            idRybaraComboBox.getItems().addAll(emails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            povolenieListVIew.getItems().add("Chyba pri načítaní e-mailov: " + e.getMessage());
+        }
+    }
+
+    @FXML
     void addPovolenieButton(ActionEvent event) {
         try {
             LocalDate platnostOd = platnostOdDatePicker.getValue();
@@ -51,37 +60,25 @@ public class PovolenieController {
                 povolenieListVIew.getItems().add("Chyba: Zvoľte platnosť od dátum.");
                 return;
             }
-
             LocalDate platnostDo = platnostOd.plusYears(1);
             kaprove = kaproveCheckBox.isSelected();
             lipnove = LipnoveCheckBox.isSelected();
             pstruhove = pstruhoveCheckBox.isSelected();
 
-            String rybarIdText = idRybaraTextFIeld.getText();
-            if (rybarIdText == null || rybarIdText.isEmpty()) {
-                povolenieListVIew.getItems().add("Chyba: Zadajte ID rybára.");
+            String email = idRybaraComboBox.getValue();
+            if (email == null || email.isEmpty()) {
+                povolenieListVIew.getItems().add("Chyba: Vyberte e-mail rybára.");
                 return;
             }
 
-            int rybarID = Integer.parseInt(rybarIdText);
-
+            int rybarID = povolenieDAO.getIdByEmail(email);
             Povolenie povolenie = new Povolenie(platnostOd, platnostDo, kaprove, lipnove, pstruhove, rybarID);
 
-            this.povolenia.add(povolenie);
-
-            try  {
-                povolenieDAO.insertPovolenie(povolenie);
-                String message = povolenieDAO.generatePovolenieMessage(rybarID,kaprove,lipnove,pstruhove);
-                povolenieListVIew.getItems().add(message.toString());
-            } catch (SQLException e) {
-                e.printStackTrace();
-                povolenieListVIew.getItems().add("Chyba pri ukladaní povolenia: " + e.getMessage());
-            }
-
-        } catch (NumberFormatException e) {
-            povolenieListVIew.getItems().add("Chyba: ID rybára musí byť číslo.");
+            povolenieDAO.insertPovolenie(povolenie);
+            String message = povolenieDAO.generatePovolenieMessage(rybarID, kaprove, lipnove, pstruhove);
+            povolenieListVIew.getItems().add(message);
+        } catch (Exception e) {
+            povolenieListVIew.getItems().add("Chyba pri ukladaní povolenia: " + e.getMessage());
         }
     }
-
-
 }

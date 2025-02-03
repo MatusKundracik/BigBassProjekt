@@ -11,10 +11,10 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemoryPovolenieDAOTest {
+class SQLPovolenieDAOTest {
 
     private static Connection connection;
-    private MemoryPovolenieDAO memoryPovolenieDAO;
+    private SQLPovolenieDAO SQLPovolenieDAO;
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {
@@ -51,7 +51,7 @@ class MemoryPovolenieDAOTest {
         Povolenie povolenie = new Povolenie(LocalDate.of(2024,1,1),LocalDate.of(2024,12,31),true,false,true,1);
 
 
-        memoryPovolenieDAO.insertPovolenie(povolenie);
+        SQLPovolenieDAO.insertPovolenie(povolenie);
 
         String query = "SELECT * FROM povolenie WHERE rybar_id_rybara = 1";
         try (PreparedStatement statement = connection.prepareStatement(query);
@@ -68,13 +68,13 @@ class MemoryPovolenieDAOTest {
 
     @Test
     void testGeneratePovolenieMessage() {
-        String message = memoryPovolenieDAO.generatePovolenieMessage(1, true, false, true);
+        String message = SQLPovolenieDAO.generatePovolenieMessage(1, true, false, true);
         assertEquals("Rybárovi 1 bolo pridané kaprové, pstruhové povolenie.", message);
 
-        message = memoryPovolenieDAO.generatePovolenieMessage(2, false, false, false);
+        message = SQLPovolenieDAO.generatePovolenieMessage(2, false, false, false);
         assertEquals("Rybárovi 2 bolo pridané žiadne povolenie.", message);
 
-        message = memoryPovolenieDAO.generatePovolenieMessage(3, false, true, false);
+        message = SQLPovolenieDAO.generatePovolenieMessage(3, false, true, false);
         assertEquals("Rybárovi 3 bolo pridané lipňové povolenie.", message);
     }
 

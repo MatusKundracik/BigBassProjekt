@@ -12,10 +12,10 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemoryUlovokDAOTest {
+class SQLUlovokDAOTest {
 
     private static Connection connection;
-    private MemoryUlovokDAO memoryUlovokDAO;
+    private SQLUlovokDAO SQLUlovokDAO;
 
     @BeforeAll
     static void setUpDatabase() throws SQLException {
@@ -89,7 +89,7 @@ class MemoryUlovokDAOTest {
         Ulovok ulovok = new Ulovok(LocalDate.of(2024, 6, 15), "1234", "Pstruh", 45.0, 1.2, 1);
         Session.aktualnyRybarId = 1;
 
-        memoryUlovokDAO.insertUlovok(ulovok);
+        SQLUlovokDAO.insertUlovok(ulovok);
 
         String query = "SELECT * FROM ulovok WHERE cislo_reviru = '1234'";
         try (PreparedStatement statement = connection.prepareStatement(query);

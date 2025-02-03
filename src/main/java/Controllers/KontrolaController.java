@@ -1,17 +1,20 @@
 package Controllers;
 
 import Ulovok.UlovokDAO;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.projekt.Factory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class KontrolaController {
     private final UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
+
     @FXML
-    private TextField idUlovkyTextField;
+    private ComboBox<String> emailComboBox;
 
     @FXML
     private ListView<String> kontrolaListView;
@@ -20,27 +23,64 @@ public class KontrolaController {
     private Button zapisKontroluButton;
 
     @FXML
-    void addKontroluButton(ActionEvent event) {
-        String idUlovkuText = idUlovkyTextField.getText();
-        if (idUlovkuText == null || idUlovkuText.isEmpty()) {
-            kontrolaListView.getItems().add("ID úlovku musí byť zadané!");
+    public void initialize() {
+        // Načítanie registrovaných e-mailov do ComboBoxu
+        List<String> registeredEmails = ulovokDAO.getRegisteredEmails();
+        emailComboBox.setItems(FXCollections.observableArrayList(registeredEmails));
+
+        // Listener na zmenu výberu e-mailu
+        emailComboBox.setOnAction(event -> loadUlovkyForSelectedEmail());
+    }
+
+    private void loadUlovkyForSelectedEmail() {
+        String selectedEmail = emailComboBox.getValue();
+        if (selectedEmail != null && !selectedEmail.isEmpty()) {
+            List<String> ulovky = ulovokDAO.getUlovkyByEmail(selectedEmail);
+            List<String> formattedUlovky = ulovky.stream()
+                    .map(ulovok -> ulovok.substring(ulovok.indexOf(' ') + 1)) // Odstrániť ID, ponechať popis
+                    .collect(Collectors.toList());
+            kontrolaListView.setItems(FXCollections.observableArrayList(formattedUlovky));
+        }
+    }
+
+    @FXML
+    void skontrolujUlovok(ActionEvent event) {
+        String selectedEmail = emailComboBox.getValue();
+        if (selectedEmail == null || selectedEmail.isEmpty()) {
+            showAlert("Chyba", "Musíte vybrať e-mail používateľa.");
+            return;
+        }
+
+        String selectedUlovok = kontrolaListView.getSelectionModel().getSelectedItem();
+        if (selectedUlovok == null) {
+            showAlert("Chyba", "Musíte vybrať úlovok na kontrolu.");
             return;
         }
 
         try {
-            int idUlovku = Integer.parseInt(idUlovkuText);
+            String originalUlovok = ulovokDAO.getUlovkyByEmail(selectedEmail).stream()
+                    .filter(ulovok -> ulovok.contains(selectedUlovok))
+                    .findFirst()
+                    .orElseThrow(() -> new Exception("Úlovok nenájdený v databáze."));
+
+            int idUlovku = Integer.parseInt(originalUlovok.split(" ")[0]); // ID sa berie z originálneho zoznamu
             boolean uspech = ulovokDAO.aktualizujKontrolu(idUlovku);
             if (uspech) {
-                kontrolaListView.getItems().add("Úlovok " + idUlovku + " bol úspešne skontrolovaný.");
+                showAlert("Úspech", "Úlovok bol úspešne skontrolovaný.");
+                loadUlovkyForSelectedEmail(); // Obnoviť zoznam
             } else {
-                kontrolaListView.getItems().add("ID úlovku neexistuje: " + idUlovku);
+                showAlert("Chyba", "ID úlovku neexistuje: " + idUlovku);
             }
-        } catch (NumberFormatException e) {
-            kontrolaListView.getItems().add("Neplatný formát ID úlovku!");
         } catch (Exception e) {
-            kontrolaListView.getItems().add("Chyba pri aktualizácii úlovku: " + e.getMessage());
+            showAlert("Chyba", "Chyba pri aktualizácii úlovku: " + e.getMessage());
         }
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
-
-

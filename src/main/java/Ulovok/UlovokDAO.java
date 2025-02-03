@@ -20,4 +20,8 @@ public interface UlovokDAO {
     List<Ulovok> nacitajUlovkyPreRybara(int rybarId);
 
     boolean aktualizujKontrolu(int idUlovku);
+
+    List<String> getRegisteredEmails();
+
+    List<String> getUlovkyByEmail(String email);
 }

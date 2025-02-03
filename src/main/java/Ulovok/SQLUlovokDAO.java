@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MemoryUlovokDAO implements UlovokDAO {
+public class SQLUlovokDAO implements UlovokDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private final PovolenieDAO povolenieDAO;
     private final RevirDAO revirDAO;
 
-    public MemoryUlovokDAO(JdbcTemplate jdbcTemplate) {
+    public SQLUlovokDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.povolenieDAO = Factory.INSTANCE.getPovolenieDAO();
         this.revirDAO = Factory.INSTANCE.getRevirDAO();
@@ -113,10 +113,32 @@ public class MemoryUlovokDAO implements UlovokDAO {
         }
     }
 
-    @Override
-    public boolean aktualizujKontrolu(int idUlovku) {
-        String sql = "UPDATE ulovok SET kontrola = 1 WHERE id_ulovok = ?";
-        return jdbcTemplate.update(sql, idUlovku) > 0;
+    // Získa všetky registrované e-maily rybárov
+    public List<String> getRegisteredEmails() {
+        String query = "SELECT DISTINCT email FROM rybar";
+        return jdbcTemplate.queryForList(query, String.class);
     }
+
+    // Získa všetky úlovky pre vybraného používateľa na základe e-mailu
+    public List<String> getUlovkyByEmail(String email) {
+        String query = "SELECT id_ulovok, datum, druh_ryby, dlzka_v_cm, hmotnost_v_kg FROM ulovok WHERE povolenie_rybar_id_rybara = (SELECT id_rybara FROM rybar WHERE email = ?)";
+        RowMapper<String> rowMapper = (rs, rowNum) ->
+                rs.getInt("id_ulovok") + " - " +
+                        rs.getString("datum") + " - " +
+                        rs.getString("druh_ryby") + " (" +
+                        rs.getDouble("dlzka_v_cm") + " cm, " +
+                        rs.getDouble("hmotnost_v_kg") + " kg)";
+
+        return jdbcTemplate.query(query, rowMapper, email);
+    }
+
+    // Aktualizuje kontrolu úlovku
+    public boolean aktualizujKontrolu(int idUlovku) {
+        String query = "UPDATE ulovok SET kontrola = 1 WHERE id_ulovok = ?";
+        return jdbcTemplate.update(query, idUlovku) > 0;
+    }
+
+
+
 
 }
