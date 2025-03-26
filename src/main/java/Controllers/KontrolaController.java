@@ -1,19 +1,20 @@
 package Controllers;
 
+import Ulovok.UlovokDAO;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javafx.scene.control.*;
+import org.projekt.Factory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class KontrolaController {
+    private final UlovokDAO ulovokDAO = Factory.INSTANCE.getUlovokDAO();
 
     @FXML
-    private TextField idUlovkyTextField;
+    private ComboBox<String> emailComboBox;
 
     @FXML
     private ListView<String> kontrolaListView;
@@ -22,35 +23,64 @@ public class KontrolaController {
     private Button zapisKontroluButton;
 
     @FXML
-    void addKontroluButton(ActionEvent event) {
-        String idUlovku = idUlovkyTextField.getText();
-        if (idUlovku == null || idUlovku.isEmpty()) {
-            System.out.println("ID úlovku musí byť zadané!");
+    public void initialize() {
+        // Načítanie registrovaných e-mailov do ComboBoxu
+        List<String> registeredEmails = ulovokDAO.getRegisteredEmails();
+        emailComboBox.setItems(FXCollections.observableArrayList(registeredEmails));
+
+        // Listener na zmenu výberu e-mailu
+        emailComboBox.setOnAction(event -> loadUlovkyForSelectedEmail());
+    }
+
+    private void loadUlovkyForSelectedEmail() {
+        String selectedEmail = emailComboBox.getValue();
+        if (selectedEmail != null && !selectedEmail.isEmpty()) {
+            List<String> ulovky = ulovokDAO.getUlovkyByEmail(selectedEmail);
+            List<String> formattedUlovky = ulovky.stream()
+                    .map(ulovok -> ulovok.substring(ulovok.indexOf(' ') + 1)) // Odstrániť ID, ponechať popis
+                    .collect(Collectors.toList());
+            kontrolaListView.setItems(FXCollections.observableArrayList(formattedUlovky));
+        }
+    }
+
+    @FXML
+    void skontrolujUlovok(ActionEvent event) {
+        String selectedEmail = emailComboBox.getValue();
+        if (selectedEmail == null || selectedEmail.isEmpty()) {
+            showAlert("Chyba", "Musíte vybrať e-mail používateľa.");
             return;
         }
 
-        // Pripojenie k databáze
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db")) {
-            // SQL na aktualizáciu stĺpca "kontrola"
-            String updateQuery = "UPDATE ulovok SET kontrola = ifnull(kontrola, 1) WHERE id_ulovok = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-                preparedStatement.setInt(1, Integer.parseInt(idUlovku));
+        String selectedUlovok = kontrolaListView.getSelectionModel().getSelectedItem();
+        if (selectedUlovok == null) {
+            showAlert("Chyba", "Musíte vybrať úlovok na kontrolu.");
+            return;
+        }
 
-                int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    String message = "Úlovok " + idUlovku + " bol úspešne skontrolovaný.";
-                    kontrolaListView.getItems().add(message);
-                } else {
-                    kontrolaListView.getItems().add("ID úlovku neexistuje: " + idUlovku);
-                }
+        try {
+            String originalUlovok = ulovokDAO.getUlovkyByEmail(selectedEmail).stream()
+                    .filter(ulovok -> ulovok.contains(selectedUlovok))
+                    .findFirst()
+                    .orElseThrow(() -> new Exception("Úlovok nenájdený v databáze."));
+
+            int idUlovku = Integer.parseInt(originalUlovok.split(" ")[0]); // ID sa berie z originálneho zoznamu
+            boolean uspech = ulovokDAO.aktualizujKontrolu(idUlovku);
+            if (uspech) {
+                showAlert("Úspech", "Úlovok bol úspešne skontrolovaný.");
+                loadUlovkyForSelectedEmail(); // Obnoviť zoznam
+            } else {
+                showAlert("Chyba", "ID úlovku neexistuje: " + idUlovku);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            kontrolaListView.getItems().add("Chyba pri aktualizácii úlovku: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            kontrolaListView.getItems().add("Neplatný formát ID úlovku!");
+        } catch (Exception e) {
+            showAlert("Chyba", "Chyba pri aktualizácii úlovku: " + e.getMessage());
         }
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
-
-
+}

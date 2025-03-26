@@ -1,8 +1,6 @@
 package Rybar;
 
-
 import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,25 +16,23 @@ public class Rybar {
     private LocalDate datumNarodenia;
     private String adresa;
     private String statnaPrislusnost;
-    private String cisloOP;
+    private String cisloObcianskehoPreukazu;  // Premenované z cisloOP
     private LocalDate pridanyDoEvidencie;
     private LocalDate odhlasenyZEvidencie;
     private String email;
+    private String heslo;  // Pridané heslo (ak je potrebné uložiť)
 
-    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia, String email,
-                 String adresa, String statnaPrislusnost, String cisloOP,
-                 LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie) {
+    public Rybar(String meno, String priezvisko, String adresa, String cisloObcianskehoPreukazu, String statnaPrislusnost, LocalDate datumNarodenia,
+                 LocalDate pridanyDoEvidencie, LocalDate odhlasenyZEvidencie, String email, String heslo) { // Pridané heslo
         this.meno = meno;
         this.priezvisko = priezvisko;
         this.datumNarodenia = datumNarodenia;
         this.adresa = adresa;
         this.statnaPrislusnost = statnaPrislusnost;
-        this.cisloOP = cisloOP;
+        this.cisloObcianskehoPreukazu = cisloObcianskehoPreukazu;
         this.pridanyDoEvidencie = pridanyDoEvidencie;
         this.odhlasenyZEvidencie = odhlasenyZEvidencie;
-    }
-
-    public Rybar(String meno, String priezvisko, LocalDate datumNarodenia){
-
+        this.email = email;
+        this.heslo = heslo;
     }
 }

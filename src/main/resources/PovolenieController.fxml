@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ComboBox?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.PovolenieController">
    <children>
       <HBox>
@@ -19,7 +20,7 @@
                   <Insets left="10.0" top="30.0" />
                </HBox.margin>
             </Label>
-            <Label text="ID Rybara:">
+            <Label text="E-mail Rybára:">
                <HBox.margin>
                   <Insets left="125.0" top="30.0" />
                </HBox.margin>
@@ -33,26 +34,26 @@
                   <Insets bottom="10.0" left="10.0" />
                </HBox.margin>
             </DatePicker>
-            <TextField fx:id="idRybaraTextFIeld" prefWidth="90.0">
+            <ComboBox fx:id="idRybaraComboBox" prefWidth="150.0">
                <HBox.margin>
                   <Insets bottom="10.0" left="100.0" />
                </HBox.margin>
-            </TextField>
+            </ComboBox>
          </children>
       </HBox>
       <HBox>
          <children>
-            <CheckBox fx:id="pstruhoveCheckBox" mnemonicParsing="false" text="Pstruhove">
+            <CheckBox fx:id="pstruhoveCheckBox" mnemonicParsing="false" text="Pstruhové">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" />
                </HBox.margin>
             </CheckBox>
-            <CheckBox fx:id="LipnoveCheckBox" mnemonicParsing="false" text="Lipnove">
+            <CheckBox fx:id="LipnoveCheckBox" mnemonicParsing="false" text="Lipňové">
                <HBox.margin>
                   <Insets bottom="10.0" left="115.0" />
                </HBox.margin>
             </CheckBox>
-            <CheckBox fx:id="kaproveCheckBox" mnemonicParsing="false" text="Kaprove">
+            <CheckBox fx:id="kaproveCheckBox" mnemonicParsing="false" text="Kaprové">
                <HBox.margin>
                   <Insets bottom="10.0" left="130.0" />
                </HBox.margin>
@@ -66,7 +67,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="600.0">
          <children>
-            <Button fx:id="zapisPovolenieButton" mnemonicParsing="false" onAction="#addPovolenieButton" stylesheets="@css/Button.css" text="Zapíš povolenie" />
+            <Button fx:id="zapisPovolenieButton" mnemonicParsing="false" onAction="#addPovolenieButton" text="Zapíš povolenie" />
          </children>
       </HBox>
    </children>

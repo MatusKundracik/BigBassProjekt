@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class AdminController {
 
+
     @FXML
     private Button odhlasitSaButton;
 

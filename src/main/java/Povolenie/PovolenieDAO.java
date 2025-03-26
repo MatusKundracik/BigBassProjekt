@@ -6,9 +6,21 @@ import java.util.List;
 
 public interface PovolenieDAO {
 
-    void insertPovolenie(Connection connection, Povolenie povolenie) throws SQLException;
+    void insertPovolenie(Povolenie povolenie) throws SQLException;
 
     String generatePovolenieMessage(int rybarID, boolean kaprove, boolean lipnove, boolean pstruhove);
 
-    public int getPovolenieIdByRybarId(Connection connection, int rybarId) throws SQLException;
+    public int getPovolenieIdByRybarId(int rybarId) throws SQLException;
+
+    public boolean zobrazKaprovePovolenie(int idRybara);
+
+    public boolean zobrazPstruhovePovolenie(int idRybara);
+
+    public boolean zobrazLipnovePovolenie(int idRybara);
+
+    public void idPovoleniaPodlaRybaraID();
+
+    List<String> getAllEmails();
+
+    int getIdByEmail(String email);
 }

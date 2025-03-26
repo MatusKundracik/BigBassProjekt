@@ -20,17 +20,6 @@ import java.sql.*;
 import java.util.Objects;
 
 public class BigBassController {
-
-    Connection connection;
-
-    {
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:bigbass.db");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private RybarDAO rybarDAO = Factory.INSTANCE.getRybarDAO();
 
     @FXML
@@ -62,7 +51,7 @@ public class BigBassController {
 
         if (aktualnyRybarId > 0) {
             // Načítaj meno používateľa podľa ID
-            String menoPouzivatela = rybarDAO.getRybarNameById(connection, aktualnyRybarId);
+            String menoPouzivatela = rybarDAO.getRybarNameById(aktualnyRybarId);
             if (menoPouzivatela != null) {
                 prihlasenyPouzivatelLabel.setText("Prihlásený používateľ: " + menoPouzivatela);
             } else {

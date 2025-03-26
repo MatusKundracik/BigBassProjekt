@@ -36,4 +36,10 @@ public class Revir {
     public boolean isPstruhove() {
         return pstruhove;
     }
+
+    @Override
+    public String toString() {
+        return nazov + " (" + lokalita + ")";
+    }
+
 }
